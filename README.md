@@ -26,7 +26,7 @@ sudo npm run patch:hosts
 
 1. ```npm install```
 
-2. ```PROXY=true npm run start:beta```
+2. ```PROXY=true npm run start``` choose stage and then beta
 
 3. Open browser in URL listed in the terminal output
 
