@@ -11,4 +11,7 @@ module.exports = {
    * Add additional webpack plugins
    */
   plugins: [],
+  routes: {
+    '/api/provisioning': { host: `http://localhost:8000` }
+  }
 };
