@@ -37,14 +37,18 @@ const SourcesDropdown = () => {
   };
   const dropdownItemsMapper = () => {
     if (isLoading)
-      return (
-        <DropdownItem>
-          <Spinner size="md" isSVG />
-        </DropdownItem>
-      );
+      return [
+        <DropdownItem key="loading">
+          <Spinner aria-label="Loading sources list" size="sm" isSVG />
+        </DropdownItem>,
+      ];
     if (sources?.length > 0) {
       return sources.map(({ name, id }) => (
-        <DropdownItem onClick={(id) => sourcesDetails(id)} key={id}>
+        <DropdownItem
+          aria-label="Source item"
+          onClick={(id) => sourcesDetails(id)}
+          key={id}
+        >
           {name}
         </DropdownItem>
       ));
