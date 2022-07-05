@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 const queryClient = new QueryClient();
 
-const ProvisioningQuery = (children) => (
+const APIProvider = (children) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
-export default ProvisioningQuery;
+export default APIProvider;
