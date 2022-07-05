@@ -1,12 +1,25 @@
 import React from 'react';
-import { Dropdown, DropdownToggle, DropdownItem } from '@patternfly/react-core';
-import { provisioningUrl } from '../../API/helpers';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownItem,
+  Spinner,
+} from '@patternfly/react-core';
+import { useQuery } from 'react-query';
+
+import { SOURCES_QUERY_KEY } from '../../API/consts';
+import { fetchSourcesList } from '../../API';
 
 const SourcesDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [sources, setSources] = React.useState([]);
+
+  const {
+    isLoading,
+    error,
+    data: sources,
+  } = useQuery(SOURCES_QUERY_KEY, fetchSourcesList);
+
   const onToggle = (isOpen) => {
-    fetchSources();
     setIsOpen(isOpen);
   };
   const onFocus = () => {
@@ -18,41 +31,32 @@ const SourcesDropdown = () => {
     onFocus();
   };
 
-  //TODO: move to react-query
-  const fetchSources = async () => {
-    const response = await fetch(provisioningUrl('sources'));
-    const json = await response.json();
-    setSources(json);
+  // TODO: add the chosen source to an global/external state
+  const sourcesDetails = (id) => {
+    console.log(`${id} was chosen`);
+  };
+  const dropdownItemsMapper = () => {
+    if (isLoading)
+      return (
+        <DropdownItem>
+          <Spinner size="md" isSVG />
+        </DropdownItem>
+      );
+    if (sources?.length > 0) {
+      return sources.map(({ name, id }) => (
+        <DropdownItem onClick={(id) => sourcesDetails(id)} key={id}>
+          {name}
+        </DropdownItem>
+      ));
+    }
+    return [];
   };
 
-  // TODO: add the chosen source to an global/external state
-  const sourcesDetails = () => console.log(`${name} was chosen`);
-
-  const dropdownItemsMapper = () =>
-    sources.map(({ name, id }) => (
-      <DropdownItem onClick={sourcesDetails} key={id}>
-        {name}
-      </DropdownItem>
-    ));
-  if (sources.length > 0) {
-    const items = dropdownItemsMapper();
-    return (
-      <Dropdown
-        onSelect={onSelect}
-        toggle={
-          <DropdownToggle
-            id="toggle-secondary"
-            toggleVariant="secondary"
-            onToggle={onToggle}
-          >
-            Sources
-          </DropdownToggle>
-        }
-        isOpen={isOpen}
-        dropdownItems={items}
-      />
-    );
+  if (error) {
+    // TODO: error handling, notifications
+    console.log('Failed to fetch sources list');
   }
+
   return (
     <Dropdown
       onSelect={onSelect}
@@ -66,7 +70,7 @@ const SourcesDropdown = () => {
         </DropdownToggle>
       }
       isOpen={isOpen}
-      dropdownItems={[]}
+      dropdownItems={dropdownItemsMapper()}
     />
   );
 };
