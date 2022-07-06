@@ -19,7 +19,7 @@
     "verify": "npm-run-all build lint test"
   },
   "dependencies": {
-    "@patternfly/react-core": "4.192.7",
+    "@patternfly/react-core": "4.224.1",
     "@patternfly/react-table": "4.90.3",
     "@redhat-cloud-services/frontend-components": "^3.9.3",
     "@redhat-cloud-services/frontend-components-notifications": "^3.2.5",
