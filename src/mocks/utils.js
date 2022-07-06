@@ -3,11 +3,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { GlobalStateProvider } from '../Components/Common/GlobalState';
 
 const AllProviders = ({ children }) => {
   const queryClient = new QueryClient();
+
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <GlobalStateProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </GlobalStateProvider>
   );
 };
 

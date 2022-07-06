@@ -9,9 +9,11 @@ import { useQuery } from 'react-query';
 
 import { SOURCES_QUERY_KEY } from '../../API/consts';
 import { fetchSourcesList } from '../../API';
+import { useGlobalState } from '../Common/GlobalState';
 
 const SourcesDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [globalState, setGlobalState] = useGlobalState();
 
   const {
     isLoading,
@@ -31,9 +33,9 @@ const SourcesDropdown = () => {
     onFocus();
   };
 
-  // TODO: add the chosen source to an global/external state
   const sourcesDetails = (id) => {
-    console.log(`${id} was chosen`);
+    setGlobalState((prevState) => ({ ...prevState, chosenSource: id }));
+    console.log(`${globalState.chosenSource} was chosen`);
   };
   const dropdownItemsMapper = () => {
     if (isLoading)
@@ -62,6 +64,7 @@ const SourcesDropdown = () => {
   }
 
   return (
+    // TODO: Move the globalProvider to the wizard component
     <Dropdown
       onSelect={onSelect}
       toggle={
