@@ -1,14 +1,19 @@
-[![Build Status](https://travis-ci.org/RedHatInsights/frontend-starter-app.svg?branch=master)](https://travis-ci.org/RedHatInsights/frontend-starter-app)
+# provisioning-frontend
 
-# frontend-starter-app
+Provisioning frontend service for `cloud.redhat.com`
 
-React.js starter app for Red Hat Insights products that includes Patternfly 4 and shared Red Hat cloud service frontend components.
+## Development
+This project is based on react and uses the `cloud.redhat.com` micro-frontend architecture
 
-## Alternative
+[patternfly](https://www.patternfly.org/v4/) - an opinionated UX/UI library for enterprise applications
+[insights-chrome](https://github.com/RedHatInsights/insights-chrome) - a wrapper that provides an api for the global application (menus / auth / etc)
+[react-query](https://react-query.tanstack.com) - Manages the server state
+[react-tracked](https://react-tracked.js.org) - Optimizes re-renders for a global state management
 
-Before using this template, please check the [create-crc-app](https://github.com/RedHatInsights/frontend-components/blob/master/packages/docs/pages/ui-onboarding/create-crc-app.md). It has some extra setup you may like.
+For further reading see [dev](https://github.com/RHEnVision/provisioning-frontend/blob/main/docs/dev.md)
 
-## Initial etc/hosts setup
+## Setup
+### Initial etc/hosts setup
 
 In order to access the https://[env].foo.redhat.com in your browser, you have to add entries to your `/etc/hosts` file. This is a **one-time** setup that has to be done only once (unless you modify hosts) on each machine.
 
@@ -22,7 +27,7 @@ If this command throws an error run it as a `sudo`:
 sudo npm run patch:hosts
 ```
 
-## Getting started
+### Getting started
 
 1. ```npm install```
 
@@ -32,19 +37,9 @@ sudo npm run patch:hosts
 
 Update `config/dev.webpack.config.js` according to your application URL. [Read more](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy).
 
-### Testing
+## Testing
+This project uses jest, react-testing-library and msw 
 
 `npm run verify` will run `npm run lint` (eslint) and `npm test` (Jest)
-
-## Deploying
-
-- The starter repo uses Travis to deploy the webpack build to another Github repo defined in `.travis.yml`
-  - That Github repo has the following branches:
-    - `ci-beta` (deployed by pushing to `master` or `main` on this repo)
-    - `ci-stable` (deployed by pushing to `ci-stable` on this repo)
-    - `qa-beta` (deployed by pushing to `qa-beta` on this repo)
-    - `qa-stable` (deployed by pushing to `qa-stable` on this repo)
-    - `prod-beta` (deployed by pushing to `prod-beta` on this repo)
-    - `prod-stable` (deployed by pushing to `prod-stable` on this repo)
-- Travis uploads results to RedHatInsight's [codecov](https://codecov.io) account. To change the account, modify CODECOV_TOKEN on https://travis-ci.com/.
-
+You can also run `npm run lint:js:fix` for auto lint fixing
+For further reading, see [testing](https://github.com/RHEnVision/provisioning-frontend/blob/main/docs/testing.md) guide
