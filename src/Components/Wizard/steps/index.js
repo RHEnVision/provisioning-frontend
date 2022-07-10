@@ -1,5 +1,5 @@
 import React from 'react';
-
+import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
 const defaultSteps = ({ stepIdReached }) => [
   {
     name: 'Account and customization',
@@ -7,7 +7,7 @@ const defaultSteps = ({ stepIdReached }) => [
       {
         name: 'AWS',
         id: 1,
-        component: <div> WIP: AWS </div>,
+        component: <AccountCustomizationsAWS />,
         canJumpTo: stepIdReached >= 1,
       },
       {
