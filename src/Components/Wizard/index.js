@@ -7,9 +7,12 @@ import { WizardProvider } from '../Common/WizardProvider';
 import APIProvider from '../Common/Query';
 import defaultSteps from './steps';
 import { useDispatch } from 'react-redux';
+import { useWizardContext } from '../Common/WizardContext';
+import initialWizardContext from '../Common/WizardContext/initialState';
 
 const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
   const [stepIdReached, setStepIdReached] = React.useState(1);
+  const [, setWizardContext] = useWizardContext();
   const steps = defaultSteps({ stepIdReached });
   const dispatch = useDispatch();
 
@@ -20,7 +23,8 @@ const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
     setStepIdReached((prevID) => (prevID < id ? id : prevID));
   };
 
-  const handleAlert = () => {
+  const handleFinish = () => {
+    setWizardContext(initialWizardContext);
     dispatch(
       addNotification({
         variant: 'success',
@@ -43,7 +47,7 @@ const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
           isOpen={isOpen}
           onClose={onClose}
           onNext={onNext}
-          onSave={handleAlert}
+          onSave={handleFinish}
         />
       </APIProvider>
     </WizardProvider>
