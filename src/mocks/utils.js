@@ -3,15 +3,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { GlobalStateProvider } from '../Components/Common/GlobalState';
+import { WizardProvider } from '../Components/Common/WizardContext';
 
 const AllProviders = ({ children }) => {
   const queryClient = new QueryClient();
 
   return (
-    <GlobalStateProvider>
+    <WizardProvider>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </GlobalStateProvider>
+    </WizardProvider>
   );
 };
 
