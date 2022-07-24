@@ -1,6 +1,6 @@
 export const instanceTypeList = [
   {
-    identifier: 'Instance Type 1',
+    id: 'Instance Type 1',
   },
-  { identifier: 'Instance Type 2' },
+  { id: 'Instance Type 2' },
 ];
