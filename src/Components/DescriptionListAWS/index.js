@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
   DescriptionList,
@@ -11,7 +12,7 @@ import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
-const DescriptionListAWS = () => {
+const DescriptionListAWS = ({ imageName }) => {
   const [wizardContext] = useWizardContext();
   const { error, data: sources } = useQuery(
     SOURCES_QUERY_KEY,
@@ -24,10 +25,14 @@ const DescriptionListAWS = () => {
   }
 
   const getChosenSourceName = () =>
-    sources.find((source) => source.id === wizardContext.chosenSource).name;
+    sources?.find((source) => source.id === wizardContext.chosenSource).name;
 
   return (
     <DescriptionList isHorizontal>
+      <DescriptionListGroup>
+        <DescriptionListTerm>Image</DescriptionListTerm>
+        <DescriptionListDescription>{imageName}</DescriptionListDescription>
+      </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>Account</DescriptionListTerm>
         <DescriptionListDescription>
@@ -56,5 +61,9 @@ const DescriptionListAWS = () => {
       </DescriptionListGroup>
     </DescriptionList>
   );
+};
+
+DescriptionListAWS.propTypes = {
+  imageName: PropTypes.string.isRequired,
 };
 export default DescriptionListAWS;

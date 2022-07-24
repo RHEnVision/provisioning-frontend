@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import DescriptionListAWS from '../DescriptionListAWS';
-export const ExpandableAWS = () => {
+export const ExpandableAWS = ({ imageName }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const onToggle = (isExpanded) => {
     setIsExpanded(isExpanded);
@@ -13,7 +14,11 @@ export const ExpandableAWS = () => {
       isExpanded={isExpanded}
       isIndented
     >
-      <DescriptionListAWS />
+      <DescriptionListAWS imageName={imageName} />
     </ExpandableSection>
   );
+};
+
+ExpandableAWS.propTypes = {
+  imageName: PropTypes.string.isRequired,
 };
