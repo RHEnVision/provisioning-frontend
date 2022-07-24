@@ -1,17 +1,18 @@
 import React from 'react';
 import InstanceTypesSelect from '.';
 import { instanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
-import { waitFor, render, fireEvent, screen } from '../../mocks/utils';
+import { render, fireEvent, screen } from '../../mocks/utils';
 
 describe('InstanceTypesSelect', () => {
   test('populate instance types select', async () => {
-    mountSelectAndClick();
+    await mountSelectAndClick();
     const items = await screen.findAllByLabelText('Instance Type item');
     expect(items).toHaveLength(instanceTypeList.length);
   });
 });
 
-const mountSelectAndClick = () => {
+const mountSelectAndClick = async () => {
   render(<InstanceTypesSelect />);
-  waitFor(() => fireEvent.click(screen.getByText(/Select instance type/)));
+  const selectDropdown = await screen.findByText(/Select instance type/);
+  fireEvent.click(selectDropdown);
 };
