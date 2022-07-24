@@ -2,7 +2,7 @@ import React from 'react';
 import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
 import ReviewDetails from './ReviewDetails';
 
-const defaultSteps = ({ stepIdReached }) => [
+const defaultSteps = ({ stepIdReached, image: { name } }) => [
   {
     name: 'Account and customization',
     steps: [
@@ -35,7 +35,7 @@ const defaultSteps = ({ stepIdReached }) => [
   {
     name: 'Review details',
     id: 5,
-    component: <ReviewDetails />,
+    component: <ReviewDetails imageName={name} />,
     canJumpTo: stepIdReached >= 5,
     nextButtonText: 'Submit',
   },

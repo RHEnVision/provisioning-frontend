@@ -41,6 +41,7 @@ const SamplePage = () => {
             <ProvisioningWizard
               isOpen={isWizardOpen}
               onClose={() => setWizardModal(false)}
+              image={{ name: 'example-image', id: 'composeID' }}
             />
           </StackItem>
         </Stack>

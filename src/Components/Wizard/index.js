@@ -8,9 +8,9 @@ import APIProvider from '../Common/Query';
 import defaultSteps from './steps';
 import { useDispatch } from 'react-redux';
 
-const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
+const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   const [stepIdReached, setStepIdReached] = React.useState(1);
-  const steps = defaultSteps({ stepIdReached });
+  const steps = defaultSteps({ stepIdReached, image });
   const dispatch = useDispatch();
 
   const onNext = ({ id, name }, { prevId, prevName }) => {
@@ -51,8 +51,12 @@ const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
 };
 
 ProvisioningWizard.propTypes = {
-  isOpen: PropTypes.bool,
+  isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
+  image: PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
 };
 
 export default ProvisioningWizard;
