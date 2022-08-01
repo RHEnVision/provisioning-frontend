@@ -1,11 +1,11 @@
 import React from 'react';
 import { Slider } from '@patternfly/react-core';
-import { useGlobalState } from '../Common/GlobalState';
+import { useWizardContext } from '../Common/WizardContext';
 const MAX_INSTANCES = 45;
 const MIN_INSTANCES = 1;
 
 const InstanceCounter = () => {
-  const [globalState, setGlobalState] = useGlobalState();
+  const [wizardContext, setWizardContext] = useWizardContext();
   const onChange = (value, inputValue, setLocalInputValue) => {
     let newValue;
     if (inputValue === undefined) {
@@ -21,7 +21,7 @@ const InstanceCounter = () => {
         newValue = Math.floor(inputValue);
       }
     }
-    setGlobalState((prevState) => ({
+    setWizardContext((prevState) => ({
       ...prevState,
       chosenNumOfInstances: newValue,
     }));
@@ -30,9 +30,9 @@ const InstanceCounter = () => {
     <Slider
       max={MAX_INSTANCES}
       min={MIN_INSTANCES}
-      value={globalState.chosenNumOfInstances}
+      value={wizardContext.chosenNumOfInstances}
       isInputVisible
-      inputValue={globalState.chosenNumOfInstances}
+      inputValue={wizardContext.chosenNumOfInstances}
       hasTooltipOverThumb
       onChange={onChange}
     />

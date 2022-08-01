@@ -3,7 +3,7 @@ import { Wizard } from '@patternfly/react-core';
 import React from 'react';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
-import { GlobalStateProvider } from '../Common/GlobalState';
+import { WizardProvider } from '../Common/WizardContext';
 import APIProvider from '../Common/Query';
 import defaultSteps from './steps';
 import { useDispatch } from 'react-redux';
@@ -33,7 +33,7 @@ const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
   };
 
   return (
-    <GlobalStateProvider>
+    <WizardProvider>
       <APIProvider>
         <Wizard
           {...props}
@@ -46,7 +46,7 @@ const ProvisioningWizard = ({ isOpen, onClose, ...props }) => {
           onSave={handleAlert}
         />
       </APIProvider>
-    </GlobalStateProvider>
+    </WizardProvider>
   );
 };
 

@@ -5,13 +5,14 @@ import {
   DescriptionListGroup,
   DescriptionListDescription,
 } from '@patternfly/react-core';
-import { useGlobalState } from '../Common/GlobalState';
+
 import { useQuery } from 'react-query';
 import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
+import { useWizardContext } from '../Common/WizardContext';
 
 const DescriptionListAWS = () => {
-  const [globalState] = useGlobalState();
+  const [wizardContext] = useWizardContext();
   const { error, data: sources } = useQuery(
     SOURCES_QUERY_KEY,
     fetchSourcesList
@@ -23,7 +24,7 @@ const DescriptionListAWS = () => {
   }
 
   const getChosenSourceName = () =>
-    sources.find((source) => source.id === globalState.chosenSource).name;
+    sources.find((source) => source.id === wizardContext.chosenSource).name;
 
   return (
     <DescriptionList isHorizontal>
@@ -40,13 +41,13 @@ const DescriptionListAWS = () => {
       <DescriptionListGroup>
         <DescriptionListTerm>Instance type</DescriptionListTerm>
         <DescriptionListDescription>
-          {globalState.chosenInstanceType}
+          {wizardContext.chosenInstanceType}
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>Count</DescriptionListTerm>
         <DescriptionListDescription>
-          {globalState.chosenNumOfInstances}
+          {wizardContext.chosenNumOfInstances}
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>

@@ -4,17 +4,17 @@ import { useQuery } from 'react-query';
 
 import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
-import { useGlobalState } from '../Common/GlobalState';
+import { useWizardContext } from '../Common/WizardContext';
 
 const SourcesSelect = () => {
-  const [globalState, setGlobalState] = useGlobalState();
+  const [wizardContext, setWizardContext] = useWizardContext();
   const { error, data: sources } = useQuery(
     SOURCES_QUERY_KEY,
     fetchSourcesList
   );
 
   const onChange = (value) => {
-    setGlobalState((prevState) => ({ ...prevState, chosenSource: value }));
+    setWizardContext((prevState) => ({ ...prevState, chosenSource: value }));
   };
 
   const selectItemsMapper = () => {
@@ -50,7 +50,7 @@ const SourcesSelect = () => {
 
   return (
     <FormSelect
-      value={globalState.chosenSource}
+      value={wizardContext.chosenSource}
       onChange={onChange}
       aria-label="Select account"
     >

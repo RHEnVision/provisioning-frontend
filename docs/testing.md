@@ -39,14 +39,14 @@ Sometimes we'd like to override a response handler in a specific test, for examp
 ```
 
 ## Custom render
-In order to access `GlobalState` and `react-query` provider, the `render` function of `testing-library` is altered with a wrapper.
+In order to access `WizardContext` and `react-query` provider, the `render` function of `testing-library` is altered with a wrapper.
 You can import all `testing-library` related functions from `mocks/utils`
 
 ```js
 import { render, fireEvent, screen } from '../../mocks/utils';
 
   test('Loading state', async () => {
-    // the component will be rended with globalState and react-query provider
+    // the component will be rended with wizard context and react-query provider
     render(<Component />)
   }
 ```

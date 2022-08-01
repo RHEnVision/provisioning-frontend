@@ -3,22 +3,25 @@ import { Spinner, FormSelect, FormSelectOption } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
-import { useGlobalState } from '../Common/GlobalState';
+import { useWizardContext } from '../Common/WizardContext';
 
 const InstanceTypesSelect = () => {
-  const [globalState, setGlobalState] = useGlobalState();
+  const [wizardContext, setWizardContext] = useWizardContext();
   const {
     isLoading,
     error,
     data: instanceTypes,
   } = useQuery(
-    instanceTypesQueryKeys(globalState.chosenSource),
-    () => fetchInstanceTypesList(globalState.chosenSource),
-    { enabled: !!globalState.chosenSource }
+    instanceTypesQueryKeys(wizardContext.chosenSource),
+    () => fetchInstanceTypesList(wizardContext.chosenSource),
+    { enabled: !!wizardContext.chosenSource }
   );
 
   const onChange = (name) => {
-    setGlobalState((prevState) => ({ ...prevState, chosenInstanceType: name }));
+    setWizardContext((prevState) => ({
+      ...prevState,
+      chosenInstanceType: name,
+    }));
   };
 
   const selectItemsMapper = () => {
@@ -60,7 +63,7 @@ const InstanceTypesSelect = () => {
       <FormSelect
         onChange={onChange}
         aria-label="Select instance type"
-        value={globalState.chosenInstanceType}
+        value={wizardContext.chosenInstanceType}
       >
         {selectItemsMapper()}
       </FormSelect>
