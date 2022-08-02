@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: provisioning-frontend
+objects:
+  - apiVersion: cloud.redhat.com/v1alpha1
+    kind: Frontend
+    metadata:
+      name: provisioning-frontend
+    spec:
+      envName: ${ENV_NAME}
+      title: Provisioning
+      deploymentRepo: https://github.com/RHEnVision/provisioning-frontend
+      API:
+        versions:
+          - v1
+      frontend:
+        paths:
+          - /apps/provisioning
+      image: ${IMAGE}:${IMAGE_TAG}
+      # navItems:
+      #   - appId: "provisioning"
+      #     title: "Provisioning"
+      #     href: "/insights/provisioning"
+      #     product: "Provisioning"
+      module:
+        manifestLocation: "/apps/inventory/fed-mods.json"
+        modules:
+          - id: "provisioning"
+            module: "./App"
+            routes:
+              - pathname: /insights/provisioning
+
+parameters:
+  - name: ENV_NAME
+    required: true
+  - name: IMAGE_TAG
+    required: true
+  - name: IMAGE
+    value: quay.io/cloudservices/provisioning-frontend
