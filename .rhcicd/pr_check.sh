@@ -1,11 +1,8 @@
-
-
 #!/bin/bash
 
 # --------------------------------------------
 # Export vars for helper scripts to use
 # --------------------------------------------
-# name of app-sre "application" folder this component lives in; needs to match for quay
 export APP_NAME="provisioning"  # name of app-sre "application" folder this component lives in
 export COMPONENT_NAME="provisioning-backend"  # name of resourceTemplate component for deploy
 # IMAGE should match the quay repo set by app.yaml in app-interface
