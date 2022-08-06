@@ -18,16 +18,16 @@ objects:
         paths:
           - /apps/provisioning
       image: ${IMAGE}:${IMAGE_TAG}
-      # navItems:
-      #   - appId: "provisioning"
-      #     title: "Provisioning"
-      #     href: "/insights/provisioning"
-      #     product: "Provisioning"
+      navItems:
+        - appId: "provisioning"
+          title: "Provisioning"
+          href: "/insights/provisioning"
+          product: "Provisioning"
       module:
-        manifestLocation: "/apps/inventory/fed-mods.json"
+        manifestLocation: "/apps/provisioning/fed-mods.json"
         modules:
           - id: "provisioning"
-            module: "./App"
+            module: "./RootApp"
             routes:
               - pathname: /insights/provisioning
 
