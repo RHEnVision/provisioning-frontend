@@ -1,12 +1,12 @@
 module.exports = {
-  appUrl: '/staging/starter',
+  appUrl: '/apps/provisioning',
   debug: true,
   useProxy: true,
   proxyVerbose: true,
   /**
    * Change to false after your app is registered in configuration files
    */
-  interceptChromeConfig: false,
+  interceptChromeConfig: true,
   /**
    * Add additional webpack plugins
    */
