@@ -12,3 +12,7 @@ export const fetchInstanceTypesList = async (sourceId) => {
   );
   return data;
 };
+
+export const createAWSReservation = async (params) => {
+  return axios.post(provisioningUrl('reservations/aws'), params);
+};
