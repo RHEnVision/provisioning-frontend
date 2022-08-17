@@ -10,7 +10,16 @@ import { useDispatch } from 'react-redux';
 
 const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   const [stepIdReached, setStepIdReached] = React.useState(1);
-  const steps = defaultSteps({ stepIdReached, image });
+  const [stepValidation, setStepValidation] = React.useState({
+    sshStep: false,
+  });
+
+  const steps = defaultSteps({
+    stepIdReached,
+    image,
+    stepValidation,
+    setStepValidation,
+  });
   const dispatch = useDispatch();
 
   const onNext = ({ id, name }, { prevId, prevName }) => {
