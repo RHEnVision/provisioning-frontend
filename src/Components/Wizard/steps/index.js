@@ -1,8 +1,14 @@
 import React from 'react';
 import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
 import ReviewDetails from './ReviewDetails';
+import PublicKeys from './Pubkeys';
 
-const defaultSteps = ({ stepIdReached, image: { name } }) => [
+const defaultSteps = ({
+  stepIdReached,
+  image: { name },
+  stepValidation,
+  setStepValidation,
+}) => [
   {
     name: 'Account and customization',
     steps: [
@@ -29,8 +35,9 @@ const defaultSteps = ({ stepIdReached, image: { name } }) => [
   {
     name: 'SSH key authentication',
     id: 4,
-    component: <div>WIP SSH</div>,
+    component: <PublicKeys setStepValidated={setStepValidation} />,
     canJumpTo: stepIdReached >= 4,
+    enableNext: stepValidation.sshStep,
   },
   {
     name: 'Review details',

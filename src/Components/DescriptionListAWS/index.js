@@ -56,8 +56,12 @@ const DescriptionListAWS = ({ imageName }) => {
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
-        <DescriptionListTerm>SSH key</DescriptionListTerm>
-        <DescriptionListDescription>WIP</DescriptionListDescription>
+        <DescriptionListTerm>
+          {wizardContext.sshPublicKey ? 'New SSH key' : 'Existing SSH key'}
+        </DescriptionListTerm>
+        <DescriptionListDescription>
+          {wizardContext.sshPublicName}
+        </DescriptionListDescription>
       </DescriptionListGroup>
     </DescriptionList>
   );
