@@ -2,12 +2,14 @@ import React from 'react';
 import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
 import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
+import FinishStep from './FinishProgress';
 
 const defaultSteps = ({
   stepIdReached,
-  image: { name },
+  image: { name, id },
   stepValidation,
   setStepValidation,
+  onClose,
 }) => [
   {
     name: 'Account and customization',
@@ -51,6 +53,12 @@ const defaultSteps = ({
     component: <ReviewDetails imageName={name} />,
     canJumpTo: stepIdReached >= 5,
     nextButtonText: 'Submit',
+  },
+  {
+    name: 'Finish Progress',
+    id: 6,
+    component: <FinishStep onClose={onClose} imageID={id} />,
+    isFinishedStep: true,
   },
 ];
 
