@@ -10,8 +10,8 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [isLoading, setIsLoading] = React.useState();
   const [validations, setValidation] = React.useState({
-    sshKey: 'default',
-    sshName: 'default',
+    sshKeyBody: 'default',
+    sshKeyName: 'default',
   });
 
   React.useEffect(() => {
@@ -19,10 +19,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     const errorExists = Object.values(validations).some(
       (valid) => valid !== 'success'
     );
-    setStepValidated((prevStepsValidation) => ({
-      ...prevStepsValidation,
-      sshStep: !errorExists,
-    }));
+    setStepValidated(!errorExists);
   }, [validations]);
 
   const updateValidation = (inputKey, value) =>
@@ -74,14 +71,14 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
   return (
     <Form>
       <FormGroup
-        validated={validations.sshName}
+        validated={validations.sshKeyName}
         helperTextInvalid="a name is required"
         label="Name"
         isRequired
         fieldId="ssh-name"
       >
         <TextInput
-          validated={validations.sshName}
+          validated={validations.sshKeyName}
           value={wizardContext.sshPublicName}
           id="public-key-name"
           onChange={handleNameChange}
@@ -93,7 +90,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         label="SSH public key"
         isRequired
         fieldId="ssh-file"
-        validated={validations.sshKey}
+        validated={validations.sshKeyBody}
       >
         <FileUpload
           id="public-key-value"
@@ -101,7 +98,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
           allowEditingUploadedText={false}
           type="text"
           value={wizardContext.sshPublicKey}
-          validated={validations.sshKey}
+          validated={validations.sshKeyBody}
           onReadStarted={handleFileReadStarted}
           onReadFinished={handleFileReadFinished}
           onClearClick={handleClear}
