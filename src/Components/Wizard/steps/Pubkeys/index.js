@@ -1,15 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Stack, StackItem, Title, Radio, Text } from '@patternfly/react-core';
+import { useWizardContext } from '../../../Common/WizardContext';
+import PubkeySelect from './PubkeySelect';
 import NewSSHKeyForm from './NewKeyForm';
 
 const EXIST_KEY_OPTION = 'existKey';
 const NEW_KEY_OPTION = 'newKey';
 
 const PublicKeys = ({ setStepValidated }) => {
-  const [SSHKeyOption, setSSHKeyOption] = React.useState(NEW_KEY_OPTION);
+  const [wizardContext, setWizardContext] = useWizardContext();
   const onOptionChange = (_, event) => {
-    setSSHKeyOption(event.currentTarget.value);
+    setWizardContext((prevState) => ({
+      ...prevState,
+      uploadedKey: event.currentTarget.value == NEW_KEY_OPTION,
+    }));
   };
   return (
     <Stack hasGutter>
@@ -30,26 +35,32 @@ const PublicKeys = ({ setStepValidated }) => {
         </StackItem>
         <StackItem>
           <Radio
-            isChecked={SSHKeyOption === EXIST_KEY_OPTION}
+            id="existing-pubkey-radio"
+            isChecked={!wizardContext.uploadedKey}
             name="ssh-keys-radio"
-            id="exist-key"
             value={EXIST_KEY_OPTION}
             onChange={onOptionChange}
-            label="Add existing SSH public key"
-            body={SSHKeyOption === EXIST_KEY_OPTION && 'WIP'}
+            label="Select named SSH public key"
+            data-testid="existing-pubkey-radio"
+            body={
+              !wizardContext.uploadedKey && (
+                <PubkeySelect setStepValidated={setStepValidated} />
+              )
+            }
           />
         </StackItem>
         <StackItem>
           <Radio
-            isChecked={SSHKeyOption === NEW_KEY_OPTION}
+            id="upload-pubkey-radio"
+            isChecked={wizardContext.uploadedKey}
             name="ssh-keys-radio"
-            id="new-key"
             value={NEW_KEY_OPTION}
             onChange={onOptionChange}
             label="Add and save a new SSH public key"
             description="Newly added key will be automatically saved. Result of the provisioning will not be affected this process"
+            data-testid="upload-pubkey-radio"
             body={
-              SSHKeyOption === NEW_KEY_OPTION && (
+              wizardContext.uploadedKey && (
                 <NewSSHKeyForm setStepValidated={setStepValidated} />
               )
             }

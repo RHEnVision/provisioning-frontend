@@ -35,7 +35,13 @@ const defaultSteps = ({
   {
     name: 'SSH key authentication',
     id: 4,
-    component: <PublicKeys setStepValidated={setStepValidation} />,
+    component: (
+      <PublicKeys
+        setStepValidated={(validated) =>
+          setStepValidation((prev) => ({ ...prev, sshStep: validated }))
+        }
+      />
+    ),
     canJumpTo: stepIdReached >= 4,
     enableNext: stepValidation.sshStep,
   },

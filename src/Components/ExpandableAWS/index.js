@@ -3,7 +3,7 @@ import React from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import DescriptionListAWS from '../DescriptionListAWS';
 export const ExpandableAWS = ({ imageName }) => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(true);
   const onToggle = (isExpanded) => {
     setIsExpanded(isExpanded);
   };
