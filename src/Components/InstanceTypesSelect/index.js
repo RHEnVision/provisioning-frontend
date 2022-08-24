@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner, FormSelect, FormSelectOption } from '@patternfly/react-core';
+import { Spinner, Select, SelectOption } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
@@ -7,6 +7,7 @@ import { useWizardContext } from '../Common/WizardContext';
 
 const InstanceTypesSelect = () => {
   const [wizardContext, setWizardContext] = useWizardContext();
+  const [isOpen, setIsOpen] = React.useState(false);
   const {
     isLoading,
     error,
@@ -17,56 +18,84 @@ const InstanceTypesSelect = () => {
     { enabled: !!wizardContext.chosenSource }
   );
 
-  const onChange = (name) => {
+  const onSelect = (event, selection, isPlaceholder) => {
+    if (isPlaceholder) {
+      clearSelection();
+    } else {
+      setWizardContext((prevState) => ({
+        ...prevState,
+        chosenInstanceType: selection,
+      }));
+      setIsOpen(false);
+    }
+  };
+
+  const clearSelection = () => {
     setWizardContext((prevState) => ({
       ...prevState,
-      chosenInstanceType: name,
+      chosenInstanceType: null,
     }));
+    setIsOpen(false);
   };
 
   const selectItemsMapper = () => {
-    if (instanceTypes?.length > 0) {
-      return placeholder.concat(
-        instanceTypes.map((instanceType) => (
-          <FormSelectOption
-            aria-label="Instance Type item"
-            key={instanceType.id}
-            label={instanceType.id}
-            value={instanceType.id}
-          />
-        ))
-      );
-    } else {
-      return placeholder;
-    }
+    return instanceTypes.map((instanceType) => (
+      <SelectOption
+        aria-label={'Instance Type item'}
+        key={instanceType.id}
+        description={
+          instanceType.cores +
+          ' cores | ' +
+          instanceType.vcpus +
+          ' vCPU | ' +
+          (parseFloat(instanceType.memory) / 1024).toFixed(1) +
+          ' GiB memory | ' +
+          instanceType.architecture
+        }
+        value={instanceType.name}
+      />
+    ));
+  };
+
+  const onToggle = (isOpen) => {
+    setIsOpen(isOpen);
   };
 
   if (error) {
     // TODO: error handling, notifications
     console.log('Failed to fetch instance types list');
   }
-  const placeholder = [
-    <FormSelectOption
-      aria-label="placeholder"
-      label="Select instance type"
-      key="placeholder"
-      isPlaceholder
-      value=""
-    ></FormSelectOption>,
-  ];
   if (isLoading) {
     return (
       <Spinner isSVG size="sm" aria-label="Contents of the small example" />
     );
-  } else {
+  }
+
+  if (instanceTypes?.length > 0) {
     return (
-      <FormSelect
-        onChange={onChange}
+      <Select
+        onToggle={onToggle}
+        onSelect={onSelect}
+        isOpen={isOpen}
+        placeholderText="Select instance type"
+        selections={wizardContext.chosenInstanceType}
         aria-label="Select instance type"
-        value={wizardContext.chosenInstanceType}
       >
         {selectItemsMapper()}
-      </FormSelect>
+      </Select>
+    );
+  } else {
+    return (
+      <>
+        <input
+          className="pf-c-form-control"
+          readOnly
+          type="text"
+          value="Select account to load instances"
+          id="input-readonly"
+          aria-label="Readonly input example"
+        />
+      </>
     );
   }
 };
