@@ -8,7 +8,7 @@ export const fetchSourcesList = async () => {
 
 export const fetchInstanceTypesList = async (sourceId) => {
   const { data } = await axios.get(
-    provisioningUrl(`sources/${sourceId}/instance_types/`)
+    provisioningUrl(`sources/${sourceId}/instance_types`)
   );
   return data;
 };
