@@ -3,6 +3,7 @@ const initialWizardContext = {
   chosenNumOfInstances: 1,
   chosenInstanceType: undefined,
   uploadedKey: false,
+  chosenRegion: 'us-east-1',
   sshPublicName: '',
   sshPublicKey: '',
   chosenSshKeyId: undefined,

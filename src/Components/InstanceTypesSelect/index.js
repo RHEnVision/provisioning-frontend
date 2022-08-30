@@ -13,8 +13,15 @@ const InstanceTypesSelect = () => {
     error,
     data: instanceTypes,
   } = useQuery(
-    instanceTypesQueryKeys(wizardContext.chosenSource),
-    () => fetchInstanceTypesList(wizardContext.chosenSource),
+    instanceTypesQueryKeys(
+      wizardContext.chosenSource,
+      wizardContext.chosenRegion
+    ),
+    () =>
+      fetchInstanceTypesList(
+        wizardContext.chosenSource,
+        wizardContext.chosenRegion
+      ),
     { enabled: !!wizardContext.chosenSource }
   );
 
