@@ -6,6 +6,8 @@ import {
   StackItem,
   Stack,
   Title,
+  FormGroup,
+  TextInput,
   Select,
   SelectOption,
   SelectVariant,
@@ -25,7 +27,6 @@ This page demonstrates the provisioning UI wizard
  */
 
 // This default AMI value is taken when no image builder api found
-const DEFAULT_AMI = 'ami-05fa00d4c63e32376';
 const IMAGE_BUILDER_URL = '/api/image-builder/v1/composes';
 
 const SamplePage = () => {
@@ -44,7 +45,7 @@ const SamplePage = () => {
         setImages(data?.data);
       } catch (e) {
         console.debug('No image builder api has been found');
-        setChosenImage({ id: DEFAULT_AMI, name: 'default-image' });
+        setImages(false);
       }
     };
 
@@ -63,6 +64,46 @@ const SamplePage = () => {
     setImageSelect(false);
   };
 
+  const onInputChange = (value) => {
+    setChosenImage({ id: value, name: 'manualy entered AMI' });
+  };
+
+  const renderSelect = (images) => (
+    <Select
+      width="33%"
+      variant={SelectVariant.single}
+      placeholderText="Select an image"
+      aria-label="Select Image"
+      onToggle={onImageSelectionToggle}
+      onSelect={onImageSelect}
+      selections={chosenImage.name}
+      isOpen={isImageSelectOpen}
+    >
+      {images?.map((option) => (
+        <SelectOption
+          key={option.id}
+          value={option.image_name}
+          description={`ID: ${option.id}`}
+        />
+      ))}
+    </Select>
+  );
+
+  let imageInput;
+  if (images) {
+    imageInput = renderSelect(images);
+  } else {
+    imageInput = (
+      <FormGroup label="Image AMI">
+        <TextInput
+          id="ami"
+          value={chosenImage.id || ''}
+          onChange={onInputChange}
+        />
+      </FormGroup>
+    );
+  }
+
   return (
     <React.Fragment>
       <PageHeader>
@@ -71,26 +112,7 @@ const SamplePage = () => {
       </PageHeader>
       <Main>
         <Stack hasGutter>
-          <StackItem>
-            <Select
-              width="33%"
-              variant={SelectVariant.single}
-              placeholderText="Select an image"
-              aria-label="Select Image"
-              onToggle={onImageSelectionToggle}
-              onSelect={onImageSelect}
-              selections={chosenImage.name}
-              isOpen={isImageSelectOpen}
-            >
-              {images?.map((option) => (
-                <SelectOption
-                  key={option.id}
-                  value={option.image_name}
-                  description={`ID: ${option.id}`}
-                />
-              ))}
-            </Select>
-          </StackItem>
+          <StackItem>{imageInput}</StackItem>
           <StackItem>
             <Title headingLevel="h2" size="3xl"></Title>
             <Button variant="primary" onClick={() => setWizardModal(true)}>
