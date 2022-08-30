@@ -13,6 +13,8 @@ describe('InstanceTypesSelect', () => {
 
 const mountSelectAndClick = async () => {
   render(<InstanceTypesSelect />);
-  const selectDropdown = await screen.findByText(/Select instance type/);
+  const selectDropdown = await screen.findByPlaceholderText(
+    'Select instance type'
+  );
   fireEvent.click(selectDropdown);
 };

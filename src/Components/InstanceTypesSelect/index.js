@@ -38,8 +38,8 @@ const InstanceTypesSelect = () => {
     setIsOpen(false);
   };
 
-  const selectItemsMapper = () => {
-    return instanceTypes.map((instanceType) => (
+  const selectItemsMapper = (types) => {
+    return types.map((instanceType) => (
       <SelectOption
         aria-label={'Instance Type item'}
         key={instanceType.id}
@@ -78,12 +78,13 @@ const InstanceTypesSelect = () => {
       <Select
         onToggle={onToggle}
         onSelect={onSelect}
+        variant="typeahead"
         isOpen={isOpen}
         placeholderText="Select instance type"
         selections={wizardContext.chosenInstanceType}
         aria-label="Select instance type"
       >
-        {selectItemsMapper()}
+        {selectItemsMapper(instanceTypes)}
       </Select>
     );
   } else {
