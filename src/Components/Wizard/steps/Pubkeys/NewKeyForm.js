@@ -31,10 +31,10 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
   const handleNameChange = (value) => {
     setWizardContext((prevState) => ({ ...prevState, sshPublicName: value }));
     if (value.length === 0) {
-      updateValidation('sshName', 'error');
+      updateValidation('sshKeyName', 'error');
       return;
     }
-    updateValidation('sshName', 'success');
+    updateValidation('sshKeyName', 'success');
   };
   const handleSSHKeyChange = (value) => {
     if (validatePublicKey(value)) {
@@ -42,9 +42,9 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         ...prevState,
         sshPublicKey: value,
       }));
-      updateValidation('sshKey', 'success');
+      updateValidation('sshKeyBody', 'success');
     } else {
-      updateValidation('sshKey', 'error');
+      updateValidation('sshKeyBody', 'error');
     }
   };
 
