@@ -15,7 +15,7 @@ const AccountCustomizationsAWS = () => {
       <FormGroup>
         <Title headingLevel="h4">Description</Title>
       </FormGroup>
-      <FormGroup label="Select accont" isRequired fieldId="aws-select-source">
+      <FormGroup label="Select account" isRequired fieldId="aws-select-source">
         <SourcesSelect />
       </FormGroup>
       <FormGroup
