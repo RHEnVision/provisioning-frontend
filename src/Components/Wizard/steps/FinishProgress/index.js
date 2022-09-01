@@ -18,6 +18,17 @@ import './styles.scss';
 const pf_success_color_100 = '#3E8635';
 const pf_danger_color_100 = '#C9190B';
 
+const steps = [
+  { description: 'Uploading SSH public key', progress: 0 },
+  { description: 'Creating AWS reservation', progress: 20 },
+  {
+    description:
+      'Waiting for AWS, it might take a few minutes, it is safe to close the wizard',
+    progress: 60,
+  },
+  { description: 'Provisioning has been completed', progress: 100 },
+];
+
 const FinishStep = ({ onClose, imageID }) => {
   const [
     {
@@ -27,11 +38,12 @@ const FinishStep = ({ onClose, imageID }) => {
       sshPublicName,
       sshPublicKey,
       chosenSshKeyId,
+      uploadedKey,
     },
   ] = useWizardContext();
   const [, setReservationID] = React.useState();
-  const [activeStep, setActiveStep] = React.useState(chosenSshKeyId ? 1 : 0);
-  const stepUp = () => setActiveStep((prevStep) => prevStep++);
+  const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
+  const stepUp = () => setActiveStep((prevStep) => prevStep + 1);
 
   const { mutate: createAWSDeployment, error: awsReservationError } =
     useMutation(createAWSReservation, {
@@ -59,7 +71,9 @@ const FinishStep = ({ onClose, imageID }) => {
   );
 
   React.useEffect(() => {
-    if (chosenSshKeyId) {
+    if (uploadedKey) {
+      createPublicKey({ name: sshPublicName, body: sshPublicKey });
+    } else {
       createAWSDeployment({
         source_id: chosenSource,
         instance_type: chosenInstanceType,
@@ -67,21 +81,8 @@ const FinishStep = ({ onClose, imageID }) => {
         image_id: imageID,
         pubkey_id: chosenSshKeyId,
       });
-    } else {
-      createPublicKey({ name: sshPublicName, body: sshPublicKey });
     }
   }, []);
-
-  const steps = [
-    { description: 'Uploading SSH public key', progress: 0 },
-    { description: 'Creating AWS reservation', progress: 20 },
-    {
-      description:
-        'Waiting for AWS, it might take a few minutes, it is safe to close the wizard',
-      progress: 60,
-    },
-    { description: 'Provisioning has been completed', progress: 100 },
-  ];
 
   const activeProgress = steps[activeStep].progress;
   const isError = !!awsReservationError || !!pubkeyError;
