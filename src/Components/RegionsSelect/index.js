@@ -1,11 +1,12 @@
 import React from 'react';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
-
+import { useWizardContext } from '../Common/WizardContext';
 export const RegionsSelect = () => {
+  const [wizardContext] = useWizardContext();
   return (
     <FormSelect isDisabled aria-label="Select region" value="">
       <FormSelectOption
-        label="US - east"
+        label={wizardContext.chosenRegion}
         key="placeholder"
         isPlaceholder
         value=""

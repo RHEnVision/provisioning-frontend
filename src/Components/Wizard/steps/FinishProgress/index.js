@@ -35,6 +35,7 @@ const FinishStep = ({ onClose, imageID }) => {
       chosenSource,
       chosenInstanceType,
       chosenNumOfInstances,
+      chosenRegion,
       sshPublicName,
       sshPublicKey,
       chosenSshKeyId,
@@ -63,6 +64,7 @@ const FinishStep = ({ onClose, imageID }) => {
           instance_type: chosenInstanceType,
           amount: chosenNumOfInstances,
           image_id: imageID,
+          region: chosenRegion,
           pubkey_id: resp?.data?.id,
         });
         stepUp();
@@ -79,6 +81,7 @@ const FinishStep = ({ onClose, imageID }) => {
         instance_type: chosenInstanceType,
         amount: chosenNumOfInstances,
         image_id: imageID,
+        region: chosenRegion,
         pubkey_id: chosenSshKeyId,
       });
     }

@@ -41,7 +41,9 @@ const DescriptionListAWS = ({ imageName }) => {
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>Region</DescriptionListTerm>
-        <DescriptionListDescription>US - east</DescriptionListDescription>
+        <DescriptionListDescription>
+          {wizardContext.chosenRegion}
+        </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>Instance type</DescriptionListTerm>
