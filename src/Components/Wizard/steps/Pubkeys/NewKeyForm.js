@@ -47,13 +47,29 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
       updateValidation('sshKeyBody', 'error');
     }
   };
+  const handleSSHKeyText = (text) => {
+    setWizardContext((prevState) => ({
+      ...prevState,
+      sshPublicKey: text,
+    }));
+    if (text === '') {
+      updateValidation('sshKeyBody', 'default');
+    } else {
+      updateValidation(
+        'sshKeyBody',
+        validatePublicKey(text) ? 'success' : 'error'
+      );
+    }
+  };
 
   const handleClear = () => {
     setWizardContext((prevState) => ({
       ...prevState,
-      sshPublicKey: undefined,
       sshPublicName: undefined,
+      sshPublicKey: undefined,
     }));
+    updateValidation('sshKeyName', 'default');
+    updateValidation('sshKeyBody', 'default');
   };
 
   const handleFileReadStarted = () => {
@@ -62,6 +78,13 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
 
   const handleFileReadFinished = () => {
     setIsLoading(false);
+  };
+  const handleFileReadFailed = () => {
+    setWizardContext((prevState) => ({
+      ...prevState,
+      sshPublicName: '<Failed to load the file>',
+    }));
+    updateValidation('sshKeyBody', 'error');
   };
 
   const validatePublicKey = (ssh) => {
@@ -95,12 +118,14 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         <FileUpload
           id="public-key-value"
           onDataChange={handleSSHKeyChange}
-          allowEditingUploadedText={false}
+          allowEditingUploadedText
+          onTextChange={handleSSHKeyText}
           type="text"
           value={wizardContext.sshPublicKey}
           validated={validations.sshKeyBody}
           onReadStarted={handleFileReadStarted}
           onReadFinished={handleFileReadFinished}
+          onReadFailed={handleFileReadFailed}
           onClearClick={handleClear}
           isLoading={isLoading}
           filenamePlaceholder="Drag a file here"
