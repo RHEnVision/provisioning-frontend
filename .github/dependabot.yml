@@ -4,4 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
+    allow:
+      - dependency-name: "@patternfly/react-core"
+      - dependency-name: "@redhat-cloud-services/*"
+        dependency-type: direct
+    open-pull-requests-limit: 2
