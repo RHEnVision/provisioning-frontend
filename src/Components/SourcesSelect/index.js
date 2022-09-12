@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
@@ -6,7 +7,7 @@ import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
-const SourcesSelect = () => {
+const SourcesSelect = ({ setValidation }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const { error, data: sources } = useQuery(
     SOURCES_QUERY_KEY,
@@ -14,6 +15,7 @@ const SourcesSelect = () => {
   );
 
   const onChange = (value) => {
+    value === '' ? setValidation('error') : setValidation('success');
     setWizardContext((prevState) => ({ ...prevState, chosenSource: value }));
   };
 
@@ -57,6 +59,10 @@ const SourcesSelect = () => {
       {selectItemsMapper()}
     </FormSelect>
   );
+};
+
+SourcesSelect.propTypes = {
+  setValidation: PropTypes.func.isRequired,
 };
 
 export default SourcesSelect;

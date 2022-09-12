@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Popover, Title } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
@@ -6,7 +7,20 @@ import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 
-const AccountCustomizationsAWS = () => {
+const AccountCustomizationsAWS = ({ setStepValidated }) => {
+  const [validations, setValidation] = React.useState({
+    sources: 'default',
+    types: 'default',
+  });
+
+  React.useEffect(() => {
+    // This effect checks if the entire step is validated
+    const errorExists = Object.values(validations).some(
+      (valid) => valid !== 'success'
+    );
+    setStepValidated(!errorExists);
+  }, [validations]);
+
   return (
     <Form isWidthLimited maxWidth="80%">
       <FormGroup>
@@ -15,8 +29,21 @@ const AccountCustomizationsAWS = () => {
       <FormGroup>
         <Title headingLevel="h4">Description</Title>
       </FormGroup>
-      <FormGroup label="Select account" isRequired fieldId="aws-select-source">
-        <SourcesSelect />
+      <FormGroup
+        label="Select account"
+        validated={validations.sources}
+        helperTextInvalid="Please pick a value"
+        isRequired
+        fieldId="aws-select-source"
+      >
+        <SourcesSelect
+          setValidation={(validation) =>
+            setValidation((prevValidations) => ({
+              ...prevValidations,
+              sources: validation,
+            }))
+          }
+        />
       </FormGroup>
       <FormGroup
         label="Select region"
@@ -41,6 +68,7 @@ const AccountCustomizationsAWS = () => {
       <FormGroup
         label="Select instance type"
         isRequired
+        helperTextInvalid="Please pick a value"
         fieldId="aws-select-instance-types"
         labelIcon={
           <Popover headerContent={<div>AWS instance types</div>}>
@@ -56,7 +84,14 @@ const AccountCustomizationsAWS = () => {
           </Popover>
         }
       >
-        <InstanceTypesSelect />
+        <InstanceTypesSelect
+          setValidation={(validation) =>
+            setValidation((prevValidations) => ({
+              ...prevValidations,
+              types: validation,
+            }))
+          }
+        />
       </FormGroup>
       <FormGroup
         label="Count"
@@ -80,5 +115,9 @@ const AccountCustomizationsAWS = () => {
       </FormGroup>
     </Form>
   );
+};
+
+AccountCustomizationsAWS.propTypes = {
+  setStepValidated: PropTypes.func.isRequired,
 };
 export default AccountCustomizationsAWS;

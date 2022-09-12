@@ -17,7 +17,14 @@ const defaultSteps = ({
       {
         name: 'AWS',
         id: 1,
-        component: <AccountCustomizationsAWS />,
+        enableNext: stepValidation.awsStep,
+        component: (
+          <AccountCustomizationsAWS
+            setStepValidated={(validated) =>
+              setStepValidation((prev) => ({ ...prev, awsStep: validated }))
+            }
+          />
+        ),
         canJumpTo: stepIdReached >= 1,
       },
       {
