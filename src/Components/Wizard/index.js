@@ -8,6 +8,7 @@ import defaultSteps from './steps';
 
 const DEFAULT_STEP_VALIDATION = {
   sshStep: false,
+  awsStep: false,
 };
 
 const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {

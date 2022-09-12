@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Spinner, Select, SelectOption } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
@@ -5,7 +6,7 @@ import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
-const InstanceTypesSelect = () => {
+const InstanceTypesSelect = ({ setValidation }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const {
@@ -33,11 +34,13 @@ const InstanceTypesSelect = () => {
         ...prevState,
         chosenInstanceType: selection,
       }));
+      setValidation('success');
       setIsOpen(false);
     }
   };
 
   const clearSelection = () => {
+    setValidation('error');
     setWizardContext((prevState) => ({
       ...prevState,
       chosenInstanceType: null,
@@ -46,10 +49,10 @@ const InstanceTypesSelect = () => {
   };
 
   const selectItemsMapper = (types) => {
-    return types.map((instanceType) => (
+    return types.map((instanceType, index) => (
       <SelectOption
         aria-label={'Instance Type item'}
-        key={instanceType.id}
+        key={index}
         description={`${instanceType.cores} cores | 
           ${instanceType.vcpus} vCPU | 
           ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(
@@ -108,6 +111,10 @@ const InstanceTypesSelect = () => {
       </>
     );
   }
+};
+
+InstanceTypesSelect.propTypes = {
+  setValidation: PropTypes.func.isRequired,
 };
 
 export default InstanceTypesSelect;
