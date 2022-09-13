@@ -11,20 +11,24 @@ import {
 } from '@patternfly/react-core';
 import { CogsIcon, OkIcon, ErrorCircleOIcon } from '@patternfly/react-icons';
 import { useWizardContext } from '../../../Common/WizardContext';
-import { useMutation } from 'react-query';
-import { createAWSReservation, createNewPublicKey } from '../../../../API';
+import { useMutation, useQuery } from 'react-query';
+import {
+  createAWSReservation,
+  createNewPublicKey,
+  fetchAWSReservation,
+} from '../../../../API';
 import './styles.scss';
 
 const pf_success_color_100 = '#3E8635';
 const pf_danger_color_100 = '#C9190B';
+const RESERVATION_POLLING_INTERVAL = 500;
 
 const steps = [
   { description: 'Uploading SSH public key', progress: 0 },
   { description: 'Creating AWS reservation', progress: 20 },
   {
-    description:
-      'Waiting for AWS, it might take a few minutes, it is safe to close the wizard',
-    progress: 60,
+    description: 'Waiting for AWS',
+    progress: 40,
   },
   { description: 'Provisioning has been completed', progress: 100 },
 ];
@@ -42,16 +46,28 @@ const FinishStep = ({ onClose, imageID }) => {
       uploadedKey,
     },
   ] = useWizardContext();
-  const [, setReservationID] = React.useState();
+  const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
-  const stepUp = () => setActiveStep((prevStep) => prevStep + 1);
+  const stepUp = () =>
+    setActiveStep((prevStep) =>
+      prevStep < steps.length - 1 ? prevStep + 1 : prevStep
+    );
+
+  const { data: polledReservation } = useQuery(
+    ['reservation', reservationID],
+    () => fetchAWSReservation(reservationID),
+    {
+      enabled: !!reservationID,
+      refetchInterval: RESERVATION_POLLING_INTERVAL,
+      refetchIntervalInBackground: true,
+    }
+  );
 
   const { mutate: createAWSDeployment, error: awsReservationError } =
     useMutation(createAWSReservation, {
       onSuccess: (data) => {
         stepUp();
-        setReservationID(data.reservation_id);
-        // TODO: start polling for job status
+        setReservationID(data?.data?.reservation_id);
       },
     });
 
@@ -73,6 +89,13 @@ const FinishStep = ({ onClose, imageID }) => {
   );
 
   React.useEffect(() => {
+    if (polledReservation?.success) {
+      stepUp();
+      setReservationID(undefined);
+    }
+  }, [polledReservation?.success]);
+
+  React.useEffect(() => {
     if (uploadedKey) {
       createPublicKey({ name: sshPublicName, body: sshPublicKey });
     } else {
@@ -88,7 +111,10 @@ const FinishStep = ({ onClose, imageID }) => {
   }, []);
 
   const activeProgress = steps[activeStep].progress;
-  const isError = !!awsReservationError || !!pubkeyError;
+  const isJobError = polledReservation
+    ? polledReservation.success === false
+    : false;
+  const isError = !!awsReservationError || !!pubkeyError || isJobError;
 
   const iconGenerator = () => {
     if (isError) return ErrorCircleOIcon;
@@ -130,9 +156,11 @@ const FinishStep = ({ onClose, imageID }) => {
               ].description.toLowerCase()}`
             : steps[activeStep].description}
           <br />
+          {polledReservation?.status}
           <span className="status-error">
             {awsReservationError?.response?.data?.msg}
             {pubkeyError?.response?.data?.msg}
+            {polledReservation?.error}
           </span>
         </span>
       </EmptyStateBody>
