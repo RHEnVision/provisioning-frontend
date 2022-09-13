@@ -26,8 +26,7 @@ export const createNewPublicKey = async (params) => {
   return axios.post(provisioningUrl('pubkeys'), params);
 };
 
-// TODO: filtering a specific reservation status in backend
-export const fetchAWSReservation = async () => {
-  const { data } = await axios.get(provisioningUrl('reservations'));
+export const fetchAWSReservation = async (id) => {
+  const { data } = await axios.get(provisioningUrl(`reservations/${id}`));
   return data;
 };
