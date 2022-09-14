@@ -8,6 +8,7 @@ import {
   Title,
   Progress,
   Button,
+  WizardContextConsumer,
 } from '@patternfly/react-core';
 import { CogsIcon, OkIcon, ErrorCircleOIcon } from '@patternfly/react-icons';
 import { useWizardContext } from '../../../Common/WizardContext';
@@ -133,47 +134,56 @@ const FinishStep = ({ onClose, imageID }) => {
   };
 
   return (
-    <EmptyState variant="large">
-      <EmptyStateIcon color={iconColor()} icon={iconGenerator()} />
-      <Title headingLevel="h4" size="lg">
-        {activeProgress === 100
-          ? 'Provisioning has been finished successfully'
-          : 'Provisioning in progress'}
-      </Title>
-      <EmptyStateBody>
-        <Progress
-          style={{ width: '500px' }}
-          variant={isError && 'danger'}
-          value={activeProgress}
-          measureLocation="outside"
-        />
-      </EmptyStateBody>
-      <EmptyStateBody>
-        <span>
-          {isError
-            ? `An error has been occurred while ${steps[
-                activeStep
-              ].description.toLowerCase()}`
-            : steps[activeStep].description}
-          <br />
-          {polledReservation?.status}
-          <span className="status-error">
-            {awsReservationError?.response?.data?.msg}
-            {pubkeyError?.response?.data?.msg}
-            {polledReservation?.error}
-          </span>
-        </span>
-      </EmptyStateBody>
-      <EmptyStateSecondaryActions>
-        <Button
-          variant="link"
-          isDisabled={!showCloseButton()}
-          onClick={onClose}
-        >
-          Close
-        </Button>
-      </EmptyStateSecondaryActions>
-    </EmptyState>
+    <WizardContextConsumer>
+      {({ goToStepById }) => (
+        <EmptyState variant="large">
+          <EmptyStateIcon color={iconColor()} icon={iconGenerator()} />
+          <Title headingLevel="h4" size="lg">
+            {activeProgress === 100
+              ? 'Provisioning has been finished successfully'
+              : 'Provisioning in progress'}
+          </Title>
+          <EmptyStateBody>
+            <Progress
+              style={{ width: '500px' }}
+              variant={isError && 'danger'}
+              value={activeProgress}
+              measureLocation="outside"
+            />
+          </EmptyStateBody>
+          <EmptyStateBody>
+            <span>
+              {isError
+                ? `An error has been occurred while ${steps[
+                    activeStep
+                  ].description.toLowerCase()}`
+                : steps[activeStep].description}
+              <br />
+              {polledReservation?.status}
+              <span className="status-error">
+                {awsReservationError?.response?.data?.msg}
+                {pubkeyError?.response?.data?.msg}
+                {polledReservation?.error}
+              </span>
+            </span>
+          </EmptyStateBody>
+          <EmptyStateSecondaryActions>
+            {isError && (
+              <Button onClick={() => goToStepById(1)} variant="link">
+                Back
+              </Button>
+            )}
+            <Button
+              variant="link"
+              isDisabled={!showCloseButton()}
+              onClick={onClose}
+            >
+              Close
+            </Button>
+          </EmptyStateSecondaryActions>
+        </EmptyState>
+      )}
+    </WizardContextConsumer>
   );
 };
 
