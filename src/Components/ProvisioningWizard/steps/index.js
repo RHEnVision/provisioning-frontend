@@ -27,18 +27,6 @@ const defaultSteps = ({
         ),
         canJumpTo: stepIdReached >= 1,
       },
-      {
-        name: 'Azure',
-        id: 2,
-        component: <div> WIP: Azure </div>,
-        canJumpTo: stepIdReached >= 2,
-      },
-      {
-        name: 'Google',
-        id: 3,
-        component: <div> WIP: Google </div>,
-        canJumpTo: stepIdReached >= 3,
-      },
     ],
   },
   {
@@ -51,14 +39,14 @@ const defaultSteps = ({
         }
       />
     ),
-    canJumpTo: stepIdReached >= 4,
+    canJumpTo: stepIdReached >= 2,
     enableNext: stepValidation.sshStep,
   },
   {
     name: 'Review details',
     id: 5,
     component: <ReviewDetails imageName={name} />,
-    canJumpTo: stepIdReached >= 5,
+    canJumpTo: stepIdReached >= 3,
     nextButtonText: 'Submit',
   },
   {
