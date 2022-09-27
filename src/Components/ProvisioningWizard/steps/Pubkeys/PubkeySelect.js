@@ -52,15 +52,25 @@ const PubkeySelect = ({ setStepValidated }) => {
   };
 
   if (isError) {
-    // TODO: error handling, notifications
     console.warn(`Failed to fetch public SSH keys list: ${error}`);
-    return <Alert variant="warning" title="Failed to fetch SSH keys" />;
+    return (
+      <>
+        <Alert
+          variant="warning"
+          isInline
+          title="There are problems fetching saved SSH keys"
+        />
+        <Select
+          isDisabled
+          placeholderText="No SSH key found"
+          aria-label="Select public key"
+        />
+      </>
+    );
   }
 
   if (isLoading) {
-    return (
-      <Spinner isSVG size="sm" aria-label="Contents of the small example" />
-    );
+    return <Spinner isSVG size="sm" aria-label="Loading saved SSH keys" />;
   }
 
   return (
