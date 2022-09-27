@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FormSelect, FormSelectOption } from '@patternfly/react-core';
+import {
+  Alert,
+  Select,
+  FormSelect,
+  FormSelectOption,
+} from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 
 import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
@@ -37,7 +42,21 @@ const SourcesSelect = ({ setValidation }) => {
 
   if (error) {
     // TODO: error handling, notifications
-    console.log('Failed to fetch sources list');
+    console.warn('Failed to fetch sources list');
+    return (
+      <>
+        <Alert
+          variant="warning"
+          isInline
+          title="There are problems fetching accounts"
+        />
+        <Select
+          isDisabled
+          placeholderText="No accounts found"
+          aria-label="Select account"
+        />
+      </>
+    );
   }
 
   const placeholder = [
