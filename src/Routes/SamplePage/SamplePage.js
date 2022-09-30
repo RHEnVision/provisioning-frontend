@@ -20,7 +20,7 @@ import {
 import axios from 'axios';
 
 import './sample-page.scss';
-import ProvisioningWizard from '../../Components/Wizard';
+import ProvisioningWizard from '../../Components/ProvisioningWizard';
 
 /**
 This page demonstrates the provisioning UI wizard
