@@ -6,11 +6,13 @@ import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
+import { useWizardContext } from '../../../Common/WizardContext';
 
 const AccountCustomizationsAWS = ({ setStepValidated }) => {
+  const [{ chosenSource, chosenInstanceType }] = useWizardContext();
   const [validations, setValidation] = React.useState({
-    sources: 'default',
-    types: 'default',
+    sources: chosenSource ? 'success' : 'default',
+    types: chosenInstanceType ? 'success' : 'default',
   });
 
   React.useEffect(() => {
