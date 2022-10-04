@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Text } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
@@ -24,13 +24,14 @@ const AccountCustomizationsAWS = ({ setStepValidated }) => {
   }, [validations]);
 
   return (
-    <Form isWidthLimited maxWidth="80%">
-      <FormGroup>
-        <Title headingLevel="h2">AWS Account and Customizations</Title>
-      </FormGroup>
-      <FormGroup>
-        <Title headingLevel="h4">Description</Title>
-      </FormGroup>
+    <Form>
+      <Title headingLevel="h1" size="xl">
+        Account and customizations | AWS
+      </Title>
+      <Text>
+        Configure instances that will run on your AWS. All the instances will
+        launch with the same configuration.
+      </Text>
       <FormGroup
         label="Select account"
         validated={validations.sources}
