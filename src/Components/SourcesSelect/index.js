@@ -1,11 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Alert,
-  Select,
-  FormSelect,
-  FormSelectOption,
-} from '@patternfly/react-core';
+import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 
 import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
@@ -14,34 +9,54 @@ import { useWizardContext } from '../Common/WizardContext';
 
 const SourcesSelect = ({ setValidation }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
-  const { error, data: sources } = useQuery(
-    SOURCES_QUERY_KEY,
-    fetchSourcesList
-  );
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState(null);
+  const selectObject = (id, name) => ({
+    id,
+    toString: () => name,
+    compareTo: (other) => other.id === id,
+  });
+  const {
+    error,
+    isLoading,
+    data: sources,
+  } = useQuery(SOURCES_QUERY_KEY, fetchSourcesList, {
+    onSuccess: (data) => {
+      const id = wizardContext.chosenSource;
 
-  const onChange = (value) => {
-    value === '' ? setValidation('error') : setValidation('success');
-    setWizardContext((prevState) => ({ ...prevState, chosenSource: value }));
-  };
-
-  const selectItemsMapper = () => {
-    if (sources?.length > 0) {
-      return placeholder.concat(
-        sources.map(({ name, id }) => (
-          <FormSelectOption
-            aria-label="Source item"
-            key={id}
-            label={name}
-            value={id}
-          ></FormSelectOption>
-        ))
+      if (!id) return;
+      setSelected(
+        selectObject(id, data.find((source) => source.id === id).name)
       );
+    },
+  });
+
+  const onSelect = (event, selection, isPlaceholder) => {
+    if (isPlaceholder) {
+      setSelected(null);
+      setWizardContext((prevState) => ({ ...prevState, chosenSource: null }));
+      setValidation('error');
+    } else {
+      setSelected(selection);
+      setWizardContext((prevState) => ({
+        ...prevState,
+        chosenSource: selection.id,
+      }));
+      setValidation('success');
     }
-    return placeholder;
+    setIsOpen(false);
   };
+
+  const selectItemsMapper = (sourcesData) =>
+    sourcesData.map(({ name, id }) => (
+      <SelectOption
+        aria-label="Source account"
+        key={id}
+        value={selectObject(id, name)}
+      ></SelectOption>
+    ));
 
   if (error) {
-    // TODO: error handling, notifications
     console.warn('Failed to fetch sources list');
     return (
       <>
@@ -59,24 +74,23 @@ const SourcesSelect = ({ setValidation }) => {
     );
   }
 
-  const placeholder = [
-    <FormSelectOption
-      aria-label="placeholder"
-      label="Select account"
-      key="placeholder"
-      isPlaceholder
-      value=""
-    ></FormSelectOption>,
-  ];
+  if (isLoading) {
+    return <Spinner isSVG size="sm" aria-label="Loading accounts" />;
+  }
+
+  console.log(sources);
 
   return (
-    <FormSelect
-      value={wizardContext.chosenSource}
-      onChange={onChange}
+    <Select
+      isOpen={isOpen}
+      onToggle={(openState) => setIsOpen(openState)}
+      selections={selected}
+      onSelect={onSelect}
+      placeholderText="Select account"
       aria-label="Select account"
     >
-      {selectItemsMapper()}
-    </FormSelect>
+      {selectItemsMapper(sources)}
+    </Select>
   );
 };
 
