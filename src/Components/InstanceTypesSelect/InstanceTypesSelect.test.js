@@ -12,7 +12,7 @@ describe('InstanceTypesSelect', () => {
 });
 
 const mountSelectAndClick = async () => {
-  render(<InstanceTypesSelect />);
+  render(<InstanceTypesSelect setValidation={jest.fn()} />);
   const selectDropdown = await screen.findByPlaceholderText(
     'Select instance type'
   );

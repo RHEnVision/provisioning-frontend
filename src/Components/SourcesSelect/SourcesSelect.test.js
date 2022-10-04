@@ -4,14 +4,12 @@ import { sourcesList } from '../../mocks/fixtures/sources.fixtures';
 import { render, fireEvent, screen } from '../../mocks/utils';
 
 describe('SourcesSelect', () => {
-  test('populate sources select', async () => {
-    mountSelectAndClick();
-    const items = await screen.findAllByLabelText('Source item');
+  test('preselects the chosen source', async () => {
+    render(<SourcesSelect setValidation={jest.fn()} />);
+    // wizard context mock is `{chosenSource: 1}`
+    const selectDropdown = await screen.findByText('Source 1');
+    fireEvent.click(selectDropdown);
+    const items = await screen.findAllByLabelText('Source account');
     expect(items).toHaveLength(sourcesList.length);
   });
 });
-
-const mountSelectAndClick = () => {
-  render(<SourcesSelect />);
-  fireEvent.click(screen.getByText('Select account'));
-};
