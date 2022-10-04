@@ -44,7 +44,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
         <Wizard
           {...props}
           title="Provisioning"
-          description="Provision RHEL images to cloud"
+          description={`Provision image ${image.name}`}
           steps={steps}
           isOpen
           onClose={onCustomClose}
