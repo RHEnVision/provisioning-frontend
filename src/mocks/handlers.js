@@ -11,10 +11,7 @@ export const handlers = [
   rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(pubkeysList));
   }),
-  rest.get(
-    provisioningUrl('sources/:sourceID/instance_types'),
-    (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(instanceTypeList));
-    }
-  ),
+  rest.get(provisioningUrl('instance_types/aws'), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(instanceTypeList));
+  }),
 ];

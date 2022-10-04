@@ -11,9 +11,9 @@ export const fetchPubkeysList = async () => {
   return data;
 };
 
-export const fetchInstanceTypesList = async (sourceId, region) => {
+export const fetchInstanceTypesList = async (region) => {
   const { data } = await axios.get(
-    provisioningUrl(`sources/${sourceId}/instance_types?region=${region}`)
+    provisioningUrl(`instance_types/aws?region=${region}`)
   );
   return data;
 };
