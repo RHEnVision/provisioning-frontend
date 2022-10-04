@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Stack, StackItem, Title, Radio, Text } from '@patternfly/react-core';
+import {
+  Form,
+  Stack,
+  StackItem,
+  Title,
+  Radio,
+  Text,
+} from '@patternfly/react-core';
 import { useWizardContext } from '../../../Common/WizardContext';
 import PubkeySelect from './PubkeySelect';
 import NewSSHKeyForm from './NewKeyForm';
@@ -17,18 +24,12 @@ const PublicKeys = ({ setStepValidated }) => {
     }));
   };
   return (
-    <Stack hasGutter>
-      <Stack>
-        <StackItem>
-          <Title headingLevel="h2">SSH keys authentication</Title>
-        </StackItem>
-        <StackItem>
-          <Text component="p">
-            Establish secure, reliable communication and strong encryption to
-            protect data
-          </Text>
-        </StackItem>
-      </Stack>
+    <Form>
+      <Title headingLevel="h1">SSH keys authentication</Title>
+      <Text>
+        Establish secure, reliable communication and strong encryption to
+        protect data.
+      </Text>
       <Stack hasGutter>
         <StackItem>
           <Title headingLevel="h6">Select a method</Title>
@@ -67,7 +68,7 @@ const PublicKeys = ({ setStepValidated }) => {
           />
         </StackItem>
       </Stack>
-    </Stack>
+    </Form>
   );
 };
 

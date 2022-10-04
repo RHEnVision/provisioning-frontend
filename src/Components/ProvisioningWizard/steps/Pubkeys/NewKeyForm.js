@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, TextInput, FileUpload } from '@patternfly/react-core';
+import { FormGroup, TextInput, FileUpload } from '@patternfly/react-core';
 import { useWizardContext } from '../../../Common/WizardContext';
 
 // This is a simple regex format for public ssh key
@@ -92,7 +92,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     return regex.test(ssh);
   };
   return (
-    <Form>
+    <>
       <FormGroup
         validated={validations.sshKeyName}
         helperTextInvalid="a name is required"
@@ -131,7 +131,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
           filenamePlaceholder="Drag a file here"
         />
       </FormGroup>
-    </Form>
+    </>
   );
 };
 
