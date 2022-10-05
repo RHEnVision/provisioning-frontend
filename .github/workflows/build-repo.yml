@@ -89,7 +89,18 @@ jobs:
         with:
           path: ${{ github.workspace }}/dist/*
           key: ${{ github.sha }}
+      - name: Check custom_release existence
+        id: check_custom_release
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "custom_release.sh"
+      - name: Run default deploy
+        if: steps.check_custom_release.outputs.files_exists != 'true'
+        run: |
+          rm -rf ${{ github.workspace }}/dist/.git
+          ${{ github.workspace }}/scripts/release.sh ${{ github.ref }}
       - name: Run the deploy
+        if: steps.check_custom_release.outputs.files_exists == 'true'
         run: ${{ github.workspace }}/custom_release.sh
       - uses: actions/cache@v2
         with:
