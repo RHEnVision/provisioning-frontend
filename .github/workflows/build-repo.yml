@@ -1,7 +1,7 @@
 name: Release workflow
 on:
   workflow_run:
-    workflows: ['lint-test']
+    workflows: [lint-test]
     branches: [main, ci-beta, qa-beta, stage-beta, prod-stable, ci-stable, qa-stable, stage-stable, prod-stable]
     types:
       - completed
