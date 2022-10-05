@@ -47,7 +47,7 @@ const defaultSteps = ({
     id: 5,
     component: <ReviewDetails imageName={name} />,
     canJumpTo: stepIdReached >= 3,
-    nextButtonText: 'Submit',
+    nextButtonText: 'Launch',
   },
   {
     name: 'Finish Progress',
