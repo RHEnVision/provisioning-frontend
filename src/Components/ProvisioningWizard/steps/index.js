@@ -39,14 +39,14 @@ const defaultSteps = ({
         }
       />
     ),
-    canJumpTo: stepIdReached >= 2,
+    canJumpTo: stepIdReached >= 4,
     enableNext: stepValidation.sshStep,
   },
   {
     name: 'Review details',
     id: 5,
     component: <ReviewDetails imageName={name} />,
-    canJumpTo: stepIdReached >= 3,
+    canJumpTo: stepIdReached >= 5,
     nextButtonText: 'Launch',
   },
   {

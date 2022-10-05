@@ -5,6 +5,7 @@ import React from 'react';
 import { WizardProvider } from '../Common/WizardContext';
 import APIProvider from '../Common/Query';
 import defaultSteps from './steps';
+import ConfirmModal from '../ConfirmModal';
 
 const DEFAULT_STEP_VALIDATION = {
   sshStep: false,
@@ -16,11 +17,21 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   const [stepValidation, setStepValidation] = React.useState(
     DEFAULT_STEP_VALIDATION
   );
+  const [isConfirming, setConfirming] = React.useState(false);
 
   const onCustomClose = () => {
+    setConfirming(false);
     setStepIdReached(1);
     setStepValidation(DEFAULT_STEP_VALIDATION);
     onClose();
+  };
+
+  const onWizardClose = () => {
+    if (stepIdReached >= 5) {
+      setConfirming(true);
+    } else {
+      onCustomClose();
+    }
   };
 
   const steps = defaultSteps({
@@ -47,8 +58,13 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
           description={`Provision image ${image.name}`}
           steps={steps}
           isOpen
-          onClose={onCustomClose}
+          onClose={onWizardClose}
           onNext={onNext}
+        />
+        <ConfirmModal
+          isOpen={isConfirming}
+          onConfirm={onCustomClose}
+          onCancel={() => setConfirming(false)}
         />
       </APIProvider>
     </WizardProvider>
