@@ -94,13 +94,12 @@ jobs:
         uses: andstor/file-existence-action@v1
         with:
           files: "custom_release.sh"
+      - run: ls ${{ github.workspace }}
       - name: Run default deploy
         if: steps.check_custom_release.outputs.files_exists != 'true'
         env:
           APP_BUILD_DIR: ${{ github.workspace }}/dist
-        run: |
-          rm -rf ${{ github.workspace }}/dist/.git
-          ${{ github.workspace }}/scripts/release.sh ${{ github.ref_name }}
+        run: ${{ github.workspace }}/scripts/release.sh ${{ github.ref_name }}
         working-directory: ${{ github.workspace }}
       - name: Run the deploy
         if: steps.check_custom_release.outputs.files_exists == 'true'
