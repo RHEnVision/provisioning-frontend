@@ -6,9 +6,14 @@ import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
+const OPTIONS_PER_SCREEN = 5;
+
 const InstanceTypesSelect = ({ setValidation }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [numOptions, setNumOptions] = React.useState(OPTIONS_PER_SCREEN);
+  const [filteredTypes, setFilteredTypes] = React.useState(null);
+  const [prevSearch, setPrevSearch] = React.useState('');
   const {
     isLoading,
     error,
@@ -25,6 +30,21 @@ const InstanceTypesSelect = ({ setValidation }) => {
       ),
     { enabled: !!wizardContext.chosenSource }
   );
+
+  if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
+    return (
+      <>
+        <input
+          className="pf-c-form-control"
+          readOnly
+          type="text"
+          value="Select account to load instances"
+          id="input-readonly"
+          aria-label="Readonly input example"
+        />
+      </>
+    );
+  }
 
   const onSelect = (event, selection, isPlaceholder) => {
     if (isPlaceholder) {
@@ -48,20 +68,30 @@ const InstanceTypesSelect = ({ setValidation }) => {
     setIsOpen(false);
   };
 
-  const selectItemsMapper = (types) => {
+  const onFilter = (_e, inputValue) => {
+    if (prevSearch !== inputValue) setNumOptions(OPTIONS_PER_SCREEN);
+    setFilteredTypes(
+      instanceTypes.filter((i) => i.name.search(inputValue) === 0)
+    );
+    setPrevSearch(inputValue);
+  };
+
+  const selectItemsMapper = (types, limit) => {
+    console.log(types, limit);
+    if (limit < types.length) types = types.slice(0, limit);
     return types.map((instanceType, index) => (
       <SelectOption
         aria-label={'Instance Type item'}
         key={index}
-        description={`${instanceType.cores} cores | 
-          ${instanceType.vcpus} vCPU | 
+        description={`${instanceType.cores} cores |
+          ${instanceType.vcpus} vCPU |
           ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(
             1
-          )} GiB memory | 
+          )} GiB memory |
           ${
             instanceType.storage_gb > 0
               ? instanceType.storage_gb + ' GB storage | '
-              : 'EBS - only | '
+              : 'EBS only | '
           }
           ${instanceType.architecture}`}
         value={instanceType.name}
@@ -83,34 +113,29 @@ const InstanceTypesSelect = ({ setValidation }) => {
     );
   }
 
-  if (instanceTypes?.length > 0) {
-    return (
-      <Select
-        onToggle={onToggle}
-        onSelect={onSelect}
-        variant="typeahead"
-        isOpen={isOpen}
-        placeholderText="Select instance type"
-        selections={wizardContext.chosenInstanceType}
-        aria-label="Select instance type"
-      >
-        {selectItemsMapper(instanceTypes)}
-      </Select>
-    );
-  } else {
-    return (
-      <>
-        <input
-          className="pf-c-form-control"
-          readOnly
-          type="text"
-          value="Select account to load instances"
-          id="input-readonly"
-          aria-label="Readonly input example"
-        />
-      </>
-    );
-  }
+  const types = filteredTypes || instanceTypes;
+
+  return (
+    <Select
+      variant="typeahead"
+      aria-label="Select instance type"
+      placeholderText="Select instance type"
+      maxHeight="450px"
+      isOpen={isOpen}
+      selections={wizardContext.chosenInstanceType}
+      onToggle={onToggle}
+      onSelect={onSelect}
+      onFilter={onFilter}
+      {...(numOptions < types.length && {
+        loadingVariant: {
+          text: `View more (${types.length - numOptions})`,
+          onClick: () => setNumOptions(numOptions + OPTIONS_PER_SCREEN),
+        },
+      })}
+    >
+      {selectItemsMapper(types, numOptions)}
+    </Select>
+  );
 };
 
 InstanceTypesSelect.propTypes = {
