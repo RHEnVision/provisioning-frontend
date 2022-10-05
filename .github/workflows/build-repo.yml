@@ -45,7 +45,7 @@ jobs:
         run: |
             mkdir -p /home/runner/.ssh
             ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/github_actions
+            echo "${{ secrets.BUILD_PRIVATE_KEY }}" > /home/runner/.ssh/github_actions
             chmod 600 /home/runner/.ssh/github_actions
             echo "Host github.com
               HostName github.com
