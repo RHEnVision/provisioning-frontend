@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  
+
     strategy:
       matrix:
         node-version: [16.14.0]
@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-  
+
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -30,3 +30,12 @@ jobs:
 
       - name: Running tests
         run: npm test
+
+      - name: Run build
+        run: yarn build
+
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}
