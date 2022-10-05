@@ -96,9 +96,12 @@ jobs:
           files: "custom_release.sh"
       - name: Run default deploy
         if: steps.check_custom_release.outputs.files_exists != 'true'
+        env:
+          APP_BUILD_DIR: ${{ github.workspace }}/dist
         run: |
           rm -rf ${{ github.workspace }}/dist/.git
-          ${{ github.workspace }}/scripts/release.sh ${{ github.ref }}
+          ${{ github.workspace }}/scripts/release.sh ${{ github.ref_name }}
+        working-directory: ${{ github.workspace }}
       - name: Run the deploy
         if: steps.check_custom_release.outputs.files_exists == 'true'
         run: ${{ github.workspace }}/custom_release.sh
