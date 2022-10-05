@@ -60,6 +60,7 @@
     "webpack-bundle-analyzer": "4.6.1"
   },
   "insights": {
-    "appname": "provisioning"
+    "appname": "provisioning",
+    "buildrepo": "git@github.com:RedHatInsights/provisioning-frontend-build.git"
   }
 }
