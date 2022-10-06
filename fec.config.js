@@ -1,3 +1,6 @@
+/* global module, __dirname */
+const { resolve } = require('path');
+
 module.exports = {
   appUrl: '/apps/provisioning',
   debug: true,
@@ -13,5 +16,11 @@ module.exports = {
   plugins: [],
   routes: {
     '/api/provisioning': { host: `http://localhost:8000` }
+  },
+  moduleFederation: {
+    exposes: {
+      './RootApp': resolve(__dirname, './src/AppEntry'),
+      './ProvisioningWizard': resolve(__dirname, './src/Components/ProvisioningWizard')
+    }
   }
 };
