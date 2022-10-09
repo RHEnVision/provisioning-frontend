@@ -8,7 +8,7 @@ describe('Pubkeys', () => {
       render(<Pubkeys setStepValidated={jest.fn()} />);
       const existingRadio = screen.getByTestId('existing-pubkey-radio');
       expect(existingRadio).toBeChecked();
-      const select = await screen.findByText('Select public key');
+      const select = await screen.findByLabelText('Public SSH key select');
       fireEvent.click(select);
       const items = screen.getAllByLabelText(/^Public key/);
       expect(items).toHaveLength(2);
@@ -20,7 +20,7 @@ describe('Pubkeys', () => {
         currentlyValid = v;
       });
       render(<Pubkeys setStepValidated={validatedMock} />);
-      const select = await screen.findByText('Select public key');
+      const select = await screen.findByLabelText('Public SSH key select');
       // mark step as invalid by default
       expect(currentlyValid).toEqual(false);
 

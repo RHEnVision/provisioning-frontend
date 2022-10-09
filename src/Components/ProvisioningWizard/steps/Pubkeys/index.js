@@ -1,13 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Form,
-  Stack,
-  StackItem,
-  Title,
-  Radio,
-  Text,
-} from '@patternfly/react-core';
+import { Form, FormGroup, Radio, Text, Title } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { useWizardContext } from '../../../Common/WizardContext';
 import PubkeySelect from './PubkeySelect';
@@ -44,7 +37,7 @@ const PublicKeys = ({ setStepValidated }) => {
   }, [isLoading, isError]);
 
   return (
-    <Form>
+    <Form className="pubkeys">
       <Title headingLevel="h1">SSH keys authentication</Title>
       <Text>
         Establish secure, reliable communication and strong encryption to
