@@ -6,6 +6,7 @@ import { WizardProvider } from '../Common/WizardContext';
 import APIProvider from '../Common/Query';
 import defaultSteps from './steps';
 import ConfirmModal from '../ConfirmModal';
+import './steps/Pubkeys/pubkeys.scss';
 
 const DEFAULT_STEP_VALIDATION = {
   sshStep: false,

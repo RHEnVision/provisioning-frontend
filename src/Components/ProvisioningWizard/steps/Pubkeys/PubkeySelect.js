@@ -18,7 +18,10 @@ const PubkeySelect = ({ setStepValidated }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [selection, setSelection] = React.useState(
     wizardContext.chosenSshKeyId
-      ? selectOptionObj(wizardContext.chosenSshKeyId, wizardContext.chosenSshKeyName)
+      ? selectOptionObj(
+          wizardContext.chosenSshKeyId,
+          wizardContext.chosenSshKeyName
+        )
       : null
   );
 
@@ -29,7 +32,6 @@ const PubkeySelect = ({ setStepValidated }) => {
   const {
     isLoading,
     isError,
-    error,
     data: pubkeys,
   } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
 
@@ -47,15 +49,16 @@ const PubkeySelect = ({ setStepValidated }) => {
     return <Spinner isSVG size="sm" aria-label="Loading saved SSH keys" />;
   }
 
-  if (isError) {
-    console.warn(`Failed to fetch public SSH keys list: ${error}`);
+  if (isError || (pubkeys && pubkeys.length < 1)) {
     return (
       <>
-        <Alert
-          variant="warning"
-          isInline
-          title="There are problems fetching saved SSH keys"
-        />
+        {isError && (
+          <Alert
+            variant="warning"
+            isInline
+            title="There are problems fetching saved SSH keys"
+          />
+        )}
         <Select
           isDisabled
           placeholderText="No SSH key found"
@@ -72,7 +75,7 @@ const PubkeySelect = ({ setStepValidated }) => {
       isOpen={isOpen}
       selections={selection}
       placeholderText="Select public key"
-      aria-label="Select public key"
+      aria-label="Public SSH key select"
     >
       {pubkeys.map(({ id, name }) => (
         <SelectOption
