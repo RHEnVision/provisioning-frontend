@@ -95,7 +95,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     <>
       <FormGroup
         validated={validations.sshKeyName}
-        helperTextInvalid="a name is required"
+        helperTextInvalid="Name is required"
         label="Name"
         isRequired
         fieldId="ssh-name"
