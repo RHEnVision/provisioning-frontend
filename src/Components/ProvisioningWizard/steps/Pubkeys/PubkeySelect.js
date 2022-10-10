@@ -51,6 +51,10 @@ const PubkeySelect = ({ setStepValidated }) => {
     setSelection(null);
   };
 
+  if (isLoading) {
+    return <Spinner isSVG size="sm" aria-label="Loading saved SSH keys" />;
+  }
+
   if (isError) {
     console.warn(`Failed to fetch public SSH keys list: ${error}`);
     return (
@@ -67,10 +71,6 @@ const PubkeySelect = ({ setStepValidated }) => {
         />
       </>
     );
-  }
-
-  if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="Loading saved SSH keys" />;
   }
 
   return (
