@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Spinner, Select, SelectOption } from '@patternfly/react-core';
+import { Alert, Spinner, Select, SelectOption } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
@@ -18,17 +18,8 @@ const InstanceTypesSelect = ({ setValidation }) => {
     isLoading,
     error,
     data: instanceTypes,
-  } = useQuery(
-    instanceTypesQueryKeys(
-      wizardContext.chosenSource,
-      wizardContext.chosenRegion
-    ),
-    () =>
-      fetchInstanceTypesList(
-        wizardContext.chosenSource,
-        wizardContext.chosenRegion
-      ),
-    { enabled: !!wizardContext.chosenSource }
+  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () =>
+    fetchInstanceTypesList(wizardContext.chosenRegion)
   );
 
   if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
@@ -104,8 +95,21 @@ const InstanceTypesSelect = ({ setValidation }) => {
   };
 
   if (error) {
-    // TODO: error handling, notifications
-    console.log('Failed to fetch instance types list');
+    console.warn('Failed to fetch instance types list');
+    return (
+      <>
+        <Alert
+          variant="warning"
+          isInline
+          title="There are problems fetching instance types"
+        />
+        <Select
+          isDisabled
+          placeholderText="No instance types found"
+          aria-label="Select instance type"
+        />
+      </>
+    );
   }
   if (isLoading) {
     return (
