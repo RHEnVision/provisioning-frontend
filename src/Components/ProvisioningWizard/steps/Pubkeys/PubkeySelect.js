@@ -74,8 +74,8 @@ const PubkeySelect = ({ setStepValidated }) => {
       onSelect={onSelect}
       isOpen={isOpen}
       selections={selection}
-      placeholderText="Select public key"
-      aria-label="Public SSH key select"
+      placeholderText="Select public key..."
+      aria-label="Select public key"
     >
       {pubkeys.map(({ id, name }) => (
         <SelectOption

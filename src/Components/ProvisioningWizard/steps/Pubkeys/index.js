@@ -18,6 +18,7 @@ const PublicKeys = ({ setStepValidated }) => {
     isError,
     data: pubkeys,
   } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
+  const [isSelectDisabled, disableSelect] = React.useState(false);
 
   const switchTo = (optionKey) => {
     setWizardContext((prevState) => ({
@@ -32,9 +33,10 @@ const PublicKeys = ({ setStepValidated }) => {
 
   React.useEffect(() => {
     if (!isLoading && (isError || (pubkeys && pubkeys.length < 1))) {
+      disableSelect(true);
       switchTo(NEW_KEY_OPTION);
     }
-  }, [isLoading, isError]);
+  }, [isLoading]);
 
   return (
     <Form className="pubkeys">
@@ -47,16 +49,18 @@ const PublicKeys = ({ setStepValidated }) => {
         <Radio
           id="existing-pubkey-radio"
           isChecked={!wizardContext.uploadedKey}
-          isDisabled={pubkeys && pubkeys.length < 1}
+          isDisabled={isSelectDisabled}
           name="ssh-keys-radio"
           value={EXIST_KEY_OPTION}
           onChange={onOptionChange}
           label="Select existing SSH public key"
           data-testid="existing-pubkey-radio"
           body={
-            <FormGroup label="Select public key">
-              <PubkeySelect setStepValidated={setStepValidated} />
-            </FormGroup>
+            (!wizardContext.uploadedKey || isSelectDisabled) && (
+              <FormGroup label="Select public key">
+                <PubkeySelect setStepValidated={setStepValidated} />
+              </FormGroup>
+            )
           }
         />
         <Radio
