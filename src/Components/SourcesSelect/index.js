@@ -78,8 +78,6 @@ const SourcesSelect = ({ setValidation }) => {
     return <Spinner isSVG size="sm" aria-label="Loading accounts" />;
   }
 
-  console.log(sources);
-
   return (
     <Select
       isOpen={isOpen}

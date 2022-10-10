@@ -68,7 +68,6 @@ const InstanceTypesSelect = ({ setValidation }) => {
   };
 
   const selectItemsMapper = (types, limit) => {
-    console.log(types, limit);
     if (limit < types.length) types = types.slice(0, limit);
     return types.map((instanceType, index) => (
       <SelectOption
