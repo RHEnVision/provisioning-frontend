@@ -13,6 +13,8 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     sshKeyBody: 'default',
     sshKeyName: 'default',
   });
+  const [keyName, setName] = React.useState(wizardContext.sshPublicName);
+  const [publicKey, setPublicKey] = React.useState(wizardContext.sshPublicKey);
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
@@ -30,7 +32,10 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
 
   const handleNameChange = (value) => {
     setWizardContext((prevState) => ({ ...prevState, sshPublicName: value }));
-    if (value.length === 0) {
+    setName(value);
+  };
+  const handleNameBlur = () => {
+    if (keyName.length === 0) {
       updateValidation('sshKeyName', 'error');
       return;
     }
@@ -42,6 +47,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         ...prevState,
         sshPublicKey: value,
       }));
+      setPublicKey(value);
       updateValidation('sshKeyBody', 'success');
     } else {
       updateValidation('sshKeyBody', 'error');
@@ -52,12 +58,15 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
       ...prevState,
       sshPublicKey: text,
     }));
-    if (text === '') {
+    setPublicKey(text);
+  };
+  const handleSSHKeyTextBlur = () => {
+    if (publicKey === '') {
       updateValidation('sshKeyBody', 'default');
     } else {
       updateValidation(
         'sshKeyBody',
-        validatePublicKey(text) ? 'success' : 'error'
+        validatePublicKey(publicKey) ? 'success' : 'error'
       );
     }
   };
@@ -68,7 +77,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
       sshPublicName: undefined,
       sshPublicKey: undefined,
     }));
-    updateValidation('sshKeyName', 'default');
+    setPublicKey('');
     updateValidation('sshKeyBody', 'default');
   };
 
@@ -102,9 +111,10 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
       >
         <TextInput
           validated={validations.sshKeyName}
-          value={wizardContext.sshPublicName}
+          value={keyName}
           id="public-key-name"
           onChange={handleNameChange}
+          onBlur={handleNameBlur}
           type="text"
         />
       </FormGroup>
@@ -120,8 +130,9 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
           onDataChange={handleSSHKeyChange}
           allowEditingUploadedText
           onTextChange={handleSSHKeyText}
+          onTextAreaBlur={handleSSHKeyTextBlur}
           type="text"
-          value={wizardContext.sshPublicKey}
+          value={publicKey}
           validated={validations.sshKeyBody}
           onReadStarted={handleFileReadStarted}
           onReadFinished={handleFileReadFinished}
