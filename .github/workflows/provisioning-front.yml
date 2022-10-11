@@ -75,7 +75,7 @@ jobs:
           path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
           key: ${{ github.sha }}-travis
   Release-to-build:
-    needs: [pull-scripts, pull-jenkins, set-ssh]
+    needs: [pull-scripts, pull-jenkins]
     runs-on: ubuntu-latest
     env:
       COMMIT_AUTHOR_USERNAME: GitHub actions
