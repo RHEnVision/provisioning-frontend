@@ -10,7 +10,11 @@ import {
   Button,
   WizardContextConsumer,
 } from '@patternfly/react-core';
-import { CogsIcon, OkIcon, ErrorCircleOIcon } from '@patternfly/react-icons';
+import {
+  CogsIcon,
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+} from '@patternfly/react-icons';
 import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
 import {
@@ -31,7 +35,7 @@ const steps = [
     description: 'Waiting for AWS',
     progress: 40,
   },
-  { description: 'Provisioning has been completed', progress: 100 },
+  { description: 'Launch is completed', progress: 100 },
 ];
 
 const FinishStep = ({ onClose, imageID }) => {
@@ -112,36 +116,29 @@ const FinishStep = ({ onClose, imageID }) => {
   }, []);
 
   const activeProgress = steps[activeStep].progress;
-  const isJobError = polledReservation
-    ? polledReservation.success === false
-    : false;
+  const isJobError = polledReservation?.success === false;
   const isError = !!awsReservationError || !!pubkeyError || isJobError;
 
-  const iconGenerator = () => {
-    if (isError) return ErrorCircleOIcon;
-    return activeProgress === 100 ? OkIcon : CogsIcon;
-  };
-
-  const showCloseButton = () => {
-    if (isError) return true;
-    return activeStep >= 2;
-  };
-
-  const iconColor = () => {
-    if (isError) return pf_danger_color_100;
-    if (activeProgress === 100) return pf_success_color_100;
-    return undefined;
-  };
+  let title;
+  let iconProps;
+  if (isError) {
+    title = 'Launching of system(s) had failed';
+    iconProps = { color: pf_danger_color_100, icon: ExclamationCircleIcon };
+  } else if (activeProgress === 100) {
+    title = 'Launching of system(s) had successeded';
+    iconProps = { color: pf_success_color_100, icon: CheckCircleIcon };
+  } else {
+    title = 'Launching your systems';
+    iconProps = { icon: CogsIcon };
+  }
 
   return (
     <WizardContextConsumer>
       {({ goToStepById }) => (
         <EmptyState variant="large">
-          <EmptyStateIcon color={iconColor()} icon={iconGenerator()} />
+          <EmptyStateIcon {...iconProps} />
           <Title headingLevel="h4" size="lg">
-            {activeProgress === 100
-              ? 'Provisioning has been finished successfully'
-              : 'Provisioning in progress'}
+            {title}
           </Title>
           <EmptyStateBody>
             <Progress
@@ -154,10 +151,11 @@ const FinishStep = ({ onClose, imageID }) => {
           <EmptyStateBody>
             <span>
               {isError
-                ? `An error has been occurred while ${steps[
+                ? `An error has occurred while ${steps[
                     activeStep
                   ].description.toLowerCase()}`
                 : steps[activeStep].description}
+              .
               <br />
               {polledReservation?.status}
               <span className="status-error">
@@ -167,15 +165,15 @@ const FinishStep = ({ onClose, imageID }) => {
               </span>
             </span>
           </EmptyStateBody>
+          {isError && (
+            <Button onClick={() => goToStepById(1)} variant="primary">
+              Edit
+            </Button>
+          )}
           <EmptyStateSecondaryActions>
-            {isError && (
-              <Button onClick={() => goToStepById(1)} variant="link">
-                Back
-              </Button>
-            )}
             <Button
               variant="link"
-              isDisabled={!showCloseButton()}
+              isDisabled={!isError && activeStep < 2}
               onClick={onClose}
             >
               Close
