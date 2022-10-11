@@ -96,10 +96,6 @@ jobs:
               User git
               AddKeysToAgent yes
               IdentityFile /home/runner/.ssh/github_actions" >> /home/runner/.ssh/config
-      - uses: actions/download-artifact@v3
-        with:
-          name: scripts
-          path: ${{ github.workspace }}/scripts/
       - uses: actions/cache@v3
         with:
           path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
