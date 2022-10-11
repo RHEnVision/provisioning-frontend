@@ -42,28 +42,9 @@ jobs:
           name: build
           path: dist/*
 
-  pull-scripts:
-    needs: [build]
-    if: github.ref_name == 'main' || github.ref_name == 'prod-beta' || contains(github.ref_name, 'stable')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: mkdir ${{ github.workspace }}/scripts
-      - name: Pull release file
-        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/release.sh > ${{ github.workspace }}/scripts/release.sh
-      - run: chmod +x "${{ github.workspace }}/scripts/release.sh"
-      - name: Pull nginx conf file
-        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/nginx_conf_gen.sh > ${{ github.workspace }}/scripts/nginx_conf_gen.sh
-      - run: chmod +x "${{ github.workspace }}/scripts/nginx_conf_gen.sh"
-      - name: Pull quay push file
-        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/quay_push.sh > ${{ github.workspace }}/scripts/quay_push.sh
-      - run: chmod +x "${{ github.workspace }}/scripts/quay_push.sh"
-      - uses: actions/upload-artifact@v3
-        with:
-          name: scripts
-          path: scripts/*
   pull-jenkins:
     needs: [build]
+    if: github.ref_name == 'main' || github.ref_name == 'prod-beta' || contains(github.ref_name, 'stable')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -75,7 +56,8 @@ jobs:
           path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
           key: ${{ github.sha }}-travis
   Release-to-build:
-    needs: [pull-scripts, pull-jenkins]
+    needs: [build, pull-jenkins]
+    if: github.ref_name == 'main' || github.ref_name == 'prod-beta' || contains(github.ref_name, 'stable')
     runs-on: ubuntu-latest
     env:
       COMMIT_AUTHOR_USERNAME: GitHub actions
@@ -90,6 +72,19 @@ jobs:
           echo "TRAVIS_COMMIT_MESSAGE=`git log -1 --pretty=format:"%s"`" >> $GITHUB_ENV
           echo "REPO=`node -e 'console.log(require("${{ github.workspace }}/package.json").insights.buildrepo)'`" >> $GITHUB_ENV
       - run: git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+      ## pull build files
+      - run: mkdir ${{ github.workspace }}/scripts
+      - name: Pull release file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/release.sh > ${{ github.workspace }}/scripts/release.sh
+      - run: chmod +x "${{ github.workspace }}/scripts/release.sh"
+      - name: Pull nginx conf file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/nginx_conf_gen.sh > ${{ github.workspace }}/scripts/nginx_conf_gen.sh
+      - run: chmod +x "${{ github.workspace }}/scripts/nginx_conf_gen.sh"
+      - name: Pull quay push file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/quay_push.sh > ${{ github.workspace }}/scripts/quay_push.sh
+      - run: chmod +x "${{ github.workspace }}/scripts/quay_push.sh"
+
+      ## set access to build repo
       - name: Add SSH key
         run: |
             mkdir -p /home/runner/.ssh
@@ -122,7 +117,7 @@ jobs:
         if: steps.check_custom_release.outputs.files_exists != 'true'
         env:
           APP_BUILD_DIR: ${{ github.workspace }}/dist
-        run: ${{ github.workspace }}/scripts/release.sh ${{ github.event.workflow_run.head_branch }}
+        run: ${{ github.workspace }}/scripts/release.sh ${{ github.ref_name }}
         working-directory: ${{ github.workspace }}
       - name: Run the deploy
         if: steps.check_custom_release.outputs.files_exists == 'true'
