@@ -1,8 +1,9 @@
 name: Release workflow
 on:
   workflow_run:
+    # Disabled for now
     workflows: [lint-test]
-    branches: [main, stage-stable, prod-beta, prod-stable]
+    branches: []
     types:
       - completed
 jobs:
@@ -72,23 +73,23 @@ jobs:
           echo "TRAVIS_COMMIT_MESSAGE=`git log -1 --pretty=format:"%s"`" >> $GITHUB_ENV
           echo "REPO=`node -e 'console.log(require("${{ github.workspace }}/package.json").insights.buildrepo)'`" >> $GITHUB_ENV
       - run: git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: /home/runner/.ssh/*
           key: ${{ github.sha }}-ssh
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ${{ github.workspace }}/scripts/*
           key: ${{ github.sha }}-scripts
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
           key: ${{ github.sha }}-travis
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: restore-build
         with:
           path: ${{ github.workspace }}/dist/*
-          key: ${{ github.sha }}
+          key: ${{ github.event.workflow_run.head_sha }}
       - name: Check custom_release existence
         id: check_custom_release
         uses: andstor/file-existence-action@v1
