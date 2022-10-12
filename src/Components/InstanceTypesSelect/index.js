@@ -60,11 +60,13 @@ const InstanceTypesSelect = ({ setValidation }) => {
   };
 
   const onFilter = (_e, inputValue) => {
-    if (prevSearch !== inputValue) setNumOptions(OPTIONS_PER_SCREEN);
-    setFilteredTypes(
-      instanceTypes.filter((i) => i.name.search(inputValue) === 0)
-    );
-    setPrevSearch(inputValue);
+    if (prevSearch !== inputValue) {
+      setNumOptions(OPTIONS_PER_SCREEN);
+      setPrevSearch(inputValue);
+      setFilteredTypes(
+        instanceTypes.filter((i) => i.name.search(inputValue) === 0)
+      );
+    }
   };
 
   const selectItemsMapper = (types, limit) => {
