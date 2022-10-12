@@ -35,7 +35,7 @@ sudo npm run patch:hosts
 
 3. Open browser in URL listed in the terminal output
 
-Update `config/dev.webpack.config.js` according to your application URL. [Read more](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy).
+Update `fec.config.json` according to your application URL. [Read more](http://front-end-docs-insights.apps.ocp4.prod.psi.redhat.com/ui-onboarding/fec-binary#Configuration)[Older webpack config](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy).
 
 ## Testing
 This project uses jest, react-testing-library and msw 
