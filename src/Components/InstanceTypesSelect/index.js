@@ -7,6 +7,7 @@ import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
 const OPTIONS_PER_SCREEN = 5;
+const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
 
 const InstanceTypesSelect = ({ setValidation }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
@@ -60,11 +61,14 @@ const InstanceTypesSelect = ({ setValidation }) => {
   };
 
   const onFilter = (_e, inputValue) => {
-    if (prevSearch !== inputValue) setNumOptions(OPTIONS_PER_SCREEN);
-    setFilteredTypes(
-      instanceTypes.filter((i) => i.name.search(inputValue) === 0)
-    );
-    setPrevSearch(inputValue);
+    const search = sanitizeSearchValue(inputValue);
+    if (prevSearch !== search) {
+      setNumOptions(OPTIONS_PER_SCREEN);
+      setPrevSearch(search);
+      setFilteredTypes(
+        instanceTypes.filter((i) => i.name.search(search) === 0)
+      );
+    }
   };
 
   const selectItemsMapper = (types, limit) => {
