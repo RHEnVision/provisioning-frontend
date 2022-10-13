@@ -68,7 +68,7 @@ jobs:
         run: |
           echo "TRAVIS_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
           echo "TRAVIS_BUILD_NUMBER=$GITHUB_RUN_ID" >> $GITHUB_ENV
-          echo ${{ github.event.head_commit.message }}
+          echo "${{ github.event.head_commit.message }}"
           echo "TRAVIS_COMMIT_MESSAGE=`git log -1 --pretty=format:"%s"`" >> $GITHUB_ENV
           echo "REPO=`node -e 'console.log(require("${{ github.workspace }}/package.json").insights.buildrepo)'`" >> $GITHUB_ENV
       - run: git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
