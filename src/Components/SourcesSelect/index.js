@@ -61,11 +61,13 @@ const SourcesSelect = ({ setValidation }) => {
     return (
       <>
         <Alert
+          ouiaId="select_account_alert"
           variant="warning"
           isInline
           title="There are problems fetching accounts"
         />
         <Select
+          ouiaId="select_account_empty"
           isDisabled
           placeholderText="No accounts found"
           aria-label="Select account"
@@ -80,6 +82,7 @@ const SourcesSelect = ({ setValidation }) => {
 
   return (
     <Select
+      ouiaId="select_account"
       isOpen={isOpen}
       onToggle={(openState) => setIsOpen(openState)}
       selections={selected}
