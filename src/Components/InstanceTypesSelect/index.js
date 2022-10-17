@@ -1,6 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Spinner, Select, SelectOption } from '@patternfly/react-core';
+import {
+  Alert,
+  Spinner,
+  Select,
+  SelectOption,
+  TextInput,
+} from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
@@ -26,7 +32,8 @@ const InstanceTypesSelect = ({ setValidation }) => {
   if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
     return (
       <>
-        <input
+        <TextInput
+          ouiaId="instance_type_readonly"
           className="pf-c-form-control"
           readOnly
           type="text"
@@ -102,11 +109,13 @@ const InstanceTypesSelect = ({ setValidation }) => {
     return (
       <>
         <Alert
+          ouiaId="instance_type_alert"
           variant="warning"
           isInline
           title="There are problems fetching instance types"
         />
         <Select
+          ouiaId="instance_type_empty"
           isDisabled
           placeholderText="No instance types found"
           aria-label="Select instance type"
@@ -124,6 +133,7 @@ const InstanceTypesSelect = ({ setValidation }) => {
 
   return (
     <Select
+      ouiaId="select_instance_type"
       variant="typeahead"
       aria-label="Select instance type"
       placeholderText="Select instance type"

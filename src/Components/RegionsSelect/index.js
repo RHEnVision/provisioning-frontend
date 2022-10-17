@@ -4,7 +4,12 @@ import { useWizardContext } from '../Common/WizardContext';
 export const RegionsSelect = () => {
   const [wizardContext] = useWizardContext();
   return (
-    <FormSelect isDisabled aria-label="Select region" value="">
+    <FormSelect
+      ouiaId="select_region"
+      isDisabled
+      aria-label="Select region"
+      value=""
+    >
       <FormSelectOption
         label={wizardContext.chosenRegion}
         key="placeholder"
