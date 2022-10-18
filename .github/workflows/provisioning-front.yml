@@ -113,7 +113,7 @@ jobs:
         if: steps.check_custom_release.outputs.files_exists != 'true'
         env:
           APP_BUILD_DIR: ${{ github.workspace }}/dist
-        run: ${{ github.workspace }}/scripts/release.sh ${{ github.ref_name }}
+        run: ${{ github.workspace }}/scripts/release.sh ${{ github.ref_name == 'main' && 'stage-beta' || github.ref_name }}
         working-directory: ${{ github.workspace }}
       - name: Run the deploy
         if: steps.check_custom_release.outputs.files_exists == 'true'
