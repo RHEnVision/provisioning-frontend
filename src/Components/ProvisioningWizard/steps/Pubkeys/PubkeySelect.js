@@ -54,12 +54,14 @@ const PubkeySelect = ({ setStepValidated }) => {
       <>
         {isError && (
           <Alert
+            ouiaId="pubkey_alert"
             variant="warning"
             isInline
             title="There are problems fetching saved SSH keys"
           />
         )}
         <Select
+          ouiaId="pubkey_empty"
           isDisabled
           placeholderText="No SSH key found"
           aria-label="Select public key"
@@ -70,6 +72,7 @@ const PubkeySelect = ({ setStepValidated }) => {
 
   return (
     <Select
+      ouiaId="select_pubkey"
       onToggle={(isExpanded) => setIsOpen(isExpanded)}
       onSelect={onSelect}
       isOpen={isOpen}
