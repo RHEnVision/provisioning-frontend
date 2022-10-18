@@ -40,14 +40,17 @@ const PublicKeys = ({ setStepValidated }) => {
 
   return (
     <Form className="pubkeys">
-      <Title headingLevel="h1">SSH keys authentication</Title>
-      <Text>
+      <Title ouiaId="pubkey_title" headingLevel="h1">
+        SSH keys authentication
+      </Title>
+      <Text ouiaId="pubkey_description">
         Establish secure, reliable communication and strong encryption to
         protect data.
       </Text>
       <FormGroup isRequired label="Select a method to add SSH pubic key">
         <Radio
           id="existing-pubkey-radio"
+          ouiaId="pubkey_radio"
           isChecked={!wizardContext.uploadedKey}
           isDisabled={isSelectDisabled}
           name="ssh-keys-radio"
@@ -65,6 +68,7 @@ const PublicKeys = ({ setStepValidated }) => {
         />
         <Radio
           id="upload-pubkey-radio"
+          ouiaId="new_pubkey_radio"
           isChecked={wizardContext.uploadedKey}
           name="ssh-keys-radio"
           value={NEW_KEY_OPTION}

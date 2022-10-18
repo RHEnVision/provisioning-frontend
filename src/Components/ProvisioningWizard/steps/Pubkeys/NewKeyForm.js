@@ -110,6 +110,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         fieldId="ssh-name"
       >
         <TextInput
+          ouiaId="new_pubkey_name"
           validated={validations.sshKeyName}
           value={keyName}
           id="public-key-name"
@@ -126,6 +127,8 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         validated={validations.sshKeyBody}
       >
         <FileUpload
+          // ouia not supported yet?
+          ouiaId="new_pubkey_file"
           id="public-key-value"
           onDataChange={handleSSHKeyChange}
           allowEditingUploadedText
