@@ -1,6 +1,8 @@
 import React from 'react';
 import { Slider } from '@patternfly/react-core';
 import { useWizardContext } from '../Common/WizardContext';
+import './styles.css';
+
 const MAX_INSTANCES = 45;
 const MIN_INSTANCES = 1;
 

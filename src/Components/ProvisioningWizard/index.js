@@ -61,6 +61,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
           isOpen
           onClose={onWizardClose}
           onNext={onNext}
+          className={'provisioning'}
         />
         <ConfirmModal
           isOpen={isConfirming}
