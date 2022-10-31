@@ -13,11 +13,7 @@ const NEW_KEY_OPTION = 'newKey';
 
 const PublicKeys = ({ setStepValidated }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
-  const {
-    isLoading,
-    isError,
-    data: pubkeys,
-  } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
+  const { isLoading, isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
   const [isSelectDisabled, disableSelect] = React.useState(false);
 
   const switchTo = (optionKey) => {
@@ -43,10 +39,7 @@ const PublicKeys = ({ setStepValidated }) => {
       <Title ouiaId="pubkey_title" headingLevel="h1">
         SSH keys authentication
       </Title>
-      <Text ouiaId="pubkey_description">
-        Establish secure, reliable communication and strong encryption to
-        protect data.
-      </Text>
+      <Text ouiaId="pubkey_description">Establish secure, reliable communication and strong encryption to protect data.</Text>
       <FormGroup isRequired label="Select a method to add SSH pubic key">
         <Radio
           id="existing-pubkey-radio"
@@ -76,11 +69,7 @@ const PublicKeys = ({ setStepValidated }) => {
           label="Add and save a new SSH public key"
           description="Newly added key will be automatically saved. Result of the provisioning will not be affected this process."
           data-testid="upload-pubkey-radio"
-          body={
-            wizardContext.uploadedKey && (
-              <NewSSHKeyForm setStepValidated={setStepValidated} />
-            )
-          }
+          body={wizardContext.uploadedKey && <NewSSHKeyForm setStepValidated={setStepValidated} />}
         />
       </FormGroup>
     </Form>

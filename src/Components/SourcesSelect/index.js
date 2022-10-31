@@ -25,9 +25,7 @@ const SourcesSelect = ({ setValidation }) => {
       const id = wizardContext.chosenSource;
 
       if (!id) return;
-      setSelected(
-        selectObject(id, data.find((source) => source.id === id).name)
-      );
+      setSelected(selectObject(id, data.find((source) => source.id === id).name));
     },
   });
 
@@ -48,30 +46,14 @@ const SourcesSelect = ({ setValidation }) => {
   };
 
   const selectItemsMapper = (sourcesData) =>
-    sourcesData.map(({ name, id }) => (
-      <SelectOption
-        aria-label="Source account"
-        key={id}
-        value={selectObject(id, name)}
-      ></SelectOption>
-    ));
+    sourcesData.map(({ name, id }) => <SelectOption aria-label="Source account" key={id} value={selectObject(id, name)}></SelectOption>);
 
   if (error) {
     console.warn('Failed to fetch sources list');
     return (
       <>
-        <Alert
-          ouiaId="select_account_alert"
-          variant="warning"
-          isInline
-          title="There are problems fetching accounts"
-        />
-        <Select
-          ouiaId="select_account_empty"
-          isDisabled
-          placeholderText="No accounts found"
-          aria-label="Select account"
-        />
+        <Alert ouiaId="select_account_alert" variant="warning" isInline title="There are problems fetching accounts" />
+        <Select ouiaId="select_account_empty" isDisabled placeholderText="No accounts found" aria-label="Select account" />
       </>
     );
   }

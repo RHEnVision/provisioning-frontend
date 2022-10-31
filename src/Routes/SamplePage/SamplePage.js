@@ -1,22 +1,9 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import {
-  Button,
-  StackItem,
-  Stack,
-  Title,
-  FormGroup,
-  TextInput,
-  Select,
-  SelectOption,
-  SelectVariant,
-} from '@patternfly/react-core';
+import { Button, StackItem, Stack, Title, FormGroup, TextInput, Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-import {
-  PageHeader,
-  PageHeaderTitle,
-} from '@redhat-cloud-services/frontend-components/PageHeader';
+import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 import axios from 'axios';
 
 import './sample-page.scss';
@@ -80,11 +67,7 @@ const SamplePage = () => {
       isOpen={isImageSelectOpen}
     >
       {images?.map((option) => (
-        <SelectOption
-          key={option.id}
-          value={option.image_name}
-          description={`ID: ${option.id}`}
-        />
+        <SelectOption key={option.id} value={option.image_name} description={`ID: ${option.id}`} />
       ))}
     </Select>
   );
@@ -95,11 +78,7 @@ const SamplePage = () => {
   } else {
     imageInput = (
       <FormGroup label="Image AMI">
-        <TextInput
-          id="ami"
-          value={chosenImage.id || ''}
-          onChange={onInputChange}
-        />
+        <TextInput id="ami" value={chosenImage.id || ''} onChange={onInputChange} />
       </FormGroup>
     );
   }
@@ -118,11 +97,7 @@ const SamplePage = () => {
             <Button variant="primary" onClick={() => setWizardModal(true)}>
               Open Wizard
             </Button>
-            <ProvisioningWizard
-              isOpen={isWizardOpen}
-              onClose={() => setWizardModal(false)}
-              image={chosenImage}
-            />
+            <ProvisioningWizard isOpen={isWizardOpen} onClose={() => setWizardModal(false)} image={chosenImage} />
           </StackItem>
         </Stack>
       </Main>

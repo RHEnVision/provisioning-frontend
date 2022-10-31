@@ -1,12 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Alert,
-  Spinner,
-  Select,
-  SelectOption,
-  TextInput,
-} from '@patternfly/react-core';
+import { Alert, Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
@@ -25,9 +19,7 @@ const InstanceTypesSelect = ({ setValidation }) => {
     isLoading,
     error,
     data: instanceTypes,
-  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () =>
-    fetchInstanceTypesList(wizardContext.chosenRegion)
-  );
+  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion));
 
   if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
     return (
@@ -72,9 +64,7 @@ const InstanceTypesSelect = ({ setValidation }) => {
     if (prevSearch !== search) {
       setNumOptions(OPTIONS_PER_SCREEN);
       setPrevSearch(search);
-      setFilteredTypes(
-        instanceTypes.filter((i) => i.name.search(search) === 0)
-      );
+      setFilteredTypes(instanceTypes.filter((i) => i.name.search(search) === 0));
     }
   };
 
@@ -86,14 +76,8 @@ const InstanceTypesSelect = ({ setValidation }) => {
         key={index}
         description={`${instanceType.cores} cores |
           ${instanceType.vcpus} vCPU |
-          ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(
-            1
-          )} GiB memory |
-          ${
-            instanceType.storage_gb > 0
-              ? instanceType.storage_gb + ' GB storage | '
-              : 'EBS only | '
-          }
+          ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(1)} GiB memory |
+          ${instanceType.storage_gb > 0 ? instanceType.storage_gb + ' GB storage | ' : 'EBS only | '}
           ${instanceType.architecture}`}
         value={instanceType.name}
       />
@@ -108,25 +92,13 @@ const InstanceTypesSelect = ({ setValidation }) => {
     console.warn('Failed to fetch instance types list');
     return (
       <>
-        <Alert
-          ouiaId="instance_type_alert"
-          variant="warning"
-          isInline
-          title="There are problems fetching instance types"
-        />
-        <Select
-          ouiaId="instance_type_empty"
-          isDisabled
-          placeholderText="No instance types found"
-          aria-label="Select instance type"
-        />
+        <Alert ouiaId="instance_type_alert" variant="warning" isInline title="There are problems fetching instance types" />
+        <Select ouiaId="instance_type_empty" isDisabled placeholderText="No instance types found" aria-label="Select instance type" />
       </>
     );
   }
   if (isLoading) {
-    return (
-      <Spinner isSVG size="sm" aria-label="Contents of the small example" />
-    );
+    return <Spinner isSVG size="sm" aria-label="Contents of the small example" />;
   }
 
   const types = filteredTypes || instanceTypes;

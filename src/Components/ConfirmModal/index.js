@@ -12,12 +12,7 @@ const ConfirmModal = ({ isOpen, onConfirm, onCancel }) => (
     isOpen={isOpen}
     onClose={onCancel}
     actions={[
-      <Button
-        key="exit"
-        variant="primary"
-        onClick={onConfirm}
-        ouiaId="btn-exit-confirm"
-      >
+      <Button key="exit" variant="primary" onClick={onConfirm} ouiaId="btn-exit-confirm">
         Exit
       </Button>,
       <Button key="stay" variant="link" onClick={onCancel}>

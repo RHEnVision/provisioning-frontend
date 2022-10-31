@@ -8,8 +8,7 @@ const ReviewDetails = ({ imageName }) => {
     <div className="pf-c-form">
       <Title headingLevel="h1">Review details</Title>
       <Text>
-        Review the information below and click <b>Launch</b> to complete
-        provisioning.
+        Review the information below and click <b>Launch</b> to complete provisioning.
       </Text>
 
       <ExpandableAWS imageName={imageName} />

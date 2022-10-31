@@ -8,12 +8,7 @@ export const ExpandableAWS = ({ imageName }) => {
     setIsExpanded(isExpanded);
   };
   return (
-    <ExpandableSection
-      toggleText={'AWS'}
-      onToggle={onToggle}
-      isExpanded={isExpanded}
-      isIndented
-    >
+    <ExpandableSection toggleText={'AWS'} onToggle={onToggle} isExpanded={isExpanded} isIndented>
       <DescriptionListAWS imageName={imageName} />
     </ExpandableSection>
   );
