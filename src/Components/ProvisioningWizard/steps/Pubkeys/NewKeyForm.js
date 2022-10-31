@@ -18,9 +18,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
-    const errorExists = Object.values(validations).some(
-      (valid) => valid !== 'success'
-    );
+    const errorExists = Object.values(validations).some((valid) => valid !== 'success');
     setStepValidated(!errorExists);
   }, [validations]);
 
@@ -64,10 +62,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     if (publicKey === '') {
       updateValidation('sshKeyBody', 'default');
     } else {
-      updateValidation(
-        'sshKeyBody',
-        validatePublicKey(publicKey) ? 'success' : 'error'
-      );
+      updateValidation('sshKeyBody', validatePublicKey(publicKey) ? 'success' : 'error');
     }
   };
 
@@ -102,13 +97,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
   };
   return (
     <>
-      <FormGroup
-        validated={validations.sshKeyName}
-        helperTextInvalid="Name is required"
-        label="Name"
-        isRequired
-        fieldId="ssh-name"
-      >
+      <FormGroup validated={validations.sshKeyName} helperTextInvalid="Name is required" label="Name" isRequired fieldId="ssh-name">
         <TextInput
           ouiaId="new_pubkey_name"
           validated={validations.sshKeyName}

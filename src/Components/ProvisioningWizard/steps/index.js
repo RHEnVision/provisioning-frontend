@@ -4,13 +4,7 @@ import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
 import FinishStep from './FinishProgress';
 
-const defaultSteps = ({
-  stepIdReached,
-  image: { name, id },
-  stepValidation,
-  setStepValidation,
-  onClose,
-}) => [
+const defaultSteps = ({ stepIdReached, image: { name, id }, stepValidation, setStepValidation, onClose }) => [
   {
     name: 'Account and customization',
     steps: [
@@ -18,13 +12,7 @@ const defaultSteps = ({
         name: 'AWS',
         id: 1,
         enableNext: stepValidation.awsStep,
-        component: (
-          <AccountCustomizationsAWS
-            setStepValidated={(validated) =>
-              setStepValidation((prev) => ({ ...prev, awsStep: validated }))
-            }
-          />
-        ),
+        component: <AccountCustomizationsAWS setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />,
         canJumpTo: stepIdReached >= 1,
       },
     ],
@@ -32,13 +20,7 @@ const defaultSteps = ({
   {
     name: 'SSH key authentication',
     id: 4,
-    component: (
-      <PublicKeys
-        setStepValidated={(validated) =>
-          setStepValidation((prev) => ({ ...prev, sshStep: validated }))
-        }
-      />
-    ),
+    component: <PublicKeys setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, sshStep: validated }))} />,
     canJumpTo: stepIdReached >= 4,
     enableNext: stepValidation.sshStep,
   },

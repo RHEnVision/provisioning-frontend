@@ -12,9 +12,7 @@ export const fetchPubkeysList = async () => {
 };
 
 export const fetchInstanceTypesList = async (region) => {
-  const { data } = await axios.get(
-    provisioningUrl(`instance_types/aws?region=${region}`)
-  );
+  const { data } = await axios.get(provisioningUrl(`instance_types/aws?region=${region}`));
   return data;
 };
 

@@ -10,18 +10,10 @@ import {
   Button,
   WizardContextConsumer,
 } from '@patternfly/react-core';
-import {
-  CogsIcon,
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-} from '@patternfly/react-icons';
+import { CogsIcon, CheckCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
-import {
-  createAWSReservation,
-  createNewPublicKey,
-  fetchAWSReservation,
-} from '../../../../API';
+import { createAWSReservation, createNewPublicKey, fetchAWSReservation } from '../../../../API';
 import './styles.scss';
 
 const pf_success_color_100 = '#3E8635';
@@ -39,59 +31,38 @@ const steps = [
 ];
 
 const FinishStep = ({ onClose, imageID }) => {
-  const [
-    {
-      chosenSource,
-      chosenInstanceType,
-      chosenNumOfInstances,
-      chosenRegion,
-      sshPublicName,
-      sshPublicKey,
-      chosenSshKeyId,
-      uploadedKey,
-    },
-  ] = useWizardContext();
+  const [{ chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
+    useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
-  const stepUp = () =>
-    setActiveStep((prevStep) =>
-      prevStep < steps.length - 1 ? prevStep + 1 : prevStep
-    );
+  const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
 
-  const { data: polledReservation } = useQuery(
-    ['reservation', reservationID],
-    () => fetchAWSReservation(reservationID),
-    {
-      enabled: !!reservationID,
-      refetchInterval: RESERVATION_POLLING_INTERVAL,
-      refetchIntervalInBackground: true,
-    }
-  );
+  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
+    enabled: !!reservationID,
+    refetchInterval: RESERVATION_POLLING_INTERVAL,
+    refetchIntervalInBackground: true,
+  });
 
-  const { mutate: createAWSDeployment, error: awsReservationError } =
-    useMutation(createAWSReservation, {
-      onSuccess: (data) => {
-        stepUp();
-        setReservationID(data?.data?.reservation_id);
-      },
-    });
+  const { mutate: createAWSDeployment, error: awsReservationError } = useMutation(createAWSReservation, {
+    onSuccess: (data) => {
+      stepUp();
+      setReservationID(data?.data?.reservation_id);
+    },
+  });
 
-  const { mutate: createPublicKey, error: pubkeyError } = useMutation(
-    createNewPublicKey,
-    {
-      onSuccess: (resp) => {
-        createAWSDeployment({
-          source_id: chosenSource,
-          instance_type: chosenInstanceType,
-          amount: chosenNumOfInstances,
-          image_id: imageID,
-          region: chosenRegion,
-          pubkey_id: resp?.data?.id,
-        });
-        stepUp();
-      },
-    }
-  );
+  const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
+    onSuccess: (resp) => {
+      createAWSDeployment({
+        source_id: chosenSource,
+        instance_type: chosenInstanceType,
+        amount: chosenNumOfInstances,
+        image_id: imageID,
+        region: chosenRegion,
+        pubkey_id: resp?.data?.id,
+      });
+      stepUp();
+    },
+  });
 
   React.useEffect(() => {
     if (polledReservation?.success) {
@@ -141,20 +112,11 @@ const FinishStep = ({ onClose, imageID }) => {
             {title}
           </Title>
           <EmptyStateBody>
-            <Progress
-              style={{ width: '500px' }}
-              variant={isError && 'danger'}
-              value={activeProgress}
-              measureLocation="outside"
-            />
+            <Progress style={{ width: '500px' }} variant={isError && 'danger'} value={activeProgress} measureLocation="outside" />
           </EmptyStateBody>
           <EmptyStateBody>
             <span>
-              {isError
-                ? `An error has occurred while ${steps[
-                    activeStep
-                  ].description.toLowerCase()}`
-                : steps[activeStep].description}
+              {isError ? `An error has occurred while ${steps[activeStep].description.toLowerCase()}` : steps[activeStep].description}
               .
               <br />
               {polledReservation?.status}
@@ -171,11 +133,7 @@ const FinishStep = ({ onClose, imageID }) => {
             </Button>
           )}
           <EmptyStateSecondaryActions>
-            <Button
-              variant="link"
-              isDisabled={!isError && activeStep < 2}
-              onClick={onClose}
-            >
+            <Button variant="link" isDisabled={!isError && activeStep < 2} onClick={onClose}>
               Close
             </Button>
           </EmptyStateSecondaryActions>

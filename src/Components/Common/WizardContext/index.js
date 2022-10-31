@@ -4,5 +4,4 @@ import initialWizardContext from './initialState';
 
 const useSharedState = () => useState(initialWizardContext);
 
-export const { Provider: WizardProvider, useTracked: useWizardContext } =
-  createContainer(useSharedState);
+export const { Provider: WizardProvider, useTracked: useWizardContext } = createContainer(useSharedState);

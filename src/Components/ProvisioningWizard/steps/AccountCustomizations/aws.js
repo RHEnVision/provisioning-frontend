@@ -1,13 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Form,
-  FormGroup,
-  Popover,
-  Title,
-  Text,
-  Button,
-} from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
@@ -24,9 +17,7 @@ const AccountCustomizationsAWS = ({ setStepValidated }) => {
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
-    const errorExists = Object.values(validations).some(
-      (valid) => valid !== 'success'
-    );
+    const errorExists = Object.values(validations).some((valid) => valid !== 'success');
     setStepValidated(!errorExists);
   }, [validations]);
 
@@ -36,8 +27,7 @@ const AccountCustomizationsAWS = ({ setStepValidated }) => {
         Account and customizations | AWS
       </Title>
       <Text ouiaId="account_custom_description">
-        Configure instances that will run on your AWS. All the instances will
-        launch with the same configuration.
+        Configure instances that will run on your AWS. All the instances will launch with the same configuration.
       </Text>
       <FormGroup
         label="Select account"

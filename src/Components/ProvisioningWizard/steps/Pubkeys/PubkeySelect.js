@@ -17,23 +17,14 @@ const PubkeySelect = ({ setStepValidated }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selection, setSelection] = React.useState(
-    wizardContext.chosenSshKeyId
-      ? selectOptionObj(
-          wizardContext.chosenSshKeyId,
-          wizardContext.chosenSshKeyName
-        )
-      : null
+    wizardContext.chosenSshKeyId ? selectOptionObj(wizardContext.chosenSshKeyId, wizardContext.chosenSshKeyName) : null
   );
 
   React.useEffect(() => {
     setStepValidated(!!selection);
   }, [selection]);
 
-  const {
-    isLoading,
-    isError,
-    data: pubkeys,
-  } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
+  const { isLoading, isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
 
   const onSelect = (event, value) => {
     setWizardContext((prevState) => ({
@@ -52,20 +43,8 @@ const PubkeySelect = ({ setStepValidated }) => {
   if (isError || (pubkeys && pubkeys.length < 1)) {
     return (
       <>
-        {isError && (
-          <Alert
-            ouiaId="pubkey_alert"
-            variant="warning"
-            isInline
-            title="There are problems fetching saved SSH keys"
-          />
-        )}
-        <Select
-          ouiaId="pubkey_empty"
-          isDisabled
-          placeholderText="No SSH key found"
-          aria-label="Select public key"
-        />
+        {isError && <Alert ouiaId="pubkey_alert" variant="warning" isInline title="There are problems fetching saved SSH keys" />}
+        <Select ouiaId="pubkey_empty" isDisabled placeholderText="No SSH key found" aria-label="Select public key" />
       </>
     );
   }
@@ -81,11 +60,7 @@ const PubkeySelect = ({ setStepValidated }) => {
       aria-label="Select public key"
     >
       {pubkeys.map(({ id, name }) => (
-        <SelectOption
-          aria-label={`Public key ${name}`}
-          key={id}
-          value={selectOptionObj(id, name)}
-        />
+        <SelectOption aria-label={`Public key ${name}`} key={id} value={selectOptionObj(id, name)} />
       ))}
     </Select>
   );
