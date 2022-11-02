@@ -93,13 +93,13 @@ const FinishStep = ({ onClose, imageID }) => {
   let title;
   let iconProps;
   if (isError) {
-    title = 'Launching of system(s) had failed';
+    title = 'Launching system(s): Failure';
     iconProps = { color: pf_danger_color_100, icon: ExclamationCircleIcon };
   } else if (activeProgress === 100) {
-    title = 'Launching of system(s) had successeded';
+    title = 'Launching system(s): Success';
     iconProps = { color: pf_success_color_100, icon: CheckCircleIcon };
   } else {
-    title = 'Launching your systems';
+    title = 'Launching your system(s)';
     iconProps = { icon: CogsIcon };
   }
 
@@ -108,11 +108,17 @@ const FinishStep = ({ onClose, imageID }) => {
       {({ goToStepById }) => (
         <EmptyState variant="large">
           <EmptyStateIcon {...iconProps} />
-          <Title headingLevel="h4" size="lg">
+          <Title headingLevel="h4" size="lg" ouiaId="launch-status">
             {title}
           </Title>
           <EmptyStateBody>
-            <Progress style={{ width: '500px' }} variant={isError && 'danger'} value={activeProgress} measureLocation="outside" />
+            <Progress
+              style={{ width: '500px' }}
+              variant={isError && 'danger'}
+              value={activeProgress}
+              measureLocation="outside"
+              id="launch-progress"
+            />
           </EmptyStateBody>
           <EmptyStateBody>
             <span>

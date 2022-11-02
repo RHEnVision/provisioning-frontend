@@ -6,8 +6,10 @@ import { ExpandableAWS } from '../../../ExpandableAWS';
 const ReviewDetails = ({ imageName }) => {
   return (
     <div className="pf-c-form">
-      <Title headingLevel="h1">Review details</Title>
-      <Text>
+      <Title ouiaId="review_details_title" headingLevel="h1">
+        Review details
+      </Title>
+      <Text ouiaId="review_details_description">
         Review the information below and click <b>Launch</b> to complete provisioning.
       </Text>
 
