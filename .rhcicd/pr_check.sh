@@ -10,7 +10,7 @@ export IMAGE="quay.io/cloudservices/provisioning-frontend"
 export WORKSPACE=${WORKSPACE:-$APP_ROOT} # if running in jenkins, use the build's workspace
 export APP_ROOT=$(pwd)
 # export NODE_BUILD_VERSION=16
-COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
+COMMON_BUILDER=https://raw.githubusercontent.com/akhil-jha/insights-frontend-builder-common/pr_latest_tag
 
 # --------------------------------------------
 # Options that must be configured by app owner
