@@ -51,8 +51,8 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
       <APIProvider>
         <Wizard
           {...props}
-          title="Provisioning"
-          description={`Provision image ${image.name}`}
+          title="Launch"
+          description={`Launch image ${image.name}`}
           steps={steps}
           isOpen
           onClose={onWizardClose}

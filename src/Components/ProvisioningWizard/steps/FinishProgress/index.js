@@ -87,6 +87,7 @@ const FinishStep = ({ onClose, imageID }) => {
   }, []);
 
   const activeProgress = steps[activeStep].progress;
+  const activeDescription = steps[activeStep].description;
   const isJobError = polledReservation?.success === false;
   const isError = !!awsReservationError || !!pubkeyError || isJobError;
 
@@ -122,7 +123,7 @@ const FinishStep = ({ onClose, imageID }) => {
           </EmptyStateBody>
           <EmptyStateBody>
             <span>
-              {isError ? `An error has occurred while ${steps[activeStep].description.toLowerCase()}` : steps[activeStep].description}
+              {isError ? `An error has occurred while ${activeDescription[0].toLowerCase() + activeDescription.substring(1)}` : activeDescription}
               .
               <br />
               {polledReservation?.status}
