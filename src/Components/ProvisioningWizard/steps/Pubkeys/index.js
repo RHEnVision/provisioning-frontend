@@ -40,7 +40,7 @@ const PublicKeys = ({ setStepValidated }) => {
         SSH keys authentication
       </Title>
       <Text ouiaId="pubkey_description">Establish secure, reliable communication and strong encryption to protect data.</Text>
-      <FormGroup isRequired label="Select a method to add SSH pubic key">
+      <FormGroup role="radiogroup" isStack isRequired label="Select a method to add SSH pubic key">
         <Radio
           id="existing-pubkey-radio"
           ouiaId="pubkey_radio"

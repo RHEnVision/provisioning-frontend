@@ -1,42 +1,55 @@
 import React from 'react';
-import { Slider } from '@patternfly/react-core';
+import { NumberInput } from '@patternfly/react-core';
 import { useWizardContext } from '../Common/WizardContext';
-import './styles.css';
 
 const MAX_INSTANCES = 45;
 const MIN_INSTANCES = 1;
 
 const InstanceCounter = () => {
-  const [wizardContext, setWizardContext] = useWizardContext();
-  const onChange = (value, inputValue, setLocalInputValue) => {
-    let newValue;
-    if (inputValue === undefined) {
-      newValue = Number(value);
-    } else {
-      if (inputValue > MAX_INSTANCES) {
-        newValue = MAX_INSTANCES;
-        setLocalInputValue(MAX_INSTANCES);
-      } else if (inputValue < MIN_INSTANCES) {
-        newValue = MIN_INSTANCES;
-        setLocalInputValue(MIN_INSTANCES);
-      } else {
-        newValue = Math.floor(inputValue);
-      }
-    }
+  const [{ chosenNumOfInstances }, setWizardContext] = useWizardContext();
+
+  const onMinus = () => {
+    const newValue = chosenNumOfInstances - 1;
     setWizardContext((prevState) => ({
       ...prevState,
       chosenNumOfInstances: newValue,
     }));
   };
+
+  const onChange = (event) => {
+    let input = Number(event.target.value);
+    if (input > MAX_INSTANCES) {
+      input = MAX_INSTANCES;
+    }
+    if (input < MIN_INSTANCES) {
+      input = MIN_INSTANCES;
+    }
+    setWizardContext((prevState) => ({
+      ...prevState,
+      chosenNumOfInstances: input,
+    }));
+  };
+
+  const onPlus = () => {
+    const newValue = chosenNumOfInstances + 1;
+    setWizardContext((prevState) => ({
+      ...prevState,
+      chosenNumOfInstances: newValue,
+    }));
+  };
+
   return (
-    <Slider
+    <NumberInput
       max={MAX_INSTANCES}
       min={MIN_INSTANCES}
-      value={wizardContext.chosenNumOfInstances}
-      isInputVisible
-      inputValue={wizardContext.chosenNumOfInstances}
-      hasTooltipOverThumb
+      value={chosenNumOfInstances}
+      onMinus={onMinus}
       onChange={onChange}
+      onPlus={onPlus}
+      inputName="instances"
+      inputAriaLabel="number of instances"
+      minusBtnAriaLabel="instances-minus"
+      plusBtnAriaLabel="instances-plus"
     />
   );
 };

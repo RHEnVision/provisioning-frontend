@@ -96,7 +96,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     return regex.test(ssh);
   };
   return (
-    <>
+    <FormGroup isStack>
       <FormGroup validated={validations.sshKeyName} helperTextInvalid="Name is required" label="Name" isRequired fieldId="ssh-name">
         <TextInput
           ouiaId="new_pubkey_name"
@@ -134,7 +134,7 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
           filenamePlaceholder="Drag a file here"
         />
       </FormGroup>
-    </>
+    </FormGroup>
   );
 };
 
