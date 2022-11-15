@@ -10,7 +10,7 @@ const ReviewDetails = ({ imageName }) => {
         Review details
       </Title>
       <Text ouiaId="review_details_description">
-        Review the information below and click <b>Launch</b> to complete provisioning.
+        Review the information below and then click <b>Launch</b> to finish the process.
       </Text>
 
       <ExpandableAWS imageName={imageName} />
