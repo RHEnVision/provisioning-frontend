@@ -14,9 +14,7 @@ module.exports = {
    * Add additional webpack plugins
    */
   plugins: [],
-  routes: {
-    '/api/provisioning': { host: `http://localhost:8000` }
-  },
+  routesPath: process.env.ROUTES_PATH && resolve(process.env.ROUTES_PATH),
   moduleFederation: {
     exposes: {
       './RootApp': resolve(__dirname, './src/AppEntry'),
