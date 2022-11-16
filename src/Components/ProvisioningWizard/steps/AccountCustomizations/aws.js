@@ -8,7 +8,7 @@ import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 
-const AccountCustomizationsAWS = ({ setStepValidated }) => {
+const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
   const [{ chosenSource, chosenInstanceType }] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: chosenSource ? 'success' : 'default',
@@ -92,6 +92,7 @@ const AccountCustomizationsAWS = ({ setStepValidated }) => {
         }
       >
         <InstanceTypesSelect
+          architecture={architecture}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -128,5 +129,6 @@ const AccountCustomizationsAWS = ({ setStepValidated }) => {
 
 AccountCustomizationsAWS.propTypes = {
   setStepValidated: PropTypes.func.isRequired,
+  architecture: PropTypes.string.isRequired,
 };
 export default AccountCustomizationsAWS;
