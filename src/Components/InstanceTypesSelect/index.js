@@ -9,7 +9,7 @@ import { useWizardContext } from '../Common/WizardContext';
 const OPTIONS_PER_SCREEN = 5;
 const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
 
-const InstanceTypesSelect = ({ setValidation }) => {
+const InstanceTypesSelect = ({ setValidation, architecture }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [numOptions, setNumOptions] = React.useState(OPTIONS_PER_SCREEN);
@@ -19,7 +19,9 @@ const InstanceTypesSelect = ({ setValidation }) => {
     isLoading,
     error,
     data: instanceTypes,
-  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion));
+  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion), {
+    select: (types) => types.filter((type) => type.architecture === architecture),
+  });
 
   if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
     return (
@@ -129,6 +131,7 @@ const InstanceTypesSelect = ({ setValidation }) => {
 
 InstanceTypesSelect.propTypes = {
   setValidation: PropTypes.func.isRequired,
+  architecture: PropTypes.string.isRequired,
 };
 
 export default InstanceTypesSelect;

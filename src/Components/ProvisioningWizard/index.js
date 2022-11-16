@@ -71,6 +71,7 @@ ProvisioningWizard.propTypes = {
   image: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.string,
+    architecture: PropTypes.string,
   }).isRequired,
 };
 

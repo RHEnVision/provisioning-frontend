@@ -16,4 +16,13 @@ export const instanceTypeList = [
     memory: 512,
     architecture: 'arm64',
   },
+  {
+    id: 3,
+    name: 't1.micro',
+    vcpus: 1,
+    cores: 2,
+    memory: 128,
+    supported: true,
+    architecture: 'x86_64',
+  },
 ];
