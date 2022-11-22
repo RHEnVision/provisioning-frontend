@@ -8,7 +8,7 @@ import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 
-const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
+const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID }) => {
   const [{ chosenSource, chosenInstanceType }] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: chosenSource ? 'success' : 'default',
@@ -65,7 +65,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
           </Popover>
         }
       >
-        <RegionsSelect />
+        <RegionsSelect composeID={composeID} />
       </FormGroup>
       <FormGroup
         label="Select instance type"
@@ -130,5 +130,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
 AccountCustomizationsAWS.propTypes = {
   setStepValidated: PropTypes.func.isRequired,
   architecture: PropTypes.string.isRequired,
+  composeID: PropTypes.string.isRequired,
 };
+
 export default AccountCustomizationsAWS;

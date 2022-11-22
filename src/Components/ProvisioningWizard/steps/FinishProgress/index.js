@@ -31,16 +31,25 @@ const steps = [
 ];
 
 const FinishStep = ({ imageID, setLaunchSuccess }) => {
-  const [{ chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
-    useWizardContext();
+  const [
+    { chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey, chosenImageID },
+  ] = useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
   const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
 
-  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
-    enabled: !!reservationID,
-    refetchInterval: RESERVATION_POLLING_INTERVAL,
-    refetchIntervalInBackground: true,
+  const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
+    onSuccess: (resp) => {
+      createAWSDeployment({
+        source_id: chosenSource,
+        instance_type: chosenInstanceType,
+        amount: chosenNumOfInstances,
+        image_id: chosenImageID || imageID,
+        region: chosenRegion,
+        pubkey_id: resp?.data?.id,
+      });
+      stepUp();
+    },
   });
 
   const { mutate: createAWSDeployment, error: awsReservationError } = useMutation(createAWSReservation, {
@@ -50,25 +59,16 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
     },
   });
 
-  const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
-    onSuccess: (resp) => {
-      createAWSDeployment({
-        source_id: chosenSource,
-        instance_type: chosenInstanceType,
-        amount: chosenNumOfInstances,
-        image_id: imageID,
-        region: chosenRegion,
-        pubkey_id: resp?.data?.id,
-      });
-      stepUp();
-    },
+  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
+    enabled: !!reservationID && activeStep < steps.length - 1 && !awsReservationError && !pubkeyError,
+    refetchInterval: RESERVATION_POLLING_INTERVAL,
+    refetchIntervalInBackground: true,
   });
 
   React.useEffect(() => {
     if (polledReservation?.success) {
       stepUp();
       setLaunchSuccess();
-      setReservationID(undefined);
     }
   }, [polledReservation?.success]);
 
@@ -80,7 +80,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
         source_id: chosenSource,
         instance_type: chosenInstanceType,
         amount: chosenNumOfInstances,
-        image_id: imageID,
+        image_id: chosenImageID || imageID,
         region: chosenRegion,
         pubkey_id: chosenSshKeyId,
       });
@@ -133,6 +133,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
                 {pubkeyError?.response?.data?.msg}
                 {polledReservation?.error}
               </span>
+              {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
             </span>
           </EmptyStateBody>
           {isError && (

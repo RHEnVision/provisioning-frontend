@@ -15,6 +15,7 @@ const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepVa
         component: (
           <AccountCustomizationsAWS
             architecture={architecture || 'x86_64'}
+            composeID={id}
             setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))}
           />
         ),
