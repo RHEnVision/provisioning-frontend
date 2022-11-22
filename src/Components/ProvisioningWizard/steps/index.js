@@ -14,7 +14,7 @@ const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepVa
         enableNext: stepValidation.awsStep,
         component: (
           <AccountCustomizationsAWS
-            architecture={architecture}
+            architecture={architecture || 'x86_64'}
             setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))}
           />
         ),
