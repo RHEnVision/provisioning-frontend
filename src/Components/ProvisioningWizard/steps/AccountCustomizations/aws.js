@@ -50,7 +50,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
         isRequired
         fieldId="aws-select-region"
         labelIcon={
-          <Popover headerContent="Select available geographical region">
+          <Popover bodyContent="Select available geographical region">
             <Button
               ouiaId="region_help"
               type="button"
@@ -74,7 +74,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
         fieldId="aws-select-instance-types"
         labelIcon={
           <Popover
-            headerContent="Select AWS instance type based on your computing,
+            bodyContent="Select AWS instance type based on your computing,
            memory, networking, or storage needs"
           >
             <Button
@@ -106,7 +106,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture }) => {
         isRequired
         fieldId="aws-select-instance-counter"
         labelIcon={
-          <Popover headerContent="Specify the number of AWS instances to be launched">
+          <Popover bodyContent="Specify the number of AWS instances to be launched">
             <Button
               ouiaId="instance_count_help"
               type="button"
