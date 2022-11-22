@@ -1,9 +1,7 @@
 import React from 'react';
 import { NumberInput } from '@patternfly/react-core';
 import { useWizardContext } from '../Common/WizardContext';
-
-const MAX_INSTANCES = 45;
-const MIN_INSTANCES = 1;
+import { MAX_INSTANCES, MIN_INSTANCES } from './constants';
 
 const InstanceCounter = () => {
   const [{ chosenNumOfInstances }, setWizardContext] = useWizardContext();
@@ -17,7 +15,7 @@ const InstanceCounter = () => {
   };
 
   const onChange = (event) => {
-    let input = Number(event.target.value);
+    let input = Math.floor(Number(event.target.value));
     if (input > MAX_INSTANCES) {
       input = MAX_INSTANCES;
     }
