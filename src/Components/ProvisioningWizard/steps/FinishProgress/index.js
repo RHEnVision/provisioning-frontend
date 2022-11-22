@@ -37,19 +37,6 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
   const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
 
-  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
-    enabled: !!reservationID,
-    refetchInterval: RESERVATION_POLLING_INTERVAL,
-    refetchIntervalInBackground: true,
-  });
-
-  const { mutate: createAWSDeployment, error: awsReservationError } = useMutation(createAWSReservation, {
-    onSuccess: (res) => {
-      stepUp();
-      setReservationID(res?.data?.reservation_id);
-    },
-  });
-
   const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
     onSuccess: (resp) => {
       createAWSDeployment({
@@ -64,11 +51,23 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
     },
   });
 
+  const { mutate: createAWSDeployment, error: awsReservationError } = useMutation(createAWSReservation, {
+    onSuccess: (res) => {
+      stepUp();
+      setReservationID(res?.data?.reservation_id);
+    },
+  });
+
+  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
+    enabled: !!reservationID && activeStep < steps.length - 1 && !awsReservationError && !pubkeyError,
+    refetchInterval: RESERVATION_POLLING_INTERVAL,
+    refetchIntervalInBackground: true,
+  });
+
   React.useEffect(() => {
     if (polledReservation?.success) {
       stepUp();
       setLaunchSuccess();
-      setReservationID(undefined);
     }
   }, [polledReservation?.success]);
 
@@ -133,6 +132,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
                 {pubkeyError?.response?.data?.msg}
                 {polledReservation?.error}
               </span>
+              {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
             </span>
           </EmptyStateBody>
           {isError && (
