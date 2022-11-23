@@ -38,7 +38,6 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
     image,
     stepValidation,
     setStepValidation,
-    onClose: onCustomClose,
   });
 
   const onNext = ({ id, name }, { prevId, prevName }) => {

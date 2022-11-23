@@ -30,7 +30,7 @@ const steps = [
   { description: 'Launch is completed', progress: 100 },
 ];
 
-const FinishStep = ({ onClose, imageID }) => {
+const FinishStep = ({ imageID }) => {
   const [{ chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
     useWizardContext();
   const [reservationID, setReservationID] = React.useState();
@@ -106,7 +106,7 @@ const FinishStep = ({ onClose, imageID }) => {
 
   return (
     <WizardContextConsumer>
-      {({ goToStepById }) => (
+      {({ goToStepById, onClose }) => (
         <EmptyState variant="large">
           <EmptyStateIcon {...iconProps} />
           <Title headingLevel="h4" size="lg" ouiaId="launch-status">
@@ -152,7 +152,6 @@ const FinishStep = ({ onClose, imageID }) => {
 
 FinishStep.propTypes = {
   imageID: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default FinishStep;
