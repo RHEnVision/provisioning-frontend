@@ -4,7 +4,7 @@ import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
 import FinishStep from './FinishProgress';
 
-const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepValidation, setStepValidation, onClose }) => [
+const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepValidation, setStepValidation }) => [
   {
     name: 'Account and customization',
     steps: [
@@ -39,7 +39,7 @@ const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepVa
   {
     name: 'Finish Progress',
     id: 6,
-    component: <FinishStep onClose={onClose} imageID={id} />,
+    component: <FinishStep imageID={id} />,
     isFinishedStep: true,
   },
 ];
