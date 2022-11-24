@@ -17,6 +17,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   const [stepIdReached, setStepIdReached] = React.useState(1);
   const [stepValidation, setStepValidation] = React.useState(DEFAULT_STEP_VALIDATION);
   const [isConfirming, setConfirming] = React.useState(false);
+  const [successfulLaunch, setLaunchSuccess] = React.useState();
 
   const onCustomClose = () => {
     setConfirming(false);
@@ -26,7 +27,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   };
 
   const onWizardClose = () => {
-    if (stepIdReached >= 5) {
+    if (stepIdReached >= 5 && !successfulLaunch) {
       setConfirming(true);
     } else {
       onCustomClose();
@@ -38,6 +39,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
     image,
     stepValidation,
     setStepValidation,
+    setLaunchSuccess,
   });
 
   const onNext = ({ id, name }, { prevId, prevName }) => {

@@ -30,7 +30,7 @@ const steps = [
   { description: 'Launch is completed', progress: 100 },
 ];
 
-const FinishStep = ({ imageID }) => {
+const FinishStep = ({ imageID, setLaunchSuccess }) => {
   const [{ chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
     useWizardContext();
   const [reservationID, setReservationID] = React.useState();
@@ -44,9 +44,9 @@ const FinishStep = ({ imageID }) => {
   });
 
   const { mutate: createAWSDeployment, error: awsReservationError } = useMutation(createAWSReservation, {
-    onSuccess: (data) => {
+    onSuccess: (res) => {
       stepUp();
-      setReservationID(data?.data?.reservation_id);
+      setReservationID(res?.data?.reservation_id);
     },
   });
 
@@ -67,6 +67,7 @@ const FinishStep = ({ imageID }) => {
   React.useEffect(() => {
     if (polledReservation?.success) {
       stepUp();
+      setLaunchSuccess();
       setReservationID(undefined);
     }
   }, [polledReservation?.success]);
@@ -152,6 +153,7 @@ const FinishStep = ({ imageID }) => {
 
 FinishStep.propTypes = {
   imageID: PropTypes.string.isRequired,
+  setLaunchSuccess: PropTypes.func.isRequired,
 };
 
 export default FinishStep;
