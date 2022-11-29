@@ -31,8 +31,9 @@ const steps = [
 ];
 
 const FinishStep = ({ imageID, setLaunchSuccess }) => {
-  const [{ chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
-    useWizardContext();
+  const [
+    { chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey, chosenImageID },
+  ] = useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
   const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
@@ -43,7 +44,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
         source_id: chosenSource,
         instance_type: chosenInstanceType,
         amount: chosenNumOfInstances,
-        image_id: imageID,
+        image_id: chosenImageID || imageID,
         region: chosenRegion,
         pubkey_id: resp?.data?.id,
       });
@@ -79,7 +80,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
         source_id: chosenSource,
         instance_type: chosenInstanceType,
         amount: chosenNumOfInstances,
-        image_id: imageID,
+        image_id: chosenImageID || imageID,
         region: chosenRegion,
         pubkey_id: chosenSshKeyId,
       });
