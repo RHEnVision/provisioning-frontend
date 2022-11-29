@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { provisioningUrl } from './helpers';
+import { imageBuilderURL, provisioningUrl } from './helpers';
 
 export const fetchSourcesList = async () => {
   const { data } = await axios.get(provisioningUrl('sources'));
@@ -26,5 +26,10 @@ export const createNewPublicKey = async (params) => {
 
 export const fetchAWSReservation = async (id) => {
   const { data } = await axios.get(provisioningUrl(`reservations/${id}`));
+  return data;
+};
+
+export const fetchImageClones = async (composeID) => {
+  const { data } = await axios.get(imageBuilderURL(`composes/${composeID}/clones`));
   return data;
 };
