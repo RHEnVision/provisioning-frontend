@@ -1,7 +1,8 @@
 import React from 'react';
+import userEvent from '@testing-library/user-event';
 import InstanceTypesSelect from '.';
 import { instanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
-import { render, fireEvent, screen } from '../../mocks/utils';
+import { render, screen } from '../../mocks/utils';
 
 describe('InstanceTypesSelect', () => {
   test('populate instance types select', async () => {
@@ -13,13 +14,13 @@ describe('InstanceTypesSelect', () => {
   describe('search', () => {
     test('filter items', async () => {
       const dropdown = await mountSelectAndClick();
-      fireEvent.change(dropdown, { target: { value: 'm5' } });
+      await userEvent.type(dropdown, 'm5');
       const items = await screen.findAllByLabelText('Instance Type item');
       expect(items).toHaveLength(1);
     });
     test('handles weird input', async () => {
       const dropdown = await mountSelectAndClick();
-      fireEvent.change(dropdown, { target: { value: '```' } });
+      await userEvent.type(dropdown, '```');
       const items = await screen.queryAllByLabelText('Instance Type item');
       expect(items).toHaveLength(0);
     });
@@ -29,6 +30,6 @@ describe('InstanceTypesSelect', () => {
 const mountSelectAndClick = async () => {
   render(<InstanceTypesSelect architecture="x86_64" setValidation={jest.fn()} />);
   const selectDropdown = await screen.findByPlaceholderText('Select instance type');
-  fireEvent.click(selectDropdown);
+  await userEvent.click(selectDropdown);
   return selectDropdown;
 };

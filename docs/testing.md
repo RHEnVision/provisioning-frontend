@@ -43,7 +43,7 @@ In order to access `WizardContext` and `react-query` provider, the `render` func
 You can import all `testing-library` related functions from `mocks/utils`
 
 ```js
-import { render, fireEvent, screen } from '../../mocks/utils';
+import { render, screen } from '../../mocks/utils';
 
   test('Loading state', async () => {
     // the component will be rended with wizard context and react-query provider
