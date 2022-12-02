@@ -9,7 +9,26 @@ on:
   pull_request:
 
 jobs:
+  commit:
+    name: "💾 Commit message"
+    if: github.ref_name != 'main' && github.ref_name != 'prod-beta' && ! contains(github.ref_name, 'stable')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+          path: code
+      - uses: actions/checkout@v3
+        with:
+          repository: "RHEnVision/changelog"
+          path: changelog
+      - run: pip3 install ./changelog
+      - run: python3 -m rhenvision_changelog commit-check
+        working-directory: code
+
   build:
+    name: "📎 Lint, test and build"
     runs-on: ubuntu-latest
 
     strategy:
@@ -42,21 +61,9 @@ jobs:
           name: build
           path: dist/*
 
-  pull-jenkins:
-    needs: [build]
-    if: github.ref_name == 'main' || github.ref_name == 'prod-beta' || contains(github.ref_name, 'stable')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: mkdir ${{ github.workspace }}/.travis
-      - name: Pull the file
-        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/Jenkinsfile > ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
-      - uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
-          key: ${{ github.sha }}-travis
   Release-to-build:
-    needs: [build, pull-jenkins]
+    name: "⛵ Release to build repository"
+    needs: [build]
     if: github.ref_name == 'main' || github.ref_name == 'prod-beta' || contains(github.ref_name, 'stable')
     runs-on: ubuntu-latest
     env:
@@ -64,6 +71,9 @@ jobs:
       COMMIT_AUTHOR_EMAIL: actions@github.com
     steps:
       - uses: actions/checkout@v2
+      - run: mkdir ${{ github.workspace }}/.travis
+      - name: Pull the Jenkins file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/Jenkinsfile > ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
       - name: Set env variables
         run: |
           echo "TRAVIS_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
@@ -96,10 +106,6 @@ jobs:
               User git
               AddKeysToAgent yes
               IdentityFile /home/runner/.ssh/github_actions" >> /home/runner/.ssh/config
-      - uses: actions/cache@v3
-        with:
-          path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
-          key: ${{ github.sha }}-travis
       - uses: actions/download-artifact@v3
         with:
           name: build
