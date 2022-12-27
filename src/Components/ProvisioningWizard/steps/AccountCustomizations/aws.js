@@ -15,7 +15,6 @@ const AccountCustomizationsAWS = ({ setStepValidated }) => {
     types: wizardContext.chosenInstanceType ? 'success' : 'default',
   });
   
-  debugger
   setWizardContext((prevState) => ({
     ...prevState,
     chosenProvider: 'aws',

@@ -13,7 +13,7 @@ import {
 import { CogsIcon, CheckCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
-import { createAWSReservation, createNewPublicKey, fetchReservation } from '../../../../API';
+import { createReservation, createNewPublicKey, fetchReservation } from '../../../../API';
 import './styles.scss';
 
 const pf_success_color_100 = '#3E8635';
@@ -31,7 +31,7 @@ const steps = [
 ];
 
 const FinishStep = ({ onClose, imageID }) => {
-  const [{ chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
+  const [{ chosenSource, chosenInstanceType, chosenNumOfInstances,chosenProvider, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey }] =
     useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
@@ -43,7 +43,7 @@ const FinishStep = ({ onClose, imageID }) => {
     refetchIntervalInBackground: true,
   });
 
-  const { mutate: createAWSDeployment, error: awsReservationError } = useMutation(createAWSReservation, {
+  const { mutate: createDeployment, error: awsReservationError } = useMutation(createReservation, {
     onSuccess: (data) => {
       stepUp();
       setReservationID(data?.data?.reservation_id);
@@ -52,7 +52,8 @@ const FinishStep = ({ onClose, imageID }) => {
 
   const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
     onSuccess: (resp) => {
-      createAWSDeployment({
+      debugger
+      createDeployment({
         source_id: chosenSource,
         instance_type: chosenInstanceType,
         amount: chosenNumOfInstances,
@@ -75,14 +76,14 @@ const FinishStep = ({ onClose, imageID }) => {
     if (uploadedKey) {
       createPublicKey({ name: sshPublicName, body: sshPublicKey });
     } else {
-      createAWSDeployment({
+      createDeployment({
         source_id: chosenSource,
         instance_type: chosenInstanceType,
         amount: chosenNumOfInstances,
         image_id: imageID,
         region: chosenRegion,
         pubkey_id: chosenSshKeyId,
-      });
+      }, chosenProvider);
     }
   }, []);
 

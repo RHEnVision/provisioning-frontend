@@ -20,8 +20,8 @@ const defaultSteps = ({ stepIdReached, image: { name, id }, stepValidation, setS
         name: 'Azure',
         id: 2,
         component: <div> WIP: Azure </div>,
-        canJumpTo: stepIdReached >= 2,
-        enableNext: stepValidation.azureStep,
+        canJumpTo: false,
+        // enableNext: stepValidation.azureStep,
       },
       {
         name: 'Google',

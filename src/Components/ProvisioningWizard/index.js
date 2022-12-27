@@ -16,7 +16,8 @@ const DEFAULT_STEP_VALIDATION = {
 };
 
 const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
-  const [stepIdReached, setStepIdReached] = React.useState(3);
+  // TODO: that default value disables the option to choose GCP, how can I fix that? 
+  const [stepIdReached, setStepIdReached] = React.useState(1); 
   const [stepValidation, setStepValidation] = React.useState(DEFAULT_STEP_VALIDATION);
   const [isConfirming, setConfirming] = React.useState(false);
 

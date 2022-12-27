@@ -16,12 +16,8 @@ export const fetchInstanceTypesList = async (region, provider) => {
   return data;
 };
 
-export const createAWSReservation = async (params) => {
-  return axios.post(provisioningUrl('reservations/aws'), params);
-};
-
-export const createGCPReservation = async (params) => {
-  return axios.post(provisioningUrl('reservations/gcp'), params);
+export const createReservation = async (params, provider) => {
+  return axios.post(provisioningUrl(`reservations/${provider}`), params);
 };
 
 export const createNewPublicKey = async (params) => {

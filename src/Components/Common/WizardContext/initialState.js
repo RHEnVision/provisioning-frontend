@@ -1,6 +1,7 @@
 const initialWizardContext = {
   chosenSource: undefined,
-  chosenProvider: undefined,
+  //TODO: should be undefined? 
+  chosenProvider: 'aws',
   chosenNumOfInstances: 1,
   chosenInstanceType: undefined,
   uploadedKey: false,
