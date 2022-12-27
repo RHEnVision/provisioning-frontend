@@ -11,8 +11,8 @@ export const fetchPubkeysList = async () => {
   return data;
 };
 
-export const fetchInstanceTypesList = async (region) => {
-  const { data } = await axios.get(provisioningUrl(`instance_types/aws?region=${region}`));
+export const fetchInstanceTypesList = async (region, provider) => {
+  const { data } = await axios.get(provisioningUrl(`instance_types/${provider}?region=${region}`));
   return data;
 };
 
@@ -20,11 +20,15 @@ export const createAWSReservation = async (params) => {
   return axios.post(provisioningUrl('reservations/aws'), params);
 };
 
+export const createGCPReservation = async (params) => {
+  return axios.post(provisioningUrl('reservations/gcp'), params);
+};
+
 export const createNewPublicKey = async (params) => {
   return axios.post(provisioningUrl('pubkeys'), params);
 };
 
-export const fetchAWSReservation = async (id) => {
+export const fetchReservation = async (id) => {
   const { data } = await axios.get(provisioningUrl(`reservations/${id}`));
   return data;
 };

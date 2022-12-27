@@ -1,5 +1,6 @@
 const initialWizardContext = {
   chosenSource: undefined,
+  chosenProvider: undefined,
   chosenNumOfInstances: 1,
   chosenInstanceType: undefined,
   uploadedKey: false,

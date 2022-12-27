@@ -11,10 +11,12 @@ import './steps/Pubkeys/pubkeys.scss';
 const DEFAULT_STEP_VALIDATION = {
   sshStep: false,
   awsStep: false,
+  azureStep: false,
+  gcpStep: false
 };
 
 const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
-  const [stepIdReached, setStepIdReached] = React.useState(1);
+  const [stepIdReached, setStepIdReached] = React.useState(3);
   const [stepValidation, setStepValidation] = React.useState(DEFAULT_STEP_VALIDATION);
   const [isConfirming, setConfirming] = React.useState(false);
 

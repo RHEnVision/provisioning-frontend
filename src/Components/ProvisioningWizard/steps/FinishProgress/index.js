@@ -13,7 +13,7 @@ import {
 import { CogsIcon, CheckCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
-import { createAWSReservation, createNewPublicKey, fetchAWSReservation } from '../../../../API';
+import { createAWSReservation, createNewPublicKey, fetchReservation } from '../../../../API';
 import './styles.scss';
 
 const pf_success_color_100 = '#3E8635';
@@ -37,7 +37,7 @@ const FinishStep = ({ onClose, imageID }) => {
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
   const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
 
-  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
+  const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchReservation(reservationID), {
     enabled: !!reservationID,
     refetchInterval: RESERVATION_POLLING_INTERVAL,
     refetchIntervalInBackground: true,

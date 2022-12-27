@@ -1,5 +1,6 @@
 import React from 'react';
 import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
+import AccountCustomizationsGCP from '../steps/AccountCustomizations/gcp';
 import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
 import FinishStep from './FinishProgress';
@@ -14,6 +15,20 @@ const defaultSteps = ({ stepIdReached, image: { name, id }, stepValidation, setS
         enableNext: stepValidation.awsStep,
         component: <AccountCustomizationsAWS setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />,
         canJumpTo: stepIdReached >= 1,
+      },
+      {
+        name: 'Azure',
+        id: 2,
+        component: <div> WIP: Azure </div>,
+        canJumpTo: stepIdReached >= 2,
+        enableNext: stepValidation.azureStep,
+      },
+      {
+        name: 'Google',
+        id: 3,
+        component: <AccountCustomizationsGCP setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, gcpStep: validated }))} />,
+        canJumpTo: stepIdReached >= 3,
+        enableNext: stepValidation.gcpStep,
       },
     ],
   },

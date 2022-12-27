@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 import { useWizardContext } from '../Common/WizardContext';
-export const RegionsSelect = () => {
+export const RegionsSelect = ({region}) => {
   const [wizardContext] = useWizardContext();
-  return (
-    <FormSelect ouiaId="select_region" isDisabled aria-label="Select region" value="">
-      <FormSelectOption label={wizardContext.chosenRegion} key="placeholder" isPlaceholder value=""></FormSelectOption>
-    </FormSelect>
-  );
+    return (
+      <FormSelect ouiaId="select_region" isDisabled aria-label="Select region" value="">
+        <FormSelectOption label={wizardContext.chosenRegion} key="placeholder" isPlaceholder value=""></FormSelectOption>
+      </FormSelect>
+    );
 };
 export default RegionsSelect;

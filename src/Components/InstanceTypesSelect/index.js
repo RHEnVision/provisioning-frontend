@@ -19,7 +19,7 @@ const InstanceTypesSelect = ({ setValidation }) => {
     isLoading,
     error,
     data: instanceTypes,
-  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion));
+  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion, wizardContext.chosenProvider));
 
   if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
     return (
