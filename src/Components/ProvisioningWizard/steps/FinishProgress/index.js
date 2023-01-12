@@ -15,20 +15,8 @@ import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
 import { createAWSReservation, createNewPublicKey, fetchAWSReservation } from '../../../../API';
 import './styles.scss';
-
-const pf_success_color_100 = '#3E8635';
-const pf_danger_color_100 = '#C9190B';
-const RESERVATION_POLLING_INTERVAL = 500;
-
-const steps = [
-  { description: 'Uploading SSH public key', progress: 0 },
-  { description: 'Creating AWS reservation', progress: 20 },
-  {
-    description: 'Waiting for AWS',
-    progress: 40,
-  },
-  { description: 'Launch is completed', progress: 100 },
-];
+import useInterval from '../../../Common/Hooks/useInterval';
+import { AWS_STEPS, PF_DANGER_100, PF_SUCCESS_100, POLLING_BACKOFF_INTERVAL } from './constants';
 
 const FinishStep = ({ imageID, setLaunchSuccess }) => {
   const [
@@ -36,7 +24,9 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   ] = useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
-  const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
+  const { nextInterval, currentInterval } = useInterval(POLLING_BACKOFF_INTERVAL);
+
+  const stepUp = () => setActiveStep((prevStep) => (prevStep < AWS_STEPS.length - 1 ? prevStep + 1 : prevStep));
 
   const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
     onSuccess: (resp) => {
@@ -60,8 +50,14 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   });
 
   const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
-    enabled: !!reservationID && activeStep < steps.length - 1 && !awsReservationError && !pubkeyError,
-    refetchInterval: RESERVATION_POLLING_INTERVAL,
+    enabled: !!reservationID && activeStep < AWS_STEPS.length - 1 && !awsReservationError && !pubkeyError,
+    refetchInterval: (data) => {
+      if (data?.success || !!data?.error) return false;
+      return currentInterval;
+    },
+    onSuccess: (data) => {
+      !data?.success && nextInterval();
+    },
     refetchIntervalInBackground: true,
   });
 
@@ -87,19 +83,20 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
     }
   }, []);
 
-  const activeProgress = steps[activeStep].progress;
-  const activeDescription = steps[activeStep].description;
+  const activeProgress = AWS_STEPS[activeStep].progress;
+  const activeDescription = AWS_STEPS[activeStep].description;
   const isJobError = polledReservation?.success === false;
-  const isError = !!awsReservationError || !!pubkeyError || isJobError;
+  const isSessionTimeout = currentInterval === false;
+  const isError = !!awsReservationError || !!pubkeyError || isJobError || isSessionTimeout;
 
   let title;
   let iconProps;
   if (isError) {
     title = 'Launching system(s): Failure';
-    iconProps = { color: pf_danger_color_100, icon: ExclamationCircleIcon };
+    iconProps = { color: PF_DANGER_100, icon: ExclamationCircleIcon };
   } else if (activeProgress === 100) {
     title = 'Launching system(s): Success';
-    iconProps = { color: pf_success_color_100, icon: CheckCircleIcon };
+    iconProps = { color: PF_SUCCESS_100, icon: CheckCircleIcon };
   } else {
     title = 'Launching your system(s)';
     iconProps = { icon: CogsIcon };
@@ -120,6 +117,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
               value={activeProgress}
               measureLocation="outside"
               id="launch-progress"
+              aria-label="provisioning progress"
             />
           </EmptyStateBody>
           <EmptyStateBody>
@@ -129,11 +127,14 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
               <br />
               {polledReservation?.status}
               <span className="status-error">
+                {isSessionTimeout && 'Session timed out, the reservation took too long to fulfill'}
+                <br />
                 {awsReservationError?.response?.data?.msg}
+                <br />
                 {pubkeyError?.response?.data?.msg}
                 {polledReservation?.error}
               </span>
-              {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
+              {reservationID && <input type="hidden" readOnly name="reservation_id" value={reservationID} />}
             </span>
           </EmptyStateBody>
           {isError && (
