@@ -15,10 +15,12 @@ import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
 import { createAWSReservation, createNewPublicKey, fetchAWSReservation } from '../../../../API';
 import './styles.scss';
+import useTimeout from '../../../Common/Hooks/useTimeout';
 
 const pf_success_color_100 = '#3E8635';
 const pf_danger_color_100 = '#C9190B';
 const RESERVATION_POLLING_INTERVAL = 500;
+const POLLING_TIMEOUT_DURATION = 1000 * 2 * 60; // 2 min
 
 const steps = [
   { description: 'Uploading SSH public key', progress: 0 },
@@ -35,7 +37,10 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
     useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
+  const [isPollingTimeout, setIsPollingTimeout] = React.useState();
+
   const stepUp = () => setActiveStep((prevStep) => (prevStep < steps.length - 1 ? prevStep + 1 : prevStep));
+  const pollingTimeoutRef = useTimeout(() => setIsPollingTimeout(true), reservationID ? POLLING_TIMEOUT_DURATION : null);
 
   const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
     onSuccess: (resp) => {
@@ -60,8 +65,12 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
 
   const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchAWSReservation(reservationID), {
     enabled: !!reservationID && activeStep < steps.length - 1 && !awsReservationError && !pubkeyError,
-    refetchInterval: RESERVATION_POLLING_INTERVAL,
+    refetchInterval: (data) => {
+      if (isPollingTimeout || data?.success || !!data?.error) return false;
+      return RESERVATION_POLLING_INTERVAL;
+    },
     refetchIntervalInBackground: true,
+    onSettled: (data) => (!!data?.error || data?.success) && window.clearTimeout(pollingTimeoutRef.current),
   });
 
   React.useEffect(() => {
@@ -89,7 +98,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   const activeProgress = steps[activeStep].progress;
   const activeDescription = steps[activeStep].description;
   const isJobError = polledReservation?.success === false;
-  const isError = !!awsReservationError || !!pubkeyError || isJobError;
+  const isError = !!awsReservationError || !!pubkeyError || isJobError || isPollingTimeout;
 
   let title;
   let iconProps;
@@ -119,6 +128,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
               value={activeProgress}
               measureLocation="outside"
               id="launch-progress"
+              aria-label="provisioning progress"
             />
           </EmptyStateBody>
           <EmptyStateBody>
@@ -128,11 +138,14 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
               <br />
               {polledReservation?.status}
               <span className="status-error">
+                {isPollingTimeout && 'Session timeout'}
+                <br />
                 {awsReservationError?.response?.data?.msg}
+                <br />
                 {pubkeyError?.response?.data?.msg}
                 {polledReservation?.error}
               </span>
-              {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
+              {reservationID && <input readOnly name="reservation_id" value={reservationID} />}
             </span>
           </EmptyStateBody>
           {isError && (
