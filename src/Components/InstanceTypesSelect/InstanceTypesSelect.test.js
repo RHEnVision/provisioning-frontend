@@ -8,7 +8,7 @@ describe('InstanceTypesSelect', () => {
   test('populate instance types select', async () => {
     await mountSelectAndClick();
     const items = await screen.findAllByLabelText('Instance Type item');
-    expect(items).toHaveLength(instanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
+    expect(items).toHaveLength(instanceTypeList.filter((type) => type.supported && type.architecture === 'x86_64').length); // arm64 is filtered
   });
 
   describe('search', () => {

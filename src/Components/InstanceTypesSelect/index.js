@@ -20,7 +20,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     error,
     data: instanceTypes,
   } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion), {
-    select: (types) => types.filter((type) => type.architecture === architecture),
+    select: (types) => types.filter((type) => type.supported && type.architecture === architecture),
   });
 
   if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {

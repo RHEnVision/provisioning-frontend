@@ -14,6 +14,7 @@ export const instanceTypeList = [
     vcpus: 2,
     cores: 2,
     memory: 512,
+    supported: true,
     architecture: 'arm64',
   },
   {
@@ -23,6 +24,15 @@ export const instanceTypeList = [
     cores: 2,
     memory: 128,
     supported: true,
+    architecture: 'x86_64',
+  },
+  {
+    id: 4,
+    name: 't2.nano',
+    vcpus: 1,
+    cores: 1,
+    memory: 512,
+    supported: false,
     architecture: 'x86_64',
   },
 ];
