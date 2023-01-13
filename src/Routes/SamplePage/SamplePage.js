@@ -72,17 +72,6 @@ const SamplePage = () => {
     </Select>
   );
 
-  let imageInput;
-  if (images) {
-    imageInput = renderSelect(images);
-  } else {
-    imageInput = (
-      <FormGroup label="Image AMI">
-        <TextInput id="ami" value={chosenImage.id || ''} onChange={onInputChange} />
-      </FormGroup>
-    );
-  }
-
   return (
     <React.Fragment>
       <PageHeader>
@@ -91,7 +80,12 @@ const SamplePage = () => {
       </PageHeader>
       <Main>
         <Stack hasGutter>
-          <StackItem>{imageInput}</StackItem>
+          {images && <StackItem>{renderSelect(images)}</StackItem>}
+          <StackItem>
+            <FormGroup label="Image AMI">
+              <TextInput id="ami" value={chosenImage.id || ''} onChange={onInputChange} />
+            </FormGroup>
+          </StackItem>
           <StackItem>
             <Title headingLevel="h2" size="3xl"></Title>
             <Button variant="primary" onClick={() => setWizardModal(true)}>
