@@ -66,7 +66,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     if (prevSearch !== search) {
       setNumOptions(OPTIONS_PER_SCREEN);
       setPrevSearch(search);
-      setFilteredTypes(instanceTypes.filter((i) => i.name.search(search) === 0));
+      setFilteredTypes(instanceTypes.filter((i) => i.name.includes(search)));
     }
   };
 

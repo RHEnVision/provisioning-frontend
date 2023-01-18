@@ -24,6 +24,12 @@ describe('InstanceTypesSelect', () => {
       const items = await screen.queryAllByLabelText('Instance Type item');
       expect(items).toHaveLength(0);
     });
+    test('filter with a substring', async () => {
+      const dropdown = await mountSelectAndClick();
+      await userEvent.type(dropdown, 'micro');
+      const items = await screen.findAllByLabelText('Instance Type item');
+      expect(items).toHaveLength(1);
+    });
   });
 });
 
