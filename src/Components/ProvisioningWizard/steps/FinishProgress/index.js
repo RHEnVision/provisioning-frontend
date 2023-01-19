@@ -14,6 +14,7 @@ import { CogsIcon, CheckCircleIcon, ExclamationCircleIcon } from '@patternfly/re
 import { useWizardContext } from '../../../Common/WizardContext';
 import { useMutation, useQuery } from 'react-query';
 import { createAWSReservation, createNewPublicKey, fetchAWSReservation } from '../../../../API';
+import ExpandedInfo from './ExpansionInfo';
 import './styles.scss';
 import useInterval from '../../../Common/Hooks/useInterval';
 import { AWS_STEPS, PF_DANGER_100, PF_SUCCESS_100, POLLING_BACKOFF_INTERVAL } from './constants';
@@ -112,7 +113,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
           </Title>
           <EmptyStateBody>
             <Progress
-              style={{ width: '500px' }}
+              style={{ width: '500px', margin: 'auto' }}
               variant={isError && 'danger'}
               value={activeProgress}
               measureLocation="outside"
@@ -132,10 +133,18 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
                 {awsReservationError?.response?.data?.msg}
                 <br />
                 {pubkeyError?.response?.data?.msg}
-                {polledReservation?.error}
               </span>
-              {reservationID && <input type="hidden" readOnly name="reservation_id" value={reservationID} />}
+              {/* TODO: remove hidden input */}
+              {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
             </span>
+            {(polledReservation?.error || polledReservation?.success) && (
+              <ExpandedInfo
+                reservationID={reservationID}
+                error={polledReservation?.error}
+                createdAt={polledReservation?.created_at}
+                finishedAt={polledReservation?.finished_at}
+              />
+            )}
           </EmptyStateBody>
           {isError && (
             <Button onClick={() => goToStepById(1)} variant="primary">

@@ -1,15 +1,24 @@
 import React from 'react';
 import FinishProgress from '.';
+import userEvent from '@testing-library/user-event';
 import { provisioningUrl } from '../../../../API/helpers';
-import { errorReservation, reservation } from '../../../../mocks/fixtures/reservation.fixtures';
+import { createdAWSReservation, errorReservation, reservation } from '../../../../mocks/fixtures/reservation.fixtures';
 import { render, screen } from '../../../../mocks/utils';
 import * as constants from './constants';
 
-describe('FinishProgress', () => {
+describe('Reservation polling', () => {
   test('progress ends successfully', async () => {
     mountProgressBar();
     const progressCompleted = await screen.findByText(/Launch is completed/i);
     expect(progressCompleted).toBeDefined();
+    const launchID = await screen.findByLabelText('launch id');
+    expect(launchID).toHaveTextContent(createdAWSReservation.reservation_id);
+  });
+
+  test('show more expansion with reservation id', async () => {
+    mountProgressBar();
+    const launchID = await screen.findByLabelText('launch id');
+    expect(launchID).toHaveTextContent(createdAWSReservation.reservation_id);
   });
 
   test('progress ends with a failure', async () => {
@@ -20,8 +29,9 @@ describe('FinishProgress', () => {
       })
     );
     mountProgressBar();
-    const errorMessage = await screen.findByText(errorReservation.error, { exact: false });
-    expect(errorMessage).toBeDefined();
+    clickOnShowMore();
+    const errorMessage = await screen.findByLabelText('launch error');
+    expect(errorMessage).toHaveTextContent(errorReservation.error);
   });
 
   test('show session timed out correctly', async () => {
@@ -43,4 +53,9 @@ const mountProgressBar = () => {
   const setLaunchSuccessFunction = jest.fn();
   const imageID = 'image-id';
   render(<FinishProgress imageID={imageID} setLaunchSuccess={setLaunchSuccessFunction} />);
+};
+
+const clickOnShowMore = async () => {
+  const expansionInfo = await screen.findByText('Show more');
+  await userEvent.click(expansionInfo);
 };
