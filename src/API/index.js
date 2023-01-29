@@ -33,3 +33,8 @@ export const fetchImageClones = async (composeID) => {
   const { data } = await axios.get(imageBuilderURL(`composes/${composeID}/clones`));
   return data;
 };
+
+export const fetchAWSInstances = async (reservationID) => {
+  const { data } = await axios.get(provisioningUrl(`reservations/aws/${reservationID}/instances`));
+  return data;
+};

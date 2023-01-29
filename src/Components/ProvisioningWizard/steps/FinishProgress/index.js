@@ -17,6 +17,7 @@ import { createAWSReservation, createNewPublicKey, fetchAWSReservation } from '.
 import './styles.scss';
 import useInterval from '../../../Common/Hooks/useInterval';
 import { AWS_STEPS, PF_DANGER_100, PF_SUCCESS_100, POLLING_BACKOFF_INTERVAL } from './constants';
+import InstancesTable from '../../../InstancesTable';
 
 const FinishStep = ({ imageID, setLaunchSuccess }) => {
   const [
@@ -24,6 +25,8 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   ] = useWizardContext();
   const [reservationID, setReservationID] = React.useState();
   const [activeStep, setActiveStep] = React.useState(uploadedKey ? 0 : 1);
+  const [toggleInstances, setToggleInstances] = React.useState();
+
   const { nextInterval, currentInterval } = useInterval(POLLING_BACKOFF_INTERVAL);
 
   const stepUp = () => setActiveStep((prevStep) => (prevStep < AWS_STEPS.length - 1 ? prevStep + 1 : prevStep));
@@ -88,6 +91,7 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   const isJobError = polledReservation?.success === false;
   const isSessionTimeout = currentInterval === false;
   const isError = !!awsReservationError || !!pubkeyError || isJobError || isSessionTimeout;
+  const isJobSuccess = polledReservation?.success;
 
   let title;
   let iconProps;
@@ -100,6 +104,10 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
   } else {
     title = 'Launching your system(s)';
     iconProps = { icon: CogsIcon };
+  }
+
+  if (toggleInstances) {
+    return <WizardContextConsumer>{({ onClose }) => <InstancesTable reservationID={reservationID} onClose={onClose} />}</WizardContextConsumer>;
   }
 
   return (
@@ -137,6 +145,11 @@ const FinishStep = ({ imageID, setLaunchSuccess }) => {
               {reservationID && <input type="hidden" readOnly name="reservation_id" value={reservationID} />}
             </span>
           </EmptyStateBody>
+          {isJobSuccess && (
+            <Button onClick={() => setToggleInstances(true)} variant="primary">
+              Show hosts
+            </Button>
+          )}
           {isError && (
             <Button onClick={() => goToStepById(1)} variant="primary">
               Edit
