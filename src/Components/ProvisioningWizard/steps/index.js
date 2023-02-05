@@ -2,7 +2,8 @@ import React from 'react';
 import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
 import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
-import FinishStep from './FinishProgress';
+import FinishStep from './ReservationProgress';
+import { AWS_PROVIDER } from './ReservationProgress/constants';
 
 const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepValidation, setStepValidation, setLaunchSuccess }) => [
   {
@@ -40,7 +41,7 @@ const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepVa
   {
     name: 'Finish Progress',
     id: 6,
-    component: <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={id} />,
+    component: <FinishStep provider={AWS_PROVIDER} setLaunchSuccess={() => setLaunchSuccess(true)} imageID={id} />,
     isFinishedStep: true,
   },
 ];

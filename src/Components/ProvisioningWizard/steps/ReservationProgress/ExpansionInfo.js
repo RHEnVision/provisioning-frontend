@@ -56,7 +56,7 @@ const ExpandedInfo = ({ reservationID, error, createdAt, provider }) => {
               <DescriptionListTerm>Host</DescriptionListTerm>
               <DescriptionListDescription>
                 {
-                  <span>
+                  <span aria-label="instance link">
                     <a href={instanceLink(instance_id, provider, chosenRegion)} rel="noreferrer" target="_blank">
                       {instance_id} <ExternalLinkAltIcon />
                     </a>
