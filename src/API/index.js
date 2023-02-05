@@ -24,7 +24,7 @@ export const createNewPublicKey = async (params) => {
   return axios.post(provisioningUrl('pubkeys'), params);
 };
 
-export const fetchAWSReservation = async (id) => {
+export const fetchReservation = async (id) => {
   const { data } = await axios.get(provisioningUrl(`reservations/${id}`));
   return data;
 };
