@@ -13,7 +13,7 @@ const NEW_KEY_OPTION = 'newKey';
 
 const PublicKeys = ({ setStepValidated }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
-  const { isLoading, isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
+  const { isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
   const [isSelectDisabled, disableSelect] = React.useState(false);
 
   const switchTo = (optionKey) => {
@@ -28,11 +28,11 @@ const PublicKeys = ({ setStepValidated }) => {
   };
 
   React.useEffect(() => {
-    if (!isLoading && (isError || (pubkeys && pubkeys.length < 1))) {
+    if (isError || pubkeys?.length < 1) {
       disableSelect(true);
       switchTo(NEW_KEY_OPTION);
     }
-  }, [isLoading]);
+  }, [isError, pubkeys]);
 
   return (
     <Form className="pubkeys">
