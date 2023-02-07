@@ -161,7 +161,7 @@ const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
             )}
           </EmptyStateBody>
           {currentError && (
-            <Button onClick={() => goToStepById(1)} variant="primary">
+            <Button id="wizard-provisioning-failed-edit-button" onClick={() => goToStepById(1)} variant="primary">
               Edit
             </Button>
           )}
