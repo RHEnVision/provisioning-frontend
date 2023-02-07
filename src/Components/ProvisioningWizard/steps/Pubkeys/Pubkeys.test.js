@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import Pubkeys from '.';
 
 import { render, screen } from '../../../../mocks/utils';
+import { provisioningUrl } from '../../../../API/helpers';
 
 describe('Pubkeys', () => {
   describe('with data', () => {
@@ -14,6 +15,18 @@ describe('Pubkeys', () => {
       await userEvent.click(select);
       const items = screen.getAllByLabelText(/^Public key/);
       expect(items).toHaveLength(2);
+    });
+
+    test('select is disabled when error', async () => {
+      const { server, rest } = window.msw;
+      server.use(
+        rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
+          return res(ctx.status(200), ctx.json([]));
+        })
+      );
+      render(<Pubkeys setStepValidated={jest.fn()} />);
+      const existingRadio = await screen.findByTestId('existing-pubkey-radio');
+      expect(existingRadio).toBeDisabled();
     });
 
     test('validate selection and keep key selection', async () => {

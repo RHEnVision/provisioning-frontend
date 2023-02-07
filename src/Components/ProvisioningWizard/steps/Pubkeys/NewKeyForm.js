@@ -5,16 +5,20 @@ import { useWizardContext } from '../../../Common/WizardContext';
 
 // This is a simple regex format for public ssh key
 const PUBLIC_KEY_FORMAT = '^(ssh|ecdsa)';
+const validatePublicKey = (ssh) => {
+  const regex = new RegExp(PUBLIC_KEY_FORMAT);
+  return regex.test(ssh);
+};
 
 const NewSSHKeyForm = ({ setStepValidated }) => {
-  const [wizardContext, setWizardContext] = useWizardContext();
+  const [{ sshPublicName, sshPublicKey }, setWizardContext] = useWizardContext();
   const [isLoading, setIsLoading] = React.useState();
   const [validations, setValidation] = React.useState({
-    sshKeyBody: 'default',
-    sshKeyName: 'default',
+    sshKeyBody: validatePublicKey(sshPublicKey) ? 'success' : 'default',
+    sshKeyName: sshPublicName ? 'success' : 'default',
   });
-  const [keyName, setName] = React.useState(wizardContext.sshPublicName);
-  const [publicKey, setPublicKey] = React.useState(wizardContext.sshPublicKey);
+  const [keyName, setName] = React.useState(sshPublicName);
+  const [publicKey, setPublicKey] = React.useState(sshPublicKey);
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
@@ -91,10 +95,6 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
     updateValidation('sshKeyBody', 'error');
   };
 
-  const validatePublicKey = (ssh) => {
-    const regex = new RegExp(PUBLIC_KEY_FORMAT);
-    return regex.test(ssh);
-  };
   return (
     <FormGroup isStack>
       <FormGroup validated={validations.sshKeyName} helperTextInvalid="Name is required" label="Name" isRequired fieldId="ssh-name">
