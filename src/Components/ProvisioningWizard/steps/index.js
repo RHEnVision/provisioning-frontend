@@ -5,6 +5,14 @@ import PublicKeys from './Pubkeys';
 import FinishStep from './ReservationProgress';
 import { AWS_PROVIDER } from './ReservationProgress/constants';
 
+const stringIds = {
+  1: 'account',
+  4: 'sshkey',
+  5: 'review',
+};
+
+export const stepIdToString = (id) => stringIds[id];
+
 const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepValidation, setStepValidation, setLaunchSuccess }) => [
   {
     name: 'Account and customization',

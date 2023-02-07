@@ -4,8 +4,9 @@ import React from 'react';
 
 import { WizardProvider } from '../Common/WizardContext';
 import APIProvider from '../Common/Query';
-import defaultSteps from './steps';
 import ConfirmModal from '../ConfirmModal';
+import CustomFooter from './CustomFooter';
+import defaultSteps from './steps';
 import './steps/Pubkeys/pubkeys.scss';
 
 const DEFAULT_STEP_VALIDATION = {
@@ -59,6 +60,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
           onClose={onWizardClose}
           onNext={onNext}
           className={'provisioning'}
+          footer={<CustomFooter />}
         />
         <ConfirmModal isOpen={isConfirming} onConfirm={onCustomClose} onCancel={() => setConfirming(false)} />
       </APIProvider>
