@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { imageBuilderURL, provisioningUrl } from './helpers';
 
-export const fetchSourcesList = async () => {
-  const { data } = await axios.get(provisioningUrl('sources'));
+export const fetchSourcesList = async (provider) => {
+  const { data } = await axios.get(provisioningUrl(`sources?provider=${provider}`));
   return data;
 };
 

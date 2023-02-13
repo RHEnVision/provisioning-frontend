@@ -7,9 +7,10 @@ import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
+const PROVIDER = 'aws';
 const DescriptionListAWS = ({ imageName }) => {
   const [wizardContext] = useWizardContext();
-  const { error, data: sources } = useQuery(SOURCES_QUERY_KEY, fetchSourcesList);
+  const { error, data: sources } = useQuery(SOURCES_QUERY_KEY, () => fetchSourcesList(PROVIDER));
 
   if (error) {
     // TODO: error handling, notifications
