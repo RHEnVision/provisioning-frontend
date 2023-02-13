@@ -7,9 +7,8 @@ import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
-const PROVIDER = 'aws';
 const SourcesSelect = ({ setValidation }) => {
-  const [wizardContext, setWizardContext] = useWizardContext();
+  const [{ provider, chosenSource }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
   const selectObject = (id, name) => ({
@@ -21,9 +20,9 @@ const SourcesSelect = ({ setValidation }) => {
     error,
     isLoading,
     data: sources,
-  } = useQuery(SOURCES_QUERY_KEY, () => fetchSourcesList(PROVIDER), {
+  } = useQuery([SOURCES_QUERY_KEY, provider], () => fetchSourcesList(provider), {
     onSuccess: (data) => {
-      const id = wizardContext.chosenSource;
+      const id = chosenSource;
 
       if (!id) return;
       setSelected(selectObject(id, data.find((source) => source.id === id).name));

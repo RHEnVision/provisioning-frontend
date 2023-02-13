@@ -75,6 +75,7 @@ ProvisioningWizard.propTypes = {
     name: PropTypes.string,
     id: PropTypes.string,
     architecture: PropTypes.string,
+    provider: PropTypes.string,
   }).isRequired,
 };
 

@@ -8,11 +8,11 @@ import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 
-const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID }) => {
-  const [{ chosenSource, chosenInstanceType }] = useWizardContext();
+const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID }) => {
+  const [wizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
-    sources: chosenSource ? 'success' : 'default',
-    types: chosenInstanceType ? 'success' : 'default',
+    sources: wizardContext.chosenSource ? 'success' : 'default',
+    types: wizardContext.chosenInstanceType ? 'success' : 'default',
   });
 
   React.useEffect(() => {
@@ -24,17 +24,17 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID })
   return (
     <Form>
       <Title ouiaId="account_custom_title" headingLevel="h1" size="xl">
-        Account and customizations | Amazon
+        Account and customizations | Google cloud
       </Title>
       <Text ouiaId="account_custom_description">
-        Configure instances that will run on your AWS. All the instances will launch with the same configuration.
+        Configure instances that will run on your Google cloud. All the instances will launch with the same configuration.
       </Text>
       <FormGroup
         label="Select account"
         validated={validations.sources}
         helperTextInvalid="Please pick a value"
         isRequired
-        fieldId="aws-select-source"
+        fieldId="gcp-select-source"
       >
         <SourcesSelect
           setValidation={(validation) =>
@@ -46,17 +46,17 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID })
         />
       </FormGroup>
       <FormGroup
-        label="Select region"
+        label="Select zone"
         isRequired
-        fieldId="aws-select-region"
+        fieldId="gcp-select-zone"
         labelIcon={
-          <Popover bodyContent="Select available geographical region">
+          <Popover headerContent={<div>GCP zones</div>}>
             <Button
-              ouiaId="region_help"
+              ouiaId="zone_help"
               type="button"
-              aria-label="More info for regions field"
+              aria-label="More info for zones field"
               onClick={(e) => e.preventDefault()}
-              aria-describedby="aws-select-region"
+              aria-describedby="gcp-select-zone"
               className="pf-c-form__group-label-help"
               variant="plain"
             >
@@ -68,21 +68,18 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID })
         <RegionsSelect composeID={composeID} />
       </FormGroup>
       <FormGroup
-        label="Select instance type"
+        label="Select machine type"
         isRequired
         helperTextInvalid="Please pick a value"
-        fieldId="aws-select-instance-types"
+        fieldId="gcp-select-machine-types"
         labelIcon={
-          <Popover
-            bodyContent="Select AWS instance type based on your computing,
-           memory, networking, or storage needs"
-          >
+          <Popover headerContent={<div>GCP machine types</div>}>
             <Button
-              ouiaId="instance_type_help"
+              ouiaId="machine_type_help"
               type="button"
-              aria-label="More info for instance types field"
+              aria-label="More info for machine types field"
               onClick={(e) => e.preventDefault()}
-              aria-describedby="aws-select-instance-types"
+              aria-describedby="gcp-select-machine-types"
               className="pf-c-form__group-label-help"
               variant="plain"
             >
@@ -104,15 +101,15 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID })
       <FormGroup
         label="Count"
         isRequired
-        fieldId="aws-select-instance-counter"
+        fieldId="gcp-select-instance-counter"
         labelIcon={
-          <Popover bodyContent="Specify the number of AWS instances to be launched">
+          <Popover headerContent={<div>Number of GCP instances</div>}>
             <Button
               ouiaId="instance_count_help"
               type="button"
               aria-label="More info for instance counter field"
               onClick={(e) => e.preventDefault()}
-              aria-describedby="aws-select-instance-counter"
+              aria-describedby="gcp-select-instance-counter"
               className="pf-c-form__group-label-help"
               variant="plain"
             >
@@ -127,10 +124,9 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID })
   );
 };
 
-AccountCustomizationsAWS.propTypes = {
-  setStepValidated: PropTypes.func.isRequired,
+AccountCustomizationsGCP.propTypes = {
   architecture: PropTypes.string.isRequired,
   composeID: PropTypes.string.isRequired,
+  setStepValidated: PropTypes.func.isRequired,
 };
-
-export default AccountCustomizationsAWS;
+export default AccountCustomizationsGCP;

@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import './sample-page.scss';
 import ProvisioningWizard from '../../Components/ProvisioningWizard';
+import { AWS_PROVIDER } from '../../Components/Common/constants';
 
 /**
 This page demonstrates the provisioning UI wizard
@@ -22,6 +23,8 @@ const SamplePage = () => {
   const [chosenImage, setChosenImage] = React.useState({
     id: undefined,
     name: undefined,
+    provider: undefined,
+    architecture: undefined,
   });
   const [isImageSelectOpen, setImageSelect] = React.useState(false);
 
@@ -46,13 +49,13 @@ const SamplePage = () => {
 
   const onImageSelect = (event, selection, isPlaceholder) => {
     if (isPlaceholder) return;
-    const { id } = images.find((image) => image.image_name === selection);
-    setChosenImage({ id, name: selection });
+    const { id, image_type, architecture } = images.find((image) => image.image_name === selection);
+    setChosenImage({ id, name: selection, architecture, provider: image_type });
     setImageSelect(false);
   };
 
   const onInputChange = (value) => {
-    setChosenImage({ id: value, name: 'manualy entered AMI' });
+    setChosenImage({ id: value, name: 'manualy entered AMI', provider: AWS_PROVIDER });
   };
 
   const renderSelect = (images) => (

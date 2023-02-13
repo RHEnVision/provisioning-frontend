@@ -17,11 +17,11 @@ import { fetchReservationByProvider } from '../../../../API';
 import { useWizardContext } from '../../../Common/WizardContext';
 import instanceLink from '../../../Common/InstanceLink';
 
-const ExpandedInfo = ({ reservationID, error, createdAt, provider }) => {
-  const [{ chosenRegion }] = useWizardContext();
+const ExpandedInfo = ({ reservationID, error, createdAt }) => {
+  const [{ chosenRegion, provider }] = useWizardContext();
   const { data: instances, isLoading } = useQuery(['launchInfo', reservationID], () => fetchReservationByProvider(reservationID, provider), {
     enabled: !error,
-    select: (reservation) => reservation.instances,
+    select: (reservation) => reservation?.instances,
   });
   return (
     <Bullseye>
@@ -76,7 +76,6 @@ ExpandedInfo.propTypes = {
   error: PropTypes.string,
   finishedAt: PropTypes.string,
   reservationID: PropTypes.number,
-  provider: PropTypes.string,
 };
 
 ExpandedInfo.defaultProps = {
@@ -84,7 +83,6 @@ ExpandedInfo.defaultProps = {
   finishedAt: undefined,
   reservationID: undefined,
   error: undefined,
-  provider: 'aws',
 };
 
 export default ExpandedInfo;

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Alert, Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
-import { instanceTypesQueryKeys } from '../../API/queryKeys';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
@@ -10,7 +9,7 @@ const OPTIONS_PER_SCREEN = 5;
 const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
 
 const InstanceTypesSelect = ({ setValidation, architecture }) => {
-  const [wizardContext, setWizardContext] = useWizardContext();
+  const [{ chosenInstanceType, chosenRegion, chosenSource, provider }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [numOptions, setNumOptions] = React.useState(OPTIONS_PER_SCREEN);
   const [filteredTypes, setFilteredTypes] = React.useState(null);
@@ -19,11 +18,12 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     isLoading,
     error,
     data: instanceTypes,
-  } = useQuery(instanceTypesQueryKeys(wizardContext.chosenRegion), () => fetchInstanceTypesList(wizardContext.chosenRegion), {
+  } = useQuery(['instanceTypes', chosenRegion], () => fetchInstanceTypesList(chosenRegion, provider), {
     select: (types) => types.filter((type) => type.architecture === architecture),
+    enabled: !!chosenRegion && !!chosenSource,
   });
 
-  if (!wizardContext.chosenSource || wizardContext.chosenSource === '') {
+  if (!chosenSource || chosenSource === '') {
     return (
       <>
         <TextInput
@@ -71,12 +71,12 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
   };
 
   const selectItemsMapper = (types, limit) => {
-    if (limit < types.length) types = types.slice(0, limit);
-    return types.map((instanceType, index) => (
+    if (limit < types?.length) types = types.slice(0, limit);
+    return types?.map((instanceType, index) => (
       <SelectOption
         aria-label={'Instance Type item'}
         key={index}
-        description={`${instanceType.cores} cores |
+        description={`${instanceType.cores || 'only vCPU'} cores |
           ${instanceType.vcpus} vCPU |
           ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(1)} GiB memory |
           ${instanceType.storage_gb > 0 ? instanceType.storage_gb + ' GB storage | ' : 'EBS only | '}
@@ -113,11 +113,11 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
       placeholderText="Select instance type"
       maxHeight="450px"
       isOpen={isOpen}
-      selections={wizardContext.chosenInstanceType}
+      selections={chosenInstanceType}
       onToggle={onToggle}
       onSelect={onSelect}
       onFilter={onFilter}
-      {...(numOptions < types.length && {
+      {...(numOptions < types?.length && {
         loadingVariant: {
           text: `View more (${types.length - numOptions})`,
           onClick: () => setNumOptions(numOptions + OPTIONS_PER_SCREEN),

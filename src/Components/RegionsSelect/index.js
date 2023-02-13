@@ -6,11 +6,10 @@ import { useQuery } from 'react-query';
 import { useWizardContext } from '../Common/WizardContext';
 import { IMAGE_REGIONS_KEY } from '../../API/queryKeys';
 import { fetchImageClones } from '../../API';
-
-const DEFAULT_REGION = 'us-east-1';
+import { defaultRegionByProvider } from '../Common/helpers';
 
 const RegionsSelect = ({ composeID }) => {
-  const [wizardContext, setWizardContext] = useWizardContext();
+  const [{ provider, chosenRegion }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const {
     isError,
@@ -19,7 +18,8 @@ const RegionsSelect = ({ composeID }) => {
   } = useQuery([IMAGE_REGIONS_KEY, composeID], () => fetchImageClones(composeID), {
     select: (images) => images.data?.map((image) => ({ id: image.id, region: image.request.region })),
   });
-  const parentImage = [{ region: DEFAULT_REGION, id: composeID }];
+  const defaultRegion = provider && defaultRegionByProvider(provider);
+  const parentImage = [{ region: defaultRegion, id: composeID }];
   const images = clonedImages ? parentImage.concat(clonedImages) : parentImage;
 
   const onSelect = (_, selection) => {
@@ -52,11 +52,18 @@ const RegionsSelect = ({ composeID }) => {
     <Select
       ouiaId="select_regions"
       variant="typeahead"
+      onClear={() =>
+        setWizardContext((prevState) => ({
+          ...prevState,
+          chosenRegion: undefined,
+        }))
+      }
+      clearSelectionsAriaLabel="clear region"
       aria-label="Select region"
       label="Select region"
       maxHeight="450px"
       isOpen={isOpen}
-      selections={wizardContext.chosenRegion}
+      selections={chosenRegion}
       onToggle={onToggle}
       onSelect={onSelect}
     >

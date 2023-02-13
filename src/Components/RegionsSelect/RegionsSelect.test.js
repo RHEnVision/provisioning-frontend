@@ -31,6 +31,9 @@ describe('RegionSelect', () => {
   test('filter items', async () => {
     const searchedValue = 'eu';
     const dropdown = await mountSelectAndClick();
+    const clearRegionButton = await screen.findByLabelText('clear region');
+    await userEvent.click(clearRegionButton);
+
     await userEvent.type(dropdown, searchedValue);
     const items = await screen.findAllByLabelText('Region item');
     const expectedLength = clonedImages.data.filter((item) => item.request.region.includes(searchedValue)).length;

@@ -6,14 +6,17 @@ export const POLLING_BACKOFF_INTERVAL = [
 ];
 
 export const AWS_STEPS = [
-  { name: 'Create reservation', description: `Submitting AWS reservation form` },
+  { name: 'Create reservation', description: `Submit requested data` },
   {
     name: 'Transfer keys',
     description: 'Uploading public key to AWS',
   },
-  { name: 'Launch instance(s)', description: 'Running the new instance(s)' },
+  { name: 'Launch instance(s)', description: 'Call AWS API for launching instance(s)' },
+];
+
+export const GCP_STEPS = [
+  { name: 'Create reservation', description: `Submit requested data` },
+  { name: 'Launch instance(s)', description: 'Call Google API' },
 ];
 
 export const SSH_STEP = [{ name: 'New SSH key', description: 'Creating new SSH public key resource' }];
-
-export const AWS_PROVIDER = 'aws';
