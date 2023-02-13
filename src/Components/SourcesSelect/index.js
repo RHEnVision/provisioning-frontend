@@ -7,6 +7,7 @@ import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
+const PROVIDER = 'aws';
 const SourcesSelect = ({ setValidation }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -20,7 +21,7 @@ const SourcesSelect = ({ setValidation }) => {
     error,
     isLoading,
     data: sources,
-  } = useQuery(SOURCES_QUERY_KEY, fetchSourcesList, {
+  } = useQuery(SOURCES_QUERY_KEY, () => fetchSourcesList(PROVIDER), {
     onSuccess: (data) => {
       const id = wizardContext.chosenSource;
 
