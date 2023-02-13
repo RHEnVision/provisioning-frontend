@@ -57,7 +57,7 @@ describe('Reservation polling', () => {
 const mountProgressBar = () => {
   const setLaunchSuccessFunction = jest.fn();
   const imageID = 'image-id';
-  render(<ReservationProgress provider={constants.AWS_PROVIDER} imageID={imageID} setLaunchSuccess={setLaunchSuccessFunction} />);
+  render(<ReservationProgress provider="aws" imageID={imageID} setLaunchSuccess={setLaunchSuccessFunction} />);
 };
 
 const clickOnShowMore = async () => {

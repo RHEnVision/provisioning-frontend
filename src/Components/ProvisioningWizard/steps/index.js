@@ -1,9 +1,9 @@
 import React from 'react';
-import AccountCustomizationsAWS from '../steps/AccountCustomizations/aws';
+import AccountCustomizations from '../steps/AccountCustomizations';
 import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
 import FinishStep from './ReservationProgress';
-import { AWS_PROVIDER } from './ReservationProgress/constants';
+import { humanizeProvider } from '../../Common/helpers';
 
 const stringIds = {
   1: 'account',
@@ -13,16 +13,17 @@ const stringIds = {
 
 export const stepIdToString = (id) => stringIds[id];
 
-const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepValidation, setStepValidation, setLaunchSuccess }) => [
+const defaultSteps = ({ stepIdReached, image: { name, id, architecture, provider }, stepValidation, setStepValidation, setLaunchSuccess }) => [
   {
     name: 'Account and customization',
     steps: [
       {
-        name: 'AWS',
+        name: humanizeProvider(provider),
         id: 1,
         enableNext: stepValidation.awsStep,
         component: (
-          <AccountCustomizationsAWS
+          <AccountCustomizations
+            provider={provider}
             architecture={architecture || 'x86_64'}
             composeID={id}
             setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))}
@@ -49,7 +50,7 @@ const defaultSteps = ({ stepIdReached, image: { name, id, architecture }, stepVa
   {
     name: 'Finish Progress',
     id: 6,
-    component: <FinishStep provider={AWS_PROVIDER} setLaunchSuccess={() => setLaunchSuccess(true)} imageID={id} />,
+    component: <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={id} />,
     isFinishedStep: true,
   },
 ];

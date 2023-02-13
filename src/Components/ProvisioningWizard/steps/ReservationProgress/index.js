@@ -16,14 +16,13 @@ import { CogsIcon, PendingIcon } from '@patternfly/react-icons';
 import { useMutation, useQuery } from 'react-query';
 
 import { useWizardContext } from '../../../Common/WizardContext';
-import { createNewPublicKey, fetchReservation } from '../../../../API';
+import { createNewPublicKey, createReservation, fetchReservation } from '../../../../API';
 import ExpandedInfo from './ExpansionInfo';
 import useInterval from '../../../Common/Hooks/useInterval';
 import { POLLING_BACKOFF_INTERVAL, SSH_STEP } from './constants';
-import { mapCurrentVariant, stepsByProvider } from './helpers';
-import useReservationMutation from '../../../Common/Hooks/useMutationReservation';
+import { instanceType, mapCurrentVariant, region, stepsByProvider } from './helpers';
 
-const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
+const ReservationProgress = ({ setLaunchSuccess }) => {
   const [steps, setSteps] = React.useState([]);
   const [currentError, setCurrentError] = React.useState();
   const [currentStep, setCurrentStep] = React.useState(0);
@@ -31,12 +30,26 @@ const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
   const [reservationID, setReservationID] = React.useState();
 
   const [
-    { chosenSource, chosenInstanceType, chosenNumOfInstances, chosenRegion, sshPublicName, sshPublicKey, chosenSshKeyId, uploadedKey, chosenImageID },
+    {
+      chosenSource,
+      chosenInstanceType,
+      chosenNumOfInstances,
+      chosenRegion,
+      sshPublicName,
+      sshPublicKey,
+      chosenSshKeyId,
+      uploadedKey,
+      chosenImageID,
+      provider,
+    },
   ] = useWizardContext();
   const { nextInterval, currentInterval } = useInterval(POLLING_BACKOFF_INTERVAL);
-  const [createReservation, reservationError] = useReservationMutation(provider, (res) => {
-    stepUp();
-    setReservationID(res?.data?.reservation_id);
+
+  const { mutate: mutateReservation, error: reservationError } = useMutation(createReservation(provider), {
+    onSuccess: (res) => {
+      stepUp();
+      setReservationID(res?.data?.reservation_id);
+    },
   });
 
   React.useEffect(() => {
@@ -46,12 +59,12 @@ const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
         createPublicKey({ name: sshPublicName, body: sshPublicKey });
       } else {
         setSteps(stepsByProvider(provider));
-        createReservation({
+        mutateReservation({
           source_id: chosenSource,
-          instance_type: chosenInstanceType,
+          [instanceType(provider)]: chosenInstanceType,
           amount: chosenNumOfInstances,
-          image_id: chosenImageID || imageID,
-          region: chosenRegion,
+          image_id: chosenImageID,
+          [region(provider)]: chosenRegion,
           pubkey_id: chosenSshKeyId,
         });
       }
@@ -61,12 +74,12 @@ const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
   const { mutate: createPublicKey, error: pubkeyError } = useMutation(createNewPublicKey, {
     onSuccess: (resp) => {
       stepUp();
-      createReservation({
+      mutateReservation({
         source_id: chosenSource,
-        instance_type: chosenInstanceType,
+        [instanceType(provider)]: chosenInstanceType,
         amount: chosenNumOfInstances,
-        image_id: chosenImageID || imageID,
-        region: chosenRegion,
+        image_id: chosenImageID,
+        [region(provider)]: chosenRegion,
         pubkey_id: resp?.data?.id,
       });
     },
@@ -80,7 +93,7 @@ const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
       return currentInterval;
     },
     onSuccess: (data) => {
-      if (currentJobStep < data.step) {
+      if (currentJobStep < data.step && !data.error) {
         setCurrentJobStep((prev) => prev + 1);
         stepUp();
       }
@@ -177,8 +190,6 @@ const ReservationProgress = ({ imageID, setLaunchSuccess, provider }) => {
 };
 
 ReservationProgress.propTypes = {
-  imageID: PropTypes.string.isRequired,
-  provider: PropTypes.string.isRequired,
   setLaunchSuccess: PropTypes.func.isRequired,
 };
 

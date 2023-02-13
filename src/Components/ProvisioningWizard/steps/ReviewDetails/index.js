@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Title, Text } from '@patternfly/react-core';
-import { ExpandableAWS } from '../../../ExpandableAWS';
+import LaunchDescriptionList from '../../../LaunchDescriptionList';
 
 const ReviewDetails = ({ imageName }) => {
   return (
@@ -13,7 +13,7 @@ const ReviewDetails = ({ imageName }) => {
         Review the information below and then click <b>Launch</b> to finish the process.
       </Text>
 
-      <ExpandableAWS imageName={imageName} />
+      <LaunchDescriptionList imageName={imageName} />
     </div>
   );
 };
