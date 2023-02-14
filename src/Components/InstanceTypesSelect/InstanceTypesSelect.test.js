@@ -30,6 +30,13 @@ describe('InstanceTypesSelect', () => {
       const items = await screen.findAllByLabelText('Instance Type item');
       expect(items).toHaveLength(1);
     });
+    test('show warning alert for unsupported type', async () => {
+      await mountSelectAndClick();
+      const unsupportedInstance = await screen.findByText('t1.nano');
+      await userEvent.click(unsupportedInstance);
+      const alert = await screen.findByTestId('unsupported_type_alert');
+      expect(alert).toBeDefined();
+    });
   });
 });
 

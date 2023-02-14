@@ -14,6 +14,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
   const [numOptions, setNumOptions] = React.useState(OPTIONS_PER_SCREEN);
   const [filteredTypes, setFilteredTypes] = React.useState(null);
   const [prevSearch, setPrevSearch] = React.useState('');
+  const [isTypeSupported, setTypeSupported] = React.useState(true);
   const {
     isLoading,
     error,
@@ -43,6 +44,8 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     if (isPlaceholder) {
       clearSelection();
     } else {
+      const chosenInstanceType = instanceTypes.find((instanceType) => selection === instanceType.name);
+      setTypeSupported(chosenInstanceType.supported);
       setWizardContext((prevState) => ({
         ...prevState,
         chosenInstanceType: selection,
@@ -54,6 +57,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
 
   const clearSelection = () => {
     setValidation('error');
+    setTypeSupported(true);
     setWizardContext((prevState) => ({
       ...prevState,
       chosenInstanceType: null,
@@ -106,26 +110,37 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
   const types = filteredTypes || instanceTypes;
 
   return (
-    <Select
-      ouiaId="select_instance_type"
-      variant="typeahead"
-      aria-label="Select instance type"
-      placeholderText="Select instance type"
-      maxHeight="450px"
-      isOpen={isOpen}
-      selections={chosenInstanceType}
-      onToggle={onToggle}
-      onSelect={onSelect}
-      onFilter={onFilter}
-      {...(numOptions < types?.length && {
-        loadingVariant: {
-          text: `View more (${types.length - numOptions})`,
-          onClick: () => setNumOptions(numOptions + OPTIONS_PER_SCREEN),
-        },
-      })}
-    >
-      {selectItemsMapper(types, numOptions)}
-    </Select>
+    <>
+      {!isTypeSupported && (
+        <Alert
+          data-testid="unsupported_type_alert"
+          ouiaId="instance_type_not_supported_alert"
+          variant="warning"
+          isInline
+          title="Warning: The selected specification does not meet minimum requirements for this image."
+        />
+      )}
+      <Select
+        ouiaId="select_instance_type"
+        variant="typeahead"
+        aria-label="Select instance type"
+        placeholderText="Select instance type"
+        maxHeight="450px"
+        isOpen={isOpen}
+        selections={chosenInstanceType}
+        onToggle={onToggle}
+        onSelect={onSelect}
+        onFilter={onFilter}
+        {...(numOptions < types?.length && {
+          loadingVariant: {
+            text: `View more (${types.length - numOptions})`,
+            onClick: () => setNumOptions(numOptions + OPTIONS_PER_SCREEN),
+          },
+        })}
+      >
+        {selectItemsMapper(types, numOptions)}
+      </Select>
+    </>
   );
 };
 

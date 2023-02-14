@@ -25,4 +25,13 @@ export const instanceTypeList = [
     supported: true,
     architecture: 'x86_64',
   },
+  {
+    id: 4,
+    name: 't1.nano',
+    vcpus: 1,
+    cores: 1,
+    memory: 512,
+    architecture: 'x86_64',
+    supported: false,
+  },
 ];
