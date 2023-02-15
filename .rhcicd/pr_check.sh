@@ -38,6 +38,7 @@ source "${CICD_ROOT}/deploy_ephemeral_env.sh"
 export COMPONENT_NAME="provisioning-backend"
 source "${CICD_ROOT}/cji_smoke_test.sh"
 
+SONAR_PR_CHECK="true"
 source $WORKSPACE/.rhcicd/sonarqube.sh
 
 source "${CICD_ROOT}/post_test_results.sh"
