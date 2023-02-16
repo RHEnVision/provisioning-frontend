@@ -29,7 +29,7 @@ podman run \
  -Dsonar.sources=/usr/src/. \
  -Dsonar.tests=/usr/src/. \
  -Dsonar.test.inclusions=**/*.test.js \
- -Dsonar.exclusions=**/*.test.js,**/*.html,**/*.yml,**/*.yaml,**/*.json,**/mocks/*" \
+ -Dsonar.exclusions=node_modules/*,**/*.test.js,**/*.html,**/*.yml,**/*.yaml,**/*.json,**/mocks/*" \
 images.paas.redhat.com/alm/sonar-scanner-alpine:latest -X
 
 #mkdir -p "${WORKSPACE}/artifacts"
