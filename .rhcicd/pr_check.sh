@@ -39,6 +39,7 @@ export COMPONENT_NAME="provisioning-backend"
 source "${CICD_ROOT}/cji_smoke_test.sh"
 
 SONAR_PR_CHECK="true"
+rm -r $WORKSPACE/node_modules # do not include npm packages in the scan
 source $WORKSPACE/.rhcicd/sonarqube.sh
 
 source "${CICD_ROOT}/post_test_results.sh"

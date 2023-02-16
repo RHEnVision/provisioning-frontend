@@ -17,6 +17,7 @@ source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
 BUILD_RESULTS=$?
 
 SONAR_PR_CHECK="false"
+rm -r $WORKSPACE/node_modules # do not include npm packages in the scan
 source $WORKSPACE/.rhcicd/sonarqube.sh
 
 # Stubbed out for now
