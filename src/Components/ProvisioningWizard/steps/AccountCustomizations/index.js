@@ -25,7 +25,7 @@ const AccountCustomizations = ({ setStepValidated, architecture, composeID, prov
     case GCP_PROVIDER:
       return <GCP setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} />;
     default:
-      undefined;
+      throw new Error(`Can not render AccountCustomizations for unrecognized provider: ${provider}`);
   }
 };
 

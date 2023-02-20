@@ -15,7 +15,7 @@ export const stepsByProvider = (provider) => {
     case GCP_PROVIDER:
       return GCP_STEPS;
     default:
-      undefined;
+      throw new Error(`Steps requested for unknown provider: ${provider}`);
   }
 };
 
@@ -26,7 +26,7 @@ export const instanceType = (provider) => {
     case GCP_PROVIDER:
       return 'machine_type';
     default:
-      'instance_type';
+      return 'instance_type';
   }
 };
 
@@ -37,6 +37,6 @@ export const region = (provider) => {
     case GCP_PROVIDER:
       return 'zone';
     default:
-      'region';
+      return 'region';
   }
 };
