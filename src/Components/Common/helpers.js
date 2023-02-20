@@ -18,6 +18,6 @@ export const humanizeProvider = (provider) => {
     case GCP_PROVIDER:
       return 'Google cloud';
     default:
-      '';
+      return '';
   }
 };
