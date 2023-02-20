@@ -16,7 +16,6 @@ if [ $IS_PR = true ]; then
 fi
 
 coverage_opts="-Dsonar.javascript.lcov.reportPaths=/usr/src/coverage/lcov.info"
-build_artifacts=".docker/**/*"
 
 podman run \
 --pull=always --rm \
@@ -30,7 +29,7 @@ podman run \
  -Dsonar.sources=/usr/src/. \
  -Dsonar.tests=/usr/src/. \
  -Dsonar.test.inclusions=**/*.test.js \
- -Dsonar.exclusions=${build_artifacts},node_modules/**/*,**/*.test.js,**/*.html,**/*.yml,**/*.yaml,**/*.json,**/mocks/*" \
+ -Dsonar.exclusions=node_modules/**/*,**/*.test.js,**/*.html,**/*.yml,**/*.yaml,**/*.json,**/mocks/*" \
 images.paas.redhat.com/alm/sonar-scanner-alpine:latest -X
 
 mkdir -p "${WORKSPACE}/artifacts"
