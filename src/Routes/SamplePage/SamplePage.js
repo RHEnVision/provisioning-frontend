@@ -49,8 +49,9 @@ const SamplePage = () => {
 
   const onImageSelect = (event, selection, isPlaceholder) => {
     if (isPlaceholder) return;
-    const { id, image_type, architecture } = images.find((image) => image.image_name === selection);
-    setChosenImage({ id, name: selection, architecture, provider: image_type });
+    const { id, request } = images.find((image) => image.image_name === selection);
+    const { architecture, image_type } = request.image_requests[0];
+    setChosenImage({ id: id, name: selection, architecture: architecture, provider: image_type });
     setImageSelect(false);
   };
 
@@ -94,7 +95,7 @@ const SamplePage = () => {
             <Button variant="primary" onClick={() => setWizardModal(true)}>
               Open Wizard
             </Button>
-            <ProvisioningWizard isOpen={isWizardOpen} onClose={() => setWizardModal(false)} image={chosenImage} />
+            {isWizardOpen && <ProvisioningWizard isOpen={true} onClose={() => setWizardModal(false)} image={chosenImage} />}
           </StackItem>
         </Stack>
       </Main>
