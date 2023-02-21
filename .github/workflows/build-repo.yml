@@ -11,7 +11,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: mkdir ${{ github.workspace }}/scripts
       - name: Pull release file
         run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/release.sh > ${{ github.workspace }}/scripts/release.sh
@@ -30,7 +30,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: mkdir ${{ github.workspace }}/.travis
       - name: Pull the file
         run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/Jenkinsfile > ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
@@ -64,7 +64,7 @@ jobs:
       COMMIT_AUTHOR_USERNAME: GitHub actions
       COMMIT_AUTHOR_EMAIL: actions@github.com
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set env variables
         run: |
           echo "TRAVIS_BRANCH=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
