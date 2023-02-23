@@ -5,6 +5,7 @@
 
 # ide config
 .idea/
+.envrc
 
 # dependencies
 node_modules
