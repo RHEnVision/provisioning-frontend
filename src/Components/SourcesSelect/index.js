@@ -21,6 +21,7 @@ const SourcesSelect = ({ setValidation }) => {
     isLoading,
     data: sources,
   } = useQuery([SOURCES_QUERY_KEY, provider], () => fetchSourcesList(provider), {
+    enabled: !!provider,
     onSuccess: (data) => {
       const id = chosenSource;
 
@@ -45,8 +46,8 @@ const SourcesSelect = ({ setValidation }) => {
     setIsOpen(false);
   };
 
-  const selectItemsMapper = (sourcesData) =>
-    sourcesData.map(({ name, id }) => <SelectOption aria-label="Source account" key={id} value={selectObject(id, name)}></SelectOption>);
+  const selectItemsMapper = () =>
+    sources.map(({ name, id }) => <SelectOption aria-label="Source account" key={id} value={selectObject(id, name)}></SelectOption>);
 
   if (error) {
     console.warn('Failed to fetch sources list');
@@ -72,7 +73,7 @@ const SourcesSelect = ({ setValidation }) => {
       placeholderText="Select account"
       aria-label="Select account"
     >
-      {selectItemsMapper(sources)}
+      {sources && selectItemsMapper()}
     </Select>
   );
 };
