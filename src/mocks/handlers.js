@@ -3,7 +3,7 @@ import { imageBuilderURL, provisioningUrl } from '../API/helpers';
 import { instanceTypeList } from './fixtures/instanceTypes.fixtures';
 import { sourcesList } from './fixtures/sources.fixtures';
 import { pubkeysList } from './fixtures/pubkeys.fixtures';
-import { clonedImages, parentImage } from './fixtures/image.fixtures';
+import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/image.fixtures';
 import { AWSReservation, createdAWSReservation, reservation } from './fixtures/reservation.fixtures';
 
 export const handlers = [
@@ -18,6 +18,9 @@ export const handlers = [
   }),
   rest.get(imageBuilderURL(`composes/${parentImage.id}/clones`), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(clonedImages));
+  }),
+  rest.get(imageBuilderURL(`clones/:id`), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(successfulCloneStatus));
   }),
   rest.post(provisioningUrl('pubkeys'), (req, res, ctx) => {
     return res(ctx.status(200));

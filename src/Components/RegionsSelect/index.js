@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
-import { useQuery } from 'react-query';
+import { useQuery, useQueries } from 'react-query';
 
 import { useWizardContext } from '../Common/WizardContext';
 import { IMAGE_REGIONS_KEY } from '../../API/queryKeys';
-import { fetchImageClones } from '../../API';
+import { fetchImageClones, fetchImageCloneStatus } from '../../API';
 import { defaultRegionByProvider } from '../Common/helpers';
 
 const RegionsSelect = ({ composeID }) => {
   const [{ provider, chosenRegion }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
+
   const {
     isError,
     isLoading,
@@ -18,9 +19,20 @@ const RegionsSelect = ({ composeID }) => {
   } = useQuery([IMAGE_REGIONS_KEY, composeID], () => fetchImageClones(composeID), {
     select: (images) => images.data?.map((image) => ({ id: image.id, region: image.request.region })),
   });
-  const defaultRegion = provider && defaultRegionByProvider(provider);
-  const parentImage = [{ region: defaultRegion, id: composeID }];
-  const images = clonedImages ? parentImage.concat(clonedImages) : parentImage;
+
+  const clonesStatusQueries = useQueries(
+    clonedImages?.map((clonedImage) => ({ queryKey: [IMAGE_REGIONS_KEY, clonedImage.id], queryFn: () => fetchImageCloneStatus(clonedImage.id) })) ||
+      []
+  );
+  const isCloneStatusLoading = clonesStatusQueries.some((clone) => clone.isLoading);
+  const defaultRegion = { region: provider && defaultRegionByProvider(provider), id: composeID };
+  const images = [defaultRegion];
+  // filter successful clones images
+  if (clonesStatusQueries.length && clonesStatusQueries.every((cloneQuery) => cloneQuery.isLoading === false)) {
+    const clonesStatus = clonesStatusQueries?.map((query) => query?.data);
+    const filteredCloned = clonedImages?.filter((_, index) => clonesStatus[index].status === 'success');
+    images.push(...filteredCloned);
+  }
 
   const onSelect = (_, selection) => {
     setWizardContext((prevState) => ({
@@ -44,7 +56,7 @@ const RegionsSelect = ({ composeID }) => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || isCloneStatusLoading) {
     return <Spinner isSVG size="sm" aria-label="loading available regions" />;
   }
 
