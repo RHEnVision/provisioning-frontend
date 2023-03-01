@@ -25,3 +25,6 @@ export const clonedImages = {
   ],
   meta: { count: 4 },
 };
+
+export const successfulCloneStatus = { status: 'success', type: 'aws' };
+export const failureCloneStatus = { status: 'failure', type: 'aws' };
