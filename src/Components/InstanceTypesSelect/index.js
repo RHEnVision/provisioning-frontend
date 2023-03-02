@@ -34,7 +34,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
           type="text"
           value="Select account to load instances"
           id="input-readonly"
-          aria-label="Readonly input example"
+          aria-label="Select instance type - disabled"
         />
       </>
     );
@@ -78,7 +78,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     if (limit < types?.length) types = types.slice(0, limit);
     return types?.map((instanceType, index) => (
       <SelectOption
-        aria-label={'Instance Type item'}
+        aria-label={`Instance Type ${instanceType.name}`}
         key={index}
         description={`${instanceType.cores || 'only vCPU'} cores |
           ${instanceType.vcpus} vCPU |
@@ -99,7 +99,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     return (
       <>
         <Alert ouiaId="instance_type_alert" variant="warning" isInline title="There are problems fetching instance types" />
-        <Select ouiaId="instance_type_empty" isDisabled placeholderText="No instance types found" aria-label="Select instance type" />
+        <Select ouiaId="instance_type_empty" isDisabled placeholderText="No instance types found" toggleAriaLabel="Select instance type" />
       </>
     );
   }
@@ -123,7 +123,8 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
       <Select
         ouiaId="select_instance_type"
         variant="typeahead"
-        aria-label="Select instance type"
+        typeAheadAriaLabel="Selected instance type"
+        toggleAriaLabel="Select instance type"
         placeholderText="Select instance type"
         maxHeight="450px"
         isOpen={isOpen}

@@ -7,7 +7,7 @@ import { render, screen } from '../../mocks/utils';
 describe('InstanceTypesSelect', () => {
   test('populate instance types select', async () => {
     await mountSelectAndClick();
-    const items = await screen.findAllByLabelText('Instance Type item');
+    const items = await screen.findAllByLabelText(/^Instance Type/);
     expect(items).toHaveLength(instanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
   });
 
@@ -15,19 +15,19 @@ describe('InstanceTypesSelect', () => {
     test('filter items', async () => {
       const dropdown = await mountSelectAndClick();
       await userEvent.type(dropdown, 'm5');
-      const items = await screen.findAllByLabelText('Instance Type item');
+      const items = await screen.findAllByLabelText(/^Instance Type/);
       expect(items).toHaveLength(1);
     });
     test('handles weird input', async () => {
       const dropdown = await mountSelectAndClick();
       await userEvent.type(dropdown, '```');
-      const items = await screen.queryAllByLabelText('Instance Type item');
+      const items = await screen.queryAllByLabelText(/^Instance Type/);
       expect(items).toHaveLength(0);
     });
     test('filter with a substring', async () => {
       const dropdown = await mountSelectAndClick();
       await userEvent.type(dropdown, 'micro');
-      const items = await screen.findAllByLabelText('Instance Type item');
+      const items = await screen.findAllByLabelText(/^Instance Type/);
       expect(items).toHaveLength(1);
     });
     test('show warning alert for unsupported type', async () => {
