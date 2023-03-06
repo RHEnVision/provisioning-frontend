@@ -34,5 +34,8 @@ export const createdAWSReservation = {
 };
 
 export const AWSReservation = {
-  instances: ['i-111', 'i-222'],
+  instances: [
+    { instance_id: 'i-111', detail: { public_ipv4: '1.1.1.1', public_dns: 'fake.dns.com' } },
+    { instance_id: 'i-222', detail: { public_ipv4: '2.2.2.2', public_dns: 'fake2.dns.com' } },
+  ],
 };

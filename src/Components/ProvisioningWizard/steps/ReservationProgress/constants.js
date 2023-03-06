@@ -1,3 +1,5 @@
+import { AWS_PROVIDER } from '../../../Common/constants';
+
 export const PF_SUCCESS_100 = '#3E8635';
 export const PF_DANGER_100 = '#C9190B';
 
@@ -12,6 +14,7 @@ export const AWS_STEPS = [
     description: 'Uploading public key to AWS',
   },
   { name: 'Launch instance(s)', description: 'Call AWS API for launching instance(s)' },
+  { name: 'Instance description', description: 'Fetch instance(s) descriptions' },
 ];
 
 export const GCP_STEPS = [
@@ -20,3 +23,5 @@ export const GCP_STEPS = [
 ];
 
 export const SSH_STEP = [{ name: 'New SSH key', description: 'Creating new SSH public key resource' }];
+
+export const PROVIDERS_INSTANCES_SUPPORT = [AWS_PROVIDER];

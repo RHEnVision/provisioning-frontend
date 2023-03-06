@@ -2,7 +2,7 @@ import React from 'react';
 import ReservationProgress from '.';
 import userEvent from '@testing-library/user-event';
 import { provisioningUrl } from '../../../../API/helpers';
-import { errorReservation, polledReservation, successfulReservation } from '../../../../mocks/fixtures/reservation.fixtures';
+import { AWSReservation, errorReservation, polledReservation, successfulReservation } from '../../../../mocks/fixtures/reservation.fixtures';
 import { render, screen } from '../../../../mocks/utils';
 import * as constants from './constants';
 
@@ -46,6 +46,12 @@ describe('Reservation polling', () => {
     );
     const launchInstancesStep = await screen.findByLabelText(`${constants.AWS_STEPS[2].name} success`, { exact: false });
     expect(launchInstancesStep).toHaveClass('pf-m-success');
+
+    // show table
+    const instancesIDs = await screen.findAllByLabelText('instance id');
+    const instancesDNSs = await screen.findAllByLabelText('instance dns');
+    expect(instancesIDs).toHaveLength(AWSReservation.instances.length);
+    expect(instancesDNSs).toHaveLength(AWSReservation.instances.length);
 
     // show reservation id
     clickOnShowMore();
