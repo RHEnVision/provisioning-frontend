@@ -19,8 +19,9 @@ import { useWizardContext } from '../../../Common/WizardContext';
 import { createNewPublicKey, createReservation, fetchReservation } from '../../../../API';
 import ExpandedInfo from './ExpansionInfo';
 import useInterval from '../../../Common/Hooks/useInterval';
-import { POLLING_BACKOFF_INTERVAL, SSH_STEP } from './constants';
+import { POLLING_BACKOFF_INTERVAL, PROVIDERS_INSTANCES_SUPPORT, SSH_STEP } from './constants';
 import { instanceType, mapCurrentVariant, region, stepsByProvider } from './helpers';
+import InstancesTable from '../../../InstancesTable';
 
 const ReservationProgress = ({ setLaunchSuccess }) => {
   const [steps, setSteps] = React.useState([]);
@@ -161,16 +162,14 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
               })}
             </ProgressStepper>
           </EmptyStateBody>
+          {polledReservation?.success && PROVIDERS_INSTANCES_SUPPORT.includes(provider) && (
+            <InstancesTable provider={provider} region={chosenRegion} reservationID={reservationID} />
+          )}
           {/* TODO: remove hidden input */}
           {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
           <EmptyStateBody>
             {(polledReservation?.error || polledReservation?.success) && (
-              <ExpandedInfo
-                reservationID={reservationID}
-                error={currentError}
-                createdAt={polledReservation?.created_at}
-                finishedAt={polledReservation?.finished_at}
-              />
+              <ExpandedInfo reservationID={reservationID} error={currentError} createdAt={polledReservation?.created_at} />
             )}
           </EmptyStateBody>
           {currentError && (
