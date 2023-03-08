@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Routes } from './Routes';
 import './App.scss';
 
@@ -9,12 +9,12 @@ import { notificationsReducer } from '@redhat-cloud-services/frontend-components
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 
 const App = (props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { on: onChromeEvent } = useChrome();
 
   useEffect(() => {
     const registry = getRegistry();
-    const unregister = onChromeEvent('APP_NAVIGATION', (event) => history.push(`/${event.navId}`));
+    const unregister = onChromeEvent('APP_NAVIGATION', (event) => navigate(`/${event.navId}`));
     registry.register({ notifications: notificationsReducer });
 
     return () => {
