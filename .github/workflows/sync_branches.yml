@@ -71,11 +71,9 @@ jobs:
       - name: Release to production
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'production' }}
         run: |
-          git push https://${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git ${{ github.event.inputs.source }}:refs/heads/prod-beta
+          git push https://${GITHUB_ACTOR}:${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git HEAD:prod-beta
 
       - name: Sync main to stage-stable
         if: ${{ github.event_name == 'push' || github.event.inputs.target == 'stage-stable' }}
-        uses: ad-m/github-push-action@master
-        with:
-          branch: stage-stable
-          github_token: ${{ secrets.FE_RELEASE_TOKEN }}
+        run:
+          git push https://${GITHUB_ACTOR}:${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git HEAD:stage-stable
