@@ -70,9 +70,9 @@ jobs:
       - name: Release to production
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'production' }}
         run: |
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ github.event.inputs.source }}:refs/heads/prod-beta
+          git push https://${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git ${{ github.event.inputs.source }}:refs/heads/prod-beta
 
       - name: Sync main to stage-stable
         if: ${{ github.event_name == 'push' || github.event.inputs.target == 'stage-stable' }}
         run: |
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git origin/main:refs/heads/stage-stable
+          git push https://${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git origin/main:refs/heads/stage-stable
