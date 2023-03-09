@@ -1,9 +1,5 @@
 name: Build and release
 on:
-  workflow_run:
-    workflows: [Sync branches]
-    types:
-      - completed
   push:
     branches:
       - main
