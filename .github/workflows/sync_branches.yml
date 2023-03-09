@@ -77,6 +77,5 @@ jobs:
         if: ${{ github.event_name == 'push' || github.event.inputs.target == 'stage-stable' }}
         uses: ad-m/github-push-action@master
         with:
-          ssh: true
           branch: stage-stable
           github_token: ${{ secrets.FE_RELEASE_TOKEN }}
