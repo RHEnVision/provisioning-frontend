@@ -64,7 +64,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.source }}
+          token: ${{ secrets.FE_RELEASE_TOKEN }}
+          ref: ${{ (github.event.inputs.target == 'production' && github.event.inputs.source) || 'main' }}
           fetch-depth: 0
 
       - name: Release to production
@@ -74,5 +75,8 @@ jobs:
 
       - name: Sync main to stage-stable
         if: ${{ github.event_name == 'push' || github.event.inputs.target == 'stage-stable' }}
-        run: |
-          git push https://${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git origin/main:refs/heads/stage-stable
+        uses: ad-m/github-push-action@master
+        with:
+          ssh: true
+          branch: stage-stable
+          github_token: ${{ secrets.FE_RELEASE_TOKEN }}
