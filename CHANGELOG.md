@@ -1,4 +1,14 @@
 <!-- insertion marker -->
+<a name="0.17.0"></a>
+
+## [0.17.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.16.0...0.17.0) (2023-03-09)
+
+### Bug Fixes
+
+- instance type labels (#212) ([5dafb54](https://github.com/RHEnVision/provisioning-frontend/commit/5dafb5432acc85ef01662227f0fcd71b7db046d0))
+- **HMS-1361:** fix a 404 api call at first rendering ([5515b07](https://github.com/RHEnVision/provisioning-frontend/commit/5515b076d8e228e2ee71cb983de71c1002d0c5a4))
+- **HMS-1131:** filter out regions with unsuccessful image clones ([08aeb73](https://github.com/RHEnVision/provisioning-frontend/commit/08aeb73b1088508231359617d611f26fa19d37e1))
+
 <a name="0.16.0"></a>
 
 ## [0.16.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.15.0...0.16.0) (2023-02-22)
