@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
-
 import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
+import { IB_SOURCE_PROVIDERS } from '../Common/constants';
 
-const SourcesSelect = ({ setValidation }) => {
+const SourcesSelect = ({ setValidation, imageSourceID }) => {
   const [{ provider, chosenSource }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
@@ -25,8 +25,18 @@ const SourcesSelect = ({ setValidation }) => {
     onSuccess: (data) => {
       const id = chosenSource;
 
-      if (!id) return;
-      setSelected(selectObject(id, data.find((source) => source.id === id).name));
+      if (IB_SOURCE_PROVIDERS.includes(provider) && imageSourceID) {
+        setSelected(selectObject(imageSourceID, data.find((source) => source.id === imageSourceID).name));
+        setWizardContext((prevState) => ({
+          ...prevState,
+          chosenSource: imageSourceID,
+        }));
+        setValidation('success');
+      } else if (!id) {
+        return;
+      } else {
+        setSelected(selectObject(id, data.find((source) => source.id === id).name));
+      }
     },
   });
 
@@ -69,6 +79,7 @@ const SourcesSelect = ({ setValidation }) => {
       isOpen={isOpen}
       onToggle={(openState) => setIsOpen(openState)}
       selections={selected}
+      isDisabled={!!imageSourceID}
       onSelect={onSelect}
       placeholderText="Select account"
       aria-label="Select account"
@@ -80,6 +91,7 @@ const SourcesSelect = ({ setValidation }) => {
 
 SourcesSelect.propTypes = {
   setValidation: PropTypes.func.isRequired,
+  imageSourceID: PropTypes.number,
 };
 
 export default SourcesSelect;
