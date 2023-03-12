@@ -6,7 +6,7 @@ import { useWizardContext } from '../../../Common/WizardContext';
 import AWS from './aws';
 import GCP from './gcp';
 
-const AccountCustomizations = ({ setStepValidated, architecture, composeID, provider }) => {
+const AccountCustomizations = ({ setStepValidated, architecture, composeID, provider, imageSourceID }) => {
   const [, setWizardContext] = useWizardContext();
 
   React.useEffect(() => {
@@ -21,7 +21,7 @@ const AccountCustomizations = ({ setStepValidated, architecture, composeID, prov
 
   switch (provider) {
     case AWS_PROVIDER:
-      return <AWS setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} />;
+      return <AWS setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} imageSourceID={imageSourceID} />;
     case GCP_PROVIDER:
       return <GCP setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} />;
     default:
@@ -34,6 +34,7 @@ AccountCustomizations.propTypes = {
   architecture: PropTypes.string.isRequired,
   composeID: PropTypes.string.isRequired,
   provider: PropTypes.oneOf([AWS_PROVIDER, GCP_PROVIDER]),
+  imageSourceID: PropTypes.number,
 };
 
 export default AccountCustomizations;

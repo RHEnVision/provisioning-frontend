@@ -13,7 +13,13 @@ const stringIds = {
 
 export const stepIdToString = (id) => stringIds[id];
 
-const defaultSteps = ({ stepIdReached, image: { name, id, architecture, provider }, stepValidation, setStepValidation, setLaunchSuccess }) => [
+const defaultSteps = ({
+  stepIdReached,
+  image: { name, id, architecture, provider, sourceId },
+  stepValidation,
+  setStepValidation,
+  setLaunchSuccess,
+}) => [
   {
     name: 'Account and customization',
     steps: [
@@ -26,6 +32,7 @@ const defaultSteps = ({ stepIdReached, image: { name, id, architecture, provider
             provider={provider}
             architecture={architecture || 'x86_64'}
             composeID={id}
+            imageSourceID={sourceId}
             setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))}
           />
         ),
