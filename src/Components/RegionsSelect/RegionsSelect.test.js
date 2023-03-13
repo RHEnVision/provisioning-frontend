@@ -40,18 +40,6 @@ describe('RegionSelect', () => {
     const items = await screen.findAllByLabelText('Region item');
     expect(items).toHaveLength(PARENT_IMAGE_COUNT);
   });
-
-  test('filter items', async () => {
-    const searchedValue = 'eu';
-    const dropdown = await mountSelectAndClick();
-    const clearRegionButton = await screen.findByLabelText('clear region');
-    await userEvent.click(clearRegionButton);
-
-    await userEvent.type(dropdown, searchedValue);
-    const items = await screen.findAllByLabelText('Region item');
-    const expectedLength = clonedImages.data.filter((item) => item.request.region.includes(searchedValue)).length;
-    expect(items).toHaveLength(expectedLength);
-  });
 });
 
 const mountSelectAndClick = async () => {

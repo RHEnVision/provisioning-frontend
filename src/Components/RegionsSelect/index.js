@@ -64,13 +64,6 @@ const RegionsSelect = ({ composeID }) => {
     <Select
       ouiaId="select_regions"
       variant="typeahead"
-      onClear={() =>
-        setWizardContext((prevState) => ({
-          ...prevState,
-          chosenRegion: undefined,
-        }))
-      }
-      clearSelectionsAriaLabel="clear region"
       aria-label="Select region"
       label="Select region"
       maxHeight="450px"
