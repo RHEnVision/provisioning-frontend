@@ -28,7 +28,6 @@ describe('RegionSelect', () => {
   });
 
   test('no clones images', async () => {
-    const PARENT_IMAGE_COUNT = 1;
     const { server, rest } = window.msw;
 
     server.use(
@@ -37,8 +36,8 @@ describe('RegionSelect', () => {
       })
     );
     await mountSelectAndClick();
-    const items = await screen.findAllByLabelText('Region item');
-    expect(items).toHaveLength(PARENT_IMAGE_COUNT);
+    const select = await screen.findByLabelText('Options menu');
+    expect(select).toBeDisabled();
   });
 });
 

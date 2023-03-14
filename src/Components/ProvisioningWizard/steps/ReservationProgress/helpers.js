@@ -1,5 +1,5 @@
-import { AWS_PROVIDER, GCP_PROVIDER } from '../../../Common/constants';
-import { AWS_STEPS, GCP_STEPS } from './constants';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../Common/constants';
+import { AWS_STEPS, AZURE_STEPS, GCP_STEPS } from './constants';
 
 export const mapCurrentVariant = (step, currentStep, currentError) => {
   if (step < currentStep) return 'success';
@@ -12,6 +12,8 @@ export const stepsByProvider = (provider) => {
   switch (provider) {
     case AWS_PROVIDER:
       return AWS_STEPS;
+    case AZURE_PROVIDER:
+      return AZURE_STEPS;
     case GCP_PROVIDER:
       return GCP_STEPS;
     default:
@@ -23,6 +25,8 @@ export const instanceType = (provider) => {
   switch (provider) {
     case AWS_PROVIDER:
       return 'instance_type';
+    case AZURE_PROVIDER:
+      return 'instance_size';
     case GCP_PROVIDER:
       return 'machine_type';
     default:

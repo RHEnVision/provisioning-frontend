@@ -1,14 +1,27 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import InstanceTypesSelect from '.';
-import { instanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
+import { awsInstanceTypeList, azureInstanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
 import { render, screen } from '../../mocks/utils';
+import initialWizardContext from '../Common/WizardContext/initialState';
 
 describe('InstanceTypesSelect', () => {
-  test('populate instance types select', async () => {
+  // reset provider to default value - AWS
+  afterEach(() => {
+    initialWizardContext.provider = 'aws';
+  });
+
+  test('populate AWS instance types select', async () => {
     await mountSelectAndClick();
     const items = await screen.findAllByLabelText(/^Instance Type/);
-    expect(items).toHaveLength(instanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
+    expect(items).toHaveLength(awsInstanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
+  });
+
+  test('populate Azure instance types select', async () => {
+    initialWizardContext.provider = 'azure';
+    await mountSelectAndClick();
+    const items = await screen.findAllByLabelText(/^Instance Type/);
+    expect(items).toHaveLength(azureInstanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
   });
 
   describe('search', () => {

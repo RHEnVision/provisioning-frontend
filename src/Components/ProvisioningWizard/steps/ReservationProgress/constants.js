@@ -4,7 +4,7 @@ export const PF_SUCCESS_100 = '#3E8635';
 export const PF_DANGER_100 = '#C9190B';
 
 export const POLLING_BACKOFF_INTERVAL = [
-  500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 3000, 4000, 5000, 10000, 15000, 20000, 25000, 30000,
+  500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 3000, 4000, 5000, 10000, 15000, 20000, 25000, 30000, 60000,
 ];
 
 export const AWS_STEPS = [
@@ -15,6 +15,12 @@ export const AWS_STEPS = [
   },
   { name: 'Launch instance(s)', description: 'Call AWS API for launching instance(s)' },
   { name: 'Instance description', description: 'Fetch instance(s) descriptions' },
+];
+
+export const AZURE_STEPS = [
+  { name: 'Create reservation', description: `Submit data of requested instances` },
+  { name: 'Ensure resource group', description: 'Ensure resource group is present on Azure account' },
+  { name: 'Launch instance(s)', description: 'Launch defined instance(s) on Azure' },
 ];
 
 export const GCP_STEPS = [

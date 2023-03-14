@@ -1,5 +1,15 @@
 import axios from 'axios';
+import { AZURE_PROVIDER } from '../constants';
 import { imageBuilderURL, provisioningUrl } from './helpers';
+
+const typesUrlForProvider = (provider, region) => {
+  switch (provider) {
+    case AZURE_PROVIDER:
+      return provisioningUrl(`instance_types/${provider}?region=${region}&zone=1`);
+    default:
+      return provisioningUrl(`instance_types/${provider}?region=${region}`);
+  }
+};
 
 export const fetchSourcesList = async (provider) => {
   const { data } = await axios.get(provisioningUrl(`sources?provider=${provider}`));
@@ -12,7 +22,8 @@ export const fetchPubkeysList = async () => {
 };
 
 export const fetchInstanceTypesList = async (region, provider) => {
-  const { data } = await axios.get(provisioningUrl(`instance_types/${provider}?region=${region}`));
+  const url = typesUrlForProvider(provider, region);
+  const { data } = await axios.get(url);
   return data;
 };
 

@@ -51,7 +51,7 @@ const RegionsSelect = ({ composeID }) => {
     return (
       <>
         <Alert ouiaId="regions_alert" variant="warning" isInline title="There are problems fetching image's regions" />
-        <Select ouiaId="regions_empty" isDisabled placeholderText="No regions have found" />
+        <Select ouiaId="regions_empty" isDisabled placeholderText="No regions have been found" />
       </>
     );
   }
@@ -71,6 +71,7 @@ const RegionsSelect = ({ composeID }) => {
       selections={chosenRegion}
       onToggle={onToggle}
       onSelect={onSelect}
+      isDisabled={(clonedImages?.length || 0) <= 1}
     >
       {images.map(({ id, region }) => (
         <SelectOption aria-label="Region item" key={id} value={region} />

@@ -1,4 +1,4 @@
-import { AWS_PROVIDER, GCP_PROVIDER } from './constants';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from './constants';
 
 export const defaultRegionByProvider = (provider) => {
   switch (provider) {
@@ -6,6 +6,8 @@ export const defaultRegionByProvider = (provider) => {
       return 'us-east-1';
     case GCP_PROVIDER:
       return 'us-central1-a';
+    case AZURE_PROVIDER:
+      return 'eastus';
     default:
       throw new Error(`Unrecognized provider was entered: ${provider}`);
   }
