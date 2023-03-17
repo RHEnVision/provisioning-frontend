@@ -27,7 +27,7 @@ const ExpandedInfo = ({ reservationID, error, createdAt }) => {
     <Bullseye>
       <ExpandableSection toggleTextCollapsed="Show additional info" toggleTextExpanded="">
         <DescriptionList columnModifier={{ lg: '2Col' }}>
-          <Card component="div">
+          <Card component="div" ouiaId="launch_id">
             <DescriptionListTerm>Launch ID</DescriptionListTerm>
             <DescriptionListDescription>{<span aria-label="launch id">{reservationID}</span>}</DescriptionListDescription>
           </Card>
