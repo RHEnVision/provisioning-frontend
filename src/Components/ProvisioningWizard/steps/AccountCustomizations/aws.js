@@ -2,11 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
+import { useFlag } from '@unleash/proxy-client-react';
+
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
+import TemplatesSelect from '../../../TemplateSelect';
 
 const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, imageSourceID }) => {
   const [{ chosenSource, chosenInstanceType }] = useWizardContext();
@@ -14,6 +17,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
     sources: chosenSource ? 'success' : 'default',
     types: chosenInstanceType ? 'success' : 'default',
   });
+  const templateFlag = useFlag('provisioning.aws.templates');
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
@@ -68,6 +72,39 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
       >
         <RegionsSelect composeID={composeID} />
       </FormGroup>
+      {templateFlag && (
+        <FormGroup
+          label="Select template"
+          fieldId="aws-select-template"
+          labelIcon={
+            <Popover
+              bodyContent={
+                <span>
+                  Launch templates contains the configuration information to launch an instance. Note that instance type and public SSH key will be
+                  still required and will override template values. For further information and for creating launch templates{' '}
+                  <a rel="noreferrer" target="_blank" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">
+                    click here
+                  </a>
+                </span>
+              }
+            >
+              <Button
+                ouiaId="template_help"
+                type="button"
+                aria-label="template field info"
+                onClick={(e) => e.preventDefault()}
+                aria-describedby="aws-select-template"
+                className="pf-c-form__group-label-help"
+                variant="plain"
+              >
+                <HelpIcon noVerticalAlign />
+              </Button>
+            </Popover>
+          }
+        >
+          <TemplatesSelect />
+        </FormGroup>
+      )}
       <FormGroup
         label="Select instance type"
         isRequired

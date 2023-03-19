@@ -5,6 +5,7 @@ import { sourcesList } from './fixtures/sources.fixtures';
 import { pubkeysList } from './fixtures/pubkeys.fixtures';
 import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/image.fixtures';
 import { AWSReservation, createdAWSReservation, reservation } from './fixtures/reservation.fixtures';
+import { templates } from './fixtures/templates.fixtures';
 
 export const handlers = [
   rest.get(provisioningUrl('sources'), (req, res, ctx) => {
@@ -36,5 +37,8 @@ export const handlers = [
   }),
   rest.get(provisioningUrl('reservations/aws/:id'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(AWSReservation));
+  }),
+  rest.get(provisioningUrl('/sources/:id/launch_templates'), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(templates));
   }),
 ];
