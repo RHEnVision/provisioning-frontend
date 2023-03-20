@@ -16,9 +16,8 @@ describe('Reservation polling', () => {
         return res(ctx.status(200), ctx.json(errorReservation));
       })
     );
-    const transferKeyStep = await screen.findByLabelText(`${constants.AWS_STEPS[1].name} danger`, { exact: false });
-    expect(transferKeyStep).toHaveClass('pf-m-danger');
-    await userEvent.click(transferKeyStep);
+    const transferKeyErrorStep = await screen.findByRole('button', { name: constants.AWS_STEPS[1].name });
+    await userEvent.click(transferKeyErrorStep);
     await screen.findByText(errorReservation.error);
   });
 
@@ -38,14 +37,14 @@ describe('Reservation polling', () => {
     const transferKeyStep = await screen.findByLabelText(`${constants.AWS_STEPS[1].name} success`, { exact: false });
     expect(transferKeyStep).toHaveClass('pf-m-success');
 
-    // polling #2
+    // polling #2 - reservation launched successfully
     server.use(
       rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
         return res(ctx.status(200), ctx.json(successfulReservation));
       })
     );
-    const launchInstancesStep = await screen.findByLabelText(`${constants.AWS_STEPS[2].name} success`, { exact: false });
-    expect(launchInstancesStep).toHaveClass('pf-m-success');
+    const successText = await screen.findByText('System(s) launched successfully');
+    expect(successText).toBeDefined();
 
     // show table
     const instancesIDs = await screen.findAllByLabelText('instance id');
@@ -54,9 +53,8 @@ describe('Reservation polling', () => {
     expect(instancesDNSs).toHaveLength(AWSReservation.instances.length);
 
     // show reservation id
-    clickOnShowMore();
-    const launchIDContainer = await screen.findByLabelText('launch id');
-    expect(launchIDContainer).toHaveTextContent(successfulReservation.id);
+    const launchIDContainer = await screen.findByText(`launch ID: ${successfulReservation.id}`);
+    expect(launchIDContainer).toBeDefined();
   });
 });
 
@@ -64,9 +62,4 @@ const mountProgressBar = () => {
   const setLaunchSuccessFunction = jest.fn();
   const imageID = 'image-id';
   render(<ReservationProgress provider="aws" imageID={imageID} setLaunchSuccess={setLaunchSuccessFunction} />);
-};
-
-const clickOnShowMore = async () => {
-  const expansionInfo = await screen.findByText('Show additional info');
-  await userEvent.click(expansionInfo);
 };

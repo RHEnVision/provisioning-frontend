@@ -8,16 +8,17 @@ import {
   EmptyStateBody,
   EmptyStateSecondaryActions,
   Title,
+  Text,
   Popover,
   Button,
   WizardContextConsumer,
 } from '@patternfly/react-core';
-import { CogsIcon, PendingIcon } from '@patternfly/react-icons';
+import { CogsIcon, PendingIcon, CheckCircleIcon } from '@patternfly/react-icons';
 import { useMutation, useQuery } from 'react-query';
 
 import { useWizardContext } from '../../../Common/WizardContext';
 import { createNewPublicKey, createReservation, fetchReservation } from '../../../../API';
-import ExpandedInfo from './ExpansionInfo';
+
 import useInterval from '../../../Common/Hooks/useInterval';
 import { POLLING_BACKOFF_INTERVAL, PROVIDERS_INSTANCES_SUPPORT, SSH_STEP } from './constants';
 import { instanceType, mapCurrentVariant, region, stepsByProvider } from './helpers';
@@ -124,54 +125,54 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
     <WizardContextConsumer>
       {({ goToStepById, onClose }) => (
         <EmptyState variant="large">
-          <EmptyStateIcon icon={CogsIcon} />
+          <EmptyStateIcon color={polledReservation?.success && '#3E8635'} icon={polledReservation?.success ? CheckCircleIcon : CogsIcon} />
           <Title headingLevel="h4" size="lg" ouiaId="launch-status">
-            {`Launching system(s)`}
+            {polledReservation?.success ? 'System(s) launched successfully' : 'Launching system(s)'}
           </Title>
+          {reservationID && (
+            <Text component="small" ouiaId="launch-id">
+              {`launch ID: ${reservationID}`}
+            </Text>
+          )}
           <EmptyStateBody>
-            <ProgressStepper isCenterAligned>
-              {steps.map(({ name, description }, step) => {
-                const variant = mapCurrentVariant(step, currentStep, currentError);
-                return (
-                  <ProgressStep
-                    variant={variant}
-                    id={name}
-                    key={name}
-                    icon={step > currentStep ? <PendingIcon /> : undefined}
-                    isCurrent={step === currentStep}
-                    description={description}
-                    titleId={name}
-                    aria-label={`step ${name} ${variant}`}
-                    popoverRender={
-                      currentError && step === currentStep
-                        ? (stepRef) => (
-                            <Popover
-                              aria-label={`${name} error message`}
-                              headerContent={<div>Error</div>}
-                              bodyContent={<div>{currentError}</div>}
-                              reference={stepRef}
-                              position="right"
-                            />
-                          )
-                        : undefined
-                    }
-                  >
-                    {name}
-                  </ProgressStep>
-                );
-              })}
-            </ProgressStepper>
+            {!polledReservation?.success && (
+              <ProgressStepper isCenterAligned>
+                {steps.map(({ name, description }, step) => {
+                  const variant = mapCurrentVariant(step, currentStep, currentError);
+                  return (
+                    <ProgressStep
+                      variant={variant}
+                      id={name}
+                      key={name}
+                      icon={step > currentStep ? <PendingIcon /> : undefined}
+                      isCurrent={step === currentStep}
+                      description={description}
+                      titleId={name}
+                      aria-label={`step ${name} ${variant}`}
+                      popoverRender={
+                        currentError && step === currentStep
+                          ? (stepRef) => (
+                              <Popover
+                                aria-label={`${name} error message`}
+                                headerContent={<div>Error</div>}
+                                bodyContent={<div>{currentError}</div>}
+                                reference={stepRef}
+                                position="right"
+                              />
+                            )
+                          : undefined
+                      }
+                    >
+                      {name}
+                    </ProgressStep>
+                  );
+                })}
+              </ProgressStepper>
+            )}
           </EmptyStateBody>
           {polledReservation?.success && PROVIDERS_INSTANCES_SUPPORT.includes(provider) && (
             <InstancesTable provider={provider} region={chosenRegion} reservationID={reservationID} />
           )}
-          {/* TODO: remove hidden input */}
-          {reservationID && <input type="hidden" name="reservation_id" value={reservationID} />}
-          <EmptyStateBody>
-            {(polledReservation?.error || polledReservation?.success) && (
-              <ExpandedInfo reservationID={reservationID} error={currentError} createdAt={polledReservation?.created_at} />
-            )}
-          </EmptyStateBody>
           {currentError && (
             <Button id="wizard-provisioning-failed-edit-button" onClick={() => goToStepById(1)} variant="primary">
               Edit
