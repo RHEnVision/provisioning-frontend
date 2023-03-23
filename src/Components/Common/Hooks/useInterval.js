@@ -15,7 +15,7 @@ const useInterval = (list) => {
 
   const nextInterval = () => {
     const nextValue = generatorRef.current.next().value;
-    setCurrentInterval(nextValue);
+    setCurrentInterval(nextValue === undefined ? false : nextValue);
     if (nextValue === undefined) return false;
     return nextValue;
   };

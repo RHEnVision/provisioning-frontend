@@ -7,6 +7,9 @@ import { render, screen } from '../../../../mocks/utils';
 import * as constants from './constants';
 
 describe('Reservation polling', () => {
+  afterEach(() => {
+    jest.resetModules();
+  });
   test('progress fails during polling', async () => {
     const { server, rest } = window.msw;
     mountProgressBar();
@@ -55,6 +58,22 @@ describe('Reservation polling', () => {
     // show reservation id
     const launchIDContainer = await screen.findByText(`launch ID: ${successfulReservation.id}`);
     expect(launchIDContainer).toBeDefined();
+  });
+  test('progress timed out', async () => {
+    const TIMEOUT_ERROR_MSG = 'Session timed out, the reservation took too long to fulfill';
+    // eslint-disable-next-line
+    constants.POLLING_BACKOFF_INTERVAL = [1];
+    const { server, rest } = window.msw;
+    mountProgressBar();
+
+    server.use(
+      rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
+        return res(ctx.delay(10), ctx.json(polledReservation));
+      })
+    );
+    const stepWithTimeoutError = await screen.findByRole('button', { name: constants.AWS_STEPS[2].name });
+    await userEvent.click(stepWithTimeoutError);
+    await screen.findByText(TIMEOUT_ERROR_MSG);
   });
 });
 
