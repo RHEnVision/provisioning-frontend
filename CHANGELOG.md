@@ -1,4 +1,22 @@
 <!-- insertion marker -->
+<a name="0.18.0"></a>
+
+## [0.18.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.17.0...0.18.0) (2023-03-23)
+
+### Features
+
+- Add Azure as provider in the wizard ([fc42dd1](https://github.com/RHEnVision/provisioning-frontend/commit/fc42dd1c3cf6057cc1f774e5f66c6a1268f6e994))
+- **HMS-1222:** Add support to a source shared with an image ([ab4b17d](https://github.com/RHEnVision/provisioning-frontend/commit/ab4b17deb1358a4dd442d45151f1985fb7b1a53c))
+- **HMS-761:** add instances description table after launch ([9fab7e5](https://github.com/RHEnVision/provisioning-frontend/commit/9fab7e5581c852c9a38199f195db80a4523bd994))
+
+### Bug Fixes
+
+- **HMS-1382:** remove the clear button from region select ([9904e0a](https://github.com/RHEnVision/provisioning-frontend/commit/9904e0af37c5ed8385f18baa76bcb30d5e89a5c3))
+
+### Code Refactoring
+
+- Add ouid for Card on show additional info ([583aecd](https://github.com/RHEnVision/provisioning-frontend/commit/583aecd9fc37fa371f44c93165028de04804d8e6))
+
 <a name="0.17.0"></a>
 
 ## [0.17.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.16.0...0.17.0) (2023-03-09)
