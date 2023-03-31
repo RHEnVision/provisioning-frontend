@@ -103,3 +103,14 @@ export const azureInstanceTypeList = [
     },
   },
 ];
+
+export const AWSPopularType = {
+  id: 3,
+  name: 't2.small',
+  vcpus: 1,
+  cores: 2,
+  memory: 128,
+  supported: true,
+  architecture: 'x86_64',
+};
+export const AWSTypesWithPopularType = [...awsInstanceTypeList, AWSPopularType];

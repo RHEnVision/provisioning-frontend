@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
+import { Alert, Spinner, Select, SelectOption, TextInput, SelectGroup, Divider } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
+import { popularTypesByProvider } from './helpers';
 
 const OPTIONS_PER_SCREEN = 5;
 const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
@@ -74,20 +75,47 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     }
   };
 
-  const selectItemsMapper = (types, limit) => {
-    if (limit < types?.length) types = types.slice(0, limit);
-    return types?.map((instanceType, index) => (
-      <SelectOption
-        aria-label={`Instance Type ${instanceType.name}`}
-        key={index}
-        description={`${instanceType.cores || 'only vCPU'} cores |
+  const popularTypes = (types) => {
+    const popularTypesNames = popularTypesByProvider(provider);
+    const filteredPopularTypes = types?.filter((type) => popularTypesNames.includes(type.name));
+    if (filteredPopularTypes.length > 0)
+      return (
+        <SelectGroup label="Popular" key="popular">
+          {filteredPopularTypes?.map((instanceType, index) => (
+            <SelectOption
+              aria-label={`popular instance Type ${instanceType.name}`}
+              key={`${instanceType.name}-${index}`}
+              description={`${instanceType.cores || 'only vCPU'} cores |
           ${instanceType.vcpus} vCPU |
           ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(1)} GiB memory |
           ${instanceType.storage_gb > 0 ? instanceType.storage_gb + ' GB storage | ' : 'EBS only | '}
           ${instanceType.architecture}`}
-        value={instanceType.name}
-      />
-    ));
+              value={instanceType.name}
+            />
+          ))}
+        </SelectGroup>
+      );
+  };
+
+  const selectItemsMapper = (types, limit) => {
+    const popularGroup = popularTypes(types);
+    const popularTypesNames = popularTypesByProvider(provider);
+    if (limit < types?.length) types = types.slice(0, limit);
+    const restTypes = types
+      ?.filter((type) => !popularTypesNames.includes(type.name))
+      ?.map((instanceType, index) => (
+        <SelectOption
+          aria-label={`Instance Type ${instanceType.name}`}
+          key={index}
+          description={`${instanceType.cores || 'only vCPU'} cores |
+                          ${instanceType.vcpus} vCPU |
+                          ${(parseFloat(instanceType.memory_mib) / 1024).toFixed(1)} GiB memory |
+                          ${instanceType.storage_gb > 0 ? instanceType.storage_gb + ' GB storage | ' : 'EBS only | '}
+                          ${instanceType.architecture}`}
+          value={instanceType.name}
+        />
+      ));
+    return [popularGroup, <Divider key="divider" />, ...restTypes].filter((type) => type);
   };
 
   const onToggle = (isOpen) => {
@@ -104,7 +132,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     );
   }
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="Contents of the small example" />;
+    return <Spinner isSVG size="sm" aria-label="Loading instances type list" />;
   }
 
   const types = filteredTypes || instanceTypes;

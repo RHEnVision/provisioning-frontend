@@ -1,9 +1,10 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import InstanceTypesSelect from '.';
-import { awsInstanceTypeList, azureInstanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
+import { awsInstanceTypeList, AWSPopularType, AWSTypesWithPopularType, azureInstanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
 import { render, screen } from '../../mocks/utils';
 import initialWizardContext from '../Common/WizardContext/initialState';
+import { provisioningUrl } from '../../API/helpers';
 
 describe('InstanceTypesSelect', () => {
   // reset provider to default value - AWS
@@ -15,6 +16,18 @@ describe('InstanceTypesSelect', () => {
     await mountSelectAndClick();
     const items = await screen.findAllByLabelText(/^Instance Type/);
     expect(items).toHaveLength(awsInstanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
+  });
+
+  test('instances types with popular type', async () => {
+    const { server, rest } = window.msw;
+
+    server.use(
+      rest.get(provisioningUrl('instance_types/aws'), (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(AWSTypesWithPopularType));
+      })
+    );
+    await mountSelectAndClick();
+    await screen.findByLabelText(`popular instance Type ${AWSPopularType.name}`);
   });
 
   test('populate Azure instance types select', async () => {
