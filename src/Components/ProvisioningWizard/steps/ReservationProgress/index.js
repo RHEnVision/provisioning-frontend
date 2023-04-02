@@ -23,10 +23,12 @@ import useInterval from '../../../Common/Hooks/useInterval';
 import { POLLING_BACKOFF_INTERVAL, PROVIDERS_INSTANCES_SUPPORT, SSH_STEP } from './constants';
 import { instanceType, mapCurrentVariant, region, stepsByProvider } from './helpers';
 import InstancesTable from '../../../InstancesTable';
+import { humanizeProvider } from '../../../Common/helpers';
 
 const ReservationProgress = ({ setLaunchSuccess }) => {
   const [steps, setSteps] = React.useState([]);
   const [currentError, setCurrentError] = React.useState();
+  const [currentWarning, setCurrentWarning] = React.useState();
   const [currentStep, setCurrentStep] = React.useState(0);
   const [currentJobStep, setCurrentJobStep] = React.useState(0);
   const [reservationID, setReservationID] = React.useState();
@@ -105,11 +107,13 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
     refetchIntervalInBackground: true,
   });
 
-  // error handling
+  // errors and warnings handling
   React.useEffect(() => {
     if (currentInterval === false) {
-      setCurrentError('Session timed out, the reservation took too long to fulfill');
-      return;
+      setCurrentWarning(
+        `The launch progress is slower than expected, but we are still on it.
+         It is safe to close this window and check your ${humanizeProvider(provider)} console later`
+      );
     }
     if (reservationError || pubkeyError || polledReservation?.error) {
       const createReservationErrorMsg = reservationError?.response?.data?.msg;
@@ -138,7 +142,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
             {!polledReservation?.success && (
               <ProgressStepper isCenterAligned>
                 {steps.map(({ name, description }, step) => {
-                  const variant = mapCurrentVariant(step, currentStep, currentError);
+                  const variant = mapCurrentVariant(step, currentStep, currentError, currentWarning);
                   return (
                     <ProgressStep
                       variant={variant}
@@ -150,12 +154,12 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
                       titleId={name}
                       aria-label={`step ${name} ${variant}`}
                       popoverRender={
-                        currentError && step === currentStep
+                        (currentError || currentWarning) && step === currentStep
                           ? (stepRef) => (
                               <Popover
                                 aria-label={`${name} error message`}
-                                headerContent={<div>Error</div>}
-                                bodyContent={<div>{currentError}</div>}
+                                headerContent={currentError ? 'Error' : 'Warning'}
+                                bodyContent={currentError || currentWarning}
                                 reference={stepRef}
                                 position="right"
                               />

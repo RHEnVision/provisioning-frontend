@@ -60,7 +60,8 @@ describe('Reservation polling', () => {
     expect(launchIDContainer).toBeDefined();
   });
   test('progress timed out', async () => {
-    const TIMEOUT_ERROR_MSG = 'Session timed out, the reservation took too long to fulfill';
+    const TIMEOUT_ERROR_MSG =
+      'The launch progress is slower than expected, but we are still on it. It is safe to close this window and check your Amazon cloud console later';
     // eslint-disable-next-line
     constants.POLLING_BACKOFF_INTERVAL = [1];
     const { server, rest } = window.msw;
@@ -71,8 +72,8 @@ describe('Reservation polling', () => {
         return res(ctx.delay(10), ctx.json(polledReservation));
       })
     );
-    const stepWithTimeoutError = await screen.findByRole('button', { name: constants.AWS_STEPS[2].name });
-    await userEvent.click(stepWithTimeoutError);
+    const stepWithTimeoutWarning = await screen.findByRole('button', { name: constants.AWS_STEPS[2].name });
+    await userEvent.click(stepWithTimeoutWarning);
     await screen.findByText(TIMEOUT_ERROR_MSG);
   });
 });
