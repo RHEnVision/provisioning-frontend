@@ -1,9 +1,10 @@
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../Common/constants';
 import { AWS_STEPS, AZURE_STEPS, GCP_STEPS } from './constants';
 
-export const mapCurrentVariant = (step, currentStep, currentError) => {
+export const mapCurrentVariant = (step, currentStep, currentError, currentWarning) => {
   if (step < currentStep) return 'success';
   if (step === currentStep && currentError) return 'danger';
+  if (step === currentStep && currentWarning) return 'warning';
   if (step === currentStep) return 'info';
   if (step > currentStep) return 'pending';
 };
