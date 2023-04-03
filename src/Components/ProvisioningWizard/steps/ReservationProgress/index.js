@@ -45,6 +45,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
       uploadedKey,
       chosenImageID,
       provider,
+      chosenTemplate,
     },
   ] = useWizardContext();
   const { nextInterval, currentInterval } = useInterval(POLLING_BACKOFF_INTERVAL);
@@ -56,6 +57,16 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
     },
   });
 
+  const reservationParams = () => ({
+    source_id: chosenSource,
+    [instanceType(provider)]: chosenInstanceType,
+    amount: chosenNumOfInstances,
+    image_id: chosenImageID,
+    [region(provider)]: chosenRegion,
+    pubkey_id: chosenSshKeyId,
+    ...(chosenTemplate && { launch_template_id: chosenTemplate }),
+  });
+
   React.useEffect(() => {
     if (createReservation) {
       if (uploadedKey) {
@@ -63,14 +74,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
         createPublicKey({ name: sshPublicName, body: sshPublicKey });
       } else {
         setSteps(stepsByProvider(provider));
-        mutateReservation({
-          source_id: chosenSource,
-          [instanceType(provider)]: chosenInstanceType,
-          amount: chosenNumOfInstances,
-          image_id: chosenImageID,
-          [region(provider)]: chosenRegion,
-          pubkey_id: chosenSshKeyId,
-        });
+        mutateReservation(reservationParams());
       }
     }
   }, [createReservation, setSteps, uploadedKey]);
@@ -79,11 +83,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
     onSuccess: (resp) => {
       stepUp();
       mutateReservation({
-        source_id: chosenSource,
-        [instanceType(provider)]: chosenInstanceType,
-        amount: chosenNumOfInstances,
-        image_id: chosenImageID,
-        [region(provider)]: chosenRegion,
+        ...reservationParams(),
         pubkey_id: resp?.data?.id,
       });
     },

@@ -54,3 +54,8 @@ export const fetchReservationByProvider = async (reservationID, provider) => {
   const { data } = await axios.get(provisioningUrl(`reservations/${provider}/${reservationID}`));
   return data;
 };
+
+export const fetchLaunchTemplates = async (sourceID, region) => {
+  const { data } = await axios.get(provisioningUrl(`/sources/${sourceID}/launch_templates?region=${region}`));
+  return data;
+};
