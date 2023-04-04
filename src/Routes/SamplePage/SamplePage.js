@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { Button, StackItem, Stack, Title, FormGroup, TextInput, Select, SelectOption, SelectVariant } from '@patternfly/react-core';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
+import { Button, GridItem, Grid, Title, FormGroup, TextInput, Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 import axios from 'axios';
 
 import './sample-page.scss';
 import ProvisioningWizard from '../../Components/ProvisioningWizard';
-import { AWS_PROVIDER } from '../../Components/Common/constants';
+import { AWS_PROVIDER, AZURE_PROVIDER } from '../../constants';
 
 /**
 This page demonstrates the provisioning UI wizard
@@ -23,10 +22,11 @@ const SamplePage = () => {
   const [chosenImage, setChosenImage] = React.useState({
     id: undefined,
     name: undefined,
-    provider: undefined,
+    provider: AWS_PROVIDER,
     architecture: undefined,
   });
   const [isImageSelectOpen, setImageSelect] = React.useState(false);
+  const [isProviderSelectOpen, setProviderSelectOpen] = React.useState(false);
 
   useEffect(() => {
     const fetchImagesFromIB = async () => {
@@ -56,12 +56,16 @@ const SamplePage = () => {
   };
 
   const onInputChange = (value) => {
-    setChosenImage({ id: value, name: 'manualy entered AMI', provider: AWS_PROVIDER });
+    setChosenImage({ ...chosenImage, id: value, name: 'manualy entered AMI', architecture: 'x86_64' });
+  };
+  const onProviderSelect = (evt, value) => {
+    setChosenImage({ ...chosenImage, provider: value });
+    setProviderSelectOpen(false);
   };
 
   const renderSelect = (images) => (
     <Select
-      width="33%"
+      width="50%"
       variant={SelectVariant.single}
       placeholderText="Select an image"
       aria-label="Select Image"
@@ -82,23 +86,37 @@ const SamplePage = () => {
         <PageHeaderTitle title="Sample Provisioning App" />
         <p> Provisioning Demo </p>
       </PageHeader>
-      <Main>
-        <Stack hasGutter>
-          {images && <StackItem>{renderSelect(images)}</StackItem>}
-          <StackItem>
-            <FormGroup label="Image AMI">
-              <TextInput id="ami" value={chosenImage.id || ''} onChange={onInputChange} />
-            </FormGroup>
-          </StackItem>
-          <StackItem>
-            <Title headingLevel="h2" size="3xl"></Title>
-            <Button variant="primary" onClick={() => setWizardModal(true)}>
-              Open Wizard
-            </Button>
-            {isWizardOpen && <ProvisioningWizard isOpen={true} onClose={() => setWizardModal(false)} image={chosenImage} />}
-          </StackItem>
-        </Stack>
-      </Main>
+      <Grid hasGutter>
+        {images && <GridItem>{renderSelect(images)}</GridItem>}
+        <GridItem span={3}>
+          <FormGroup label="Provider">
+            <Select
+              variant={SelectVariant.single}
+              aria-label="Select Provider"
+              ouiaId="select_provider"
+              onToggle={(isOpen) => setProviderSelectOpen(isOpen)}
+              onSelect={onProviderSelect}
+              selections={chosenImage.provider}
+              isOpen={isProviderSelectOpen}
+            >
+              <SelectOption key={AWS_PROVIDER} value={AWS_PROVIDER} />
+              <SelectOption key={AZURE_PROVIDER} value={AZURE_PROVIDER} />
+            </Select>
+          </FormGroup>
+        </GridItem>
+        <GridItem span={6}>
+          <FormGroup label="Image">
+            <TextInput id="ami" ouiaId="image_id" value={chosenImage.id || ''} onChange={onInputChange} />
+          </FormGroup>
+        </GridItem>
+        <GridItem>
+          <Title headingLevel="h2" size="3xl"></Title>
+          <Button variant="primary" onClick={() => setWizardModal(true)}>
+            Open Wizard
+          </Button>
+          {isWizardOpen && <ProvisioningWizard isOpen={true} onClose={() => setWizardModal(false)} image={chosenImage} />}
+        </GridItem>
+      </Grid>
     </React.Fragment>
   );
 };
