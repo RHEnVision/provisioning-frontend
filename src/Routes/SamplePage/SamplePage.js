@@ -20,6 +20,7 @@ const SamplePage = () => {
   const [isWizardOpen, setWizardModal] = React.useState(false);
   const [images, setImages] = React.useState([]);
   const [chosenImage, setChosenImage] = React.useState({
+    isTesting: true,
     id: undefined,
     name: undefined,
     provider: AWS_PROVIDER,
@@ -51,7 +52,7 @@ const SamplePage = () => {
     if (isPlaceholder) return;
     const { id, request } = images.find((image) => image.image_name === selection);
     const { architecture, image_type } = request.image_requests[0];
-    setChosenImage({ id: id, name: selection, architecture: architecture, provider: image_type });
+    setChosenImage({ isTesting: true, id: id, name: selection, architecture: architecture, provider: image_type });
     setImageSelect(false);
   };
 

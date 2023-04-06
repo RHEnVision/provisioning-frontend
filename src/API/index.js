@@ -16,6 +16,11 @@ export const fetchSourcesList = async (provider) => {
   return data;
 };
 
+export const fetchSourceUploadInfo = async (sourceID) => {
+  const { data } = await axios.get(provisioningUrl(`sources/${sourceID}/upload_info`));
+  return data;
+};
+
 export const fetchPubkeysList = async () => {
   const { data } = await axios.get(provisioningUrl('pubkeys'));
   return data;

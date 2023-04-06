@@ -1,5 +1,6 @@
 import React from 'react';
-import AccountCustomizations from '../steps/AccountCustomizations';
+import SourceMissing from './SourceMissing';
+import AccountCustomizations from './AccountCustomizations';
 import ReviewDetails from './ReviewDetails';
 import PublicKeys from './Pubkeys';
 import FinishStep from './ReservationProgress';
@@ -13,9 +14,18 @@ const stringIds = {
 
 export const stepIdToString = (id) => stringIds[id];
 
-const defaultSteps = ({
+const missingSource = ({ image, isLoading, sourcesError }) => [
+  {
+    name: 'Define source',
+    id: 1,
+    component: <SourceMissing image={image} isLoading={isLoading} error={sourcesError} />,
+    isFinishedStep: true,
+  },
+];
+
+const wizardSteps = ({
   stepIdReached,
-  image: { name, id, architecture, provider, sourceId },
+  image: { name, id, architecture, provider, sourceIDs },
   stepValidation,
   setStepValidation,
   setLaunchSuccess,
@@ -32,7 +42,7 @@ const defaultSteps = ({
             provider={provider}
             architecture={architecture || 'x86_64'}
             composeID={id}
-            imageSourceID={sourceId}
+            imageSourceID={sourceIDs?.[0]}
             setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))}
           />
         ),
@@ -62,4 +72,6 @@ const defaultSteps = ({
   },
 ];
 
-export default defaultSteps;
+const steps = (props) => (!props.isLoading && props.availableSources.length > 0 ? wizardSteps(props) : missingSource(props));
+
+export default steps;

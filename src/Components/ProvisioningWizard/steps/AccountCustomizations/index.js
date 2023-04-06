@@ -37,7 +37,7 @@ AccountCustomizations.propTypes = {
   architecture: PropTypes.string.isRequired,
   composeID: PropTypes.string.isRequired,
   provider: PropTypes.oneOf([AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER]),
-  imageSourceID: PropTypes.number,
+  imageSourceID: PropTypes.string,
 };
 
 export default AccountCustomizations;
