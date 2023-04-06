@@ -6,7 +6,8 @@ import { WizardProvider } from '../Common/WizardContext';
 import APIProvider from '../Common/Query';
 import ConfirmModal from '../ConfirmModal';
 import CustomFooter from './CustomFooter';
-import defaultSteps from './steps';
+import { imageProps, sourcesForImage } from './helpers';
+import getSteps from './steps';
 import './steps/Pubkeys/pubkeys.scss';
 
 const DEFAULT_STEP_VALIDATION = {
@@ -19,6 +20,8 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   const [stepValidation, setStepValidation] = React.useState(DEFAULT_STEP_VALIDATION);
   const [isConfirming, setConfirming] = React.useState(false);
   const [successfulLaunch, setLaunchSuccess] = React.useState();
+
+  const { isLoading, error: sourcesError, sources: availableSources } = sourcesForImage(image, { refetch: stepIdReached <= 2 });
 
   const onCustomClose = () => {
     setConfirming(false);
@@ -35,7 +38,10 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
     }
   };
 
-  const steps = defaultSteps({
+  const steps = getSteps({
+    sourcesError,
+    isLoading,
+    availableSources,
     stepIdReached,
     image,
     stepValidation,
@@ -48,35 +54,32 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
     setStepIdReached((prevID) => (prevID < id ? id : prevID));
   };
 
-  return isOpen ? (
+  return (
     <WizardProvider>
-      <APIProvider>
-        <Wizard
-          {...props}
-          title="Launch"
-          description={`Launch image ${image.name}`}
-          steps={steps}
-          isOpen
-          onClose={onWizardClose}
-          onNext={onNext}
-          className={'provisioning'}
-          footer={<CustomFooter />}
-        />
-        <ConfirmModal isOpen={isConfirming} onConfirm={onCustomClose} onCancel={() => setConfirming(false)} />
-      </APIProvider>
+      <Wizard
+        {...props}
+        title="Launch"
+        description={`Launch image ${image.name}`}
+        steps={steps}
+        isOpen
+        onClose={onWizardClose}
+        onNext={onNext}
+        className={'provisioning'}
+        footer={<CustomFooter />}
+      />
+      <ConfirmModal isOpen={isConfirming} onConfirm={onCustomClose} onCancel={() => setConfirming(false)} />
     </WizardProvider>
-  ) : null;
+  );
 };
+
+const ProvisioningWizardWrapper = (props) => <APIProvider>{props.isOpen && <ProvisioningWizard {...props} />}</APIProvider>;
 
 ProvisioningWizard.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
-  image: PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.string,
-    architecture: PropTypes.string,
-    provider: PropTypes.string,
-  }).isRequired,
+  image: imageProps,
 };
 
-export default ProvisioningWizard;
+ProvisioningWizardWrapper.propTypes = ProvisioningWizard.propTypes;
+
+export default ProvisioningWizardWrapper;

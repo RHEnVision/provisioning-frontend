@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
-import { SOURCES_QUERY_KEY } from '../../API/queryKeys';
+import { sourcesQueryKey } from '../../API/queryKeys';
 import { fetchSourcesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 import { IB_SOURCE_PROVIDERS } from '../Common/constants';
@@ -20,7 +20,7 @@ const SourcesSelect = ({ setValidation, imageSourceID }) => {
     error,
     isLoading,
     data: sources,
-  } = useQuery([SOURCES_QUERY_KEY, provider], () => fetchSourcesList(provider), {
+  } = useQuery(sourcesQueryKey(provider), () => fetchSourcesList(provider), {
     enabled: !!provider,
     onSuccess: (data) => {
       const id = chosenSource;
@@ -91,7 +91,7 @@ const SourcesSelect = ({ setValidation, imageSourceID }) => {
 
 SourcesSelect.propTypes = {
   setValidation: PropTypes.func.isRequired,
-  imageSourceID: PropTypes.number,
+  imageSourceID: PropTypes.string,
 };
 
 export default SourcesSelect;
