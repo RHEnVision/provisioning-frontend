@@ -4,6 +4,7 @@ import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import { useFlag } from '@unleash/proxy-client-react';
 
+import { AWS_PROVIDER } from '../../../../constants';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
@@ -12,12 +13,20 @@ import { useWizardContext } from '../../../Common/WizardContext';
 import TemplatesSelect from '../../../TemplateSelect';
 
 const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, imageSourceID }) => {
-  const [{ chosenSource, chosenInstanceType }] = useWizardContext();
+  const [{ chosenSource, chosenRegion, chosenInstanceType }, setWizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: chosenSource ? 'success' : 'default',
     types: chosenInstanceType ? 'success' : 'default',
   });
   const templateFlag = useFlag('provisioning.aws.templates');
+
+  const onRegionChange = ({ region, imageID }) => {
+    setWizardContext((prevState) => ({
+      ...prevState,
+      chosenRegion: region,
+      chosenImageID: imageID,
+    }));
+  };
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
@@ -70,7 +79,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
           </Popover>
         }
       >
-        <RegionsSelect composeID={composeID} />
+        <RegionsSelect provider={AWS_PROVIDER} onChange={onRegionChange} composeID={composeID} currentRegion={chosenRegion} />
       </FormGroup>
       {templateFlag && (
         <FormGroup
