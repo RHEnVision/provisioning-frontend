@@ -3,14 +3,8 @@ import userEvent from '@testing-library/user-event';
 import InstanceTypesSelect from '.';
 import { awsInstanceTypeList, azureInstanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
 import { render, screen } from '../../mocks/utils';
-import initialWizardContext from '../Common/WizardContext/initialState';
 
 describe('InstanceTypesSelect', () => {
-  // reset provider to default value - AWS
-  afterEach(() => {
-    initialWizardContext.provider = 'aws';
-  });
-
   test('populate AWS instance types select', async () => {
     await mountSelectAndClick();
     const items = await screen.findAllByLabelText(/^Instance Type/);
@@ -18,8 +12,7 @@ describe('InstanceTypesSelect', () => {
   });
 
   test('populate Azure instance types select', async () => {
-    initialWizardContext.provider = 'azure';
-    await mountSelectAndClick();
+    await mountSelectAndClick('azure');
     const items = await screen.findAllByLabelText(/^Instance Type/);
     expect(items).toHaveLength(azureInstanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
   });
@@ -53,8 +46,8 @@ describe('InstanceTypesSelect', () => {
   });
 });
 
-const mountSelectAndClick = async () => {
-  render(<InstanceTypesSelect architecture="x86_64" setValidation={jest.fn()} />);
+const mountSelectAndClick = async (provider = 'aws') => {
+  render(<InstanceTypesSelect architecture="x86_64" setValidation={jest.fn()} />, { provider });
   const selectDropdown = await screen.findByPlaceholderText('Select instance type');
   await userEvent.click(selectDropdown);
   return selectDropdown;

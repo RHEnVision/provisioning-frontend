@@ -129,7 +129,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
     <WizardContextConsumer>
       {({ goToStepById, onClose }) => (
         <EmptyState variant="large">
-          <EmptyStateIcon color={polledReservation?.success && '#3E8635'} icon={polledReservation?.success ? CheckCircleIcon : CogsIcon} />
+          <EmptyStateIcon color={(polledReservation?.success && '#3E8635') || null} icon={polledReservation?.success ? CheckCircleIcon : CogsIcon} />
           <Title headingLevel="h4" size="lg" ouiaId="launch-status">
             {polledReservation?.success ? 'System(s) launched successfully' : 'Launching system(s)'}
           </Title>

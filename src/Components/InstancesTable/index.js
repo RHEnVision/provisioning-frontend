@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { TableComposable, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
-import { ClipboardCopy, Card, Pagination } from '@patternfly/react-core';
+import { Button, ClipboardCopy, Card, Pagination } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 
 import { SSHUsername } from './helpers';
-import instanceLink from '../Common/InstanceLink';
+import { instanceLink, humanizeInstanceID } from '../Common/instanceHelpers';
 import { fetchReservationByProvider } from '../../API';
 
 const PER_PAGE_OPTIONS = [
@@ -55,11 +55,18 @@ const InstancesTable = ({ reservationID, provider, region }) => {
           {instancesPerPage?.map(({ instance_id, detail }) => (
             <Tr key={instance_id}>
               <Td aria-label="instance id" dataLabel="ID">
-                <a href={instanceLink(instance_id, provider, region)} rel="noreferrer" target="_blank">
-                  <span>
-                    {instance_id} <ExternalLinkAltIcon />
-                  </span>
-                </a>
+                <Button
+                  variant="link"
+                  icon={<ExternalLinkAltIcon />}
+                  iconPosition="right"
+                  isInline
+                  component="a"
+                  rel="noreferrer"
+                  target="_blank"
+                  href={instanceLink(instance_id, provider, region)}
+                >
+                  {humanizeInstanceID(instance_id, provider)}
+                </Button>
               </Td>
               <Td aria-label="instance dns" dataLabel="DNS">
                 {detail?.public_dns ? (
@@ -70,7 +77,7 @@ const InstancesTable = ({ reservationID, provider, region }) => {
                   'N/A'
                 )}
               </Td>
-              <Td dataLabel="SSH">
+              <Td aria-label="ssh command" dataLabel="SSH">
                 {detail?.public_ipv4 ? (
                   <ClipboardCopy isReadOnly hoverTip="Copy SSH command" clickTip="SSH was copied!" variant="expansion">
                     {`ssh ${SSHUsername(provider)}@${detail?.public_ipv4}`}

@@ -2,7 +2,7 @@
 const { resolve } = require('path');
 
 module.exports = {
-  appUrl: '/apps/provisioning',
+  appUrl: '/insights/provisioning',
   debug: true,
   useProxy: true,
   proxyVerbose: true,
