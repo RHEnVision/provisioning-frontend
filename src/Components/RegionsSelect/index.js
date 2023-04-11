@@ -3,13 +3,12 @@ import React from 'react';
 import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
 import { useQuery, useQueries } from 'react-query';
 
-import { useWizardContext } from '../Common/WizardContext';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../constants';
 import { IMAGE_REGIONS_KEY } from '../../API/queryKeys';
 import { fetchImageClones, fetchImageCloneStatus } from '../../API';
 import { defaultRegionByProvider } from '../Common/helpers';
 
-const RegionsSelect = ({ composeID }) => {
-  const [{ provider, chosenRegion }, setWizardContext] = useWizardContext();
+const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const {
@@ -35,11 +34,7 @@ const RegionsSelect = ({ composeID }) => {
   }
 
   const onSelect = (_, selection) => {
-    setWizardContext((prevState) => ({
-      ...prevState,
-      chosenRegion: selection,
-      chosenImageID: images.find((image) => image.region === selection)?.id,
-    }));
+    onChange({ region: selection, imageID: images.find((image) => image.region === selection)?.id });
     setIsOpen(false);
   };
 
@@ -68,7 +63,7 @@ const RegionsSelect = ({ composeID }) => {
       label="Select region"
       maxHeight="450px"
       isOpen={isOpen}
-      selections={chosenRegion}
+      selections={currentRegion}
       onToggle={onToggle}
       onSelect={onSelect}
       isDisabled={(clonedImages?.length || 0) <= 1}
@@ -81,7 +76,10 @@ const RegionsSelect = ({ composeID }) => {
 };
 
 RegionsSelect.propTypes = {
+  provider: PropTypes.oneOf([AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER]).isRequired,
   composeID: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  currentRegion: PropTypes.string,
 };
 
 export default RegionsSelect;

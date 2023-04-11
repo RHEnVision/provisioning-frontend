@@ -42,7 +42,7 @@ describe('RegionSelect', () => {
 });
 
 const mountSelectAndClick = async () => {
-  render(<RegionSelect composeID={parentImage.id} />);
+  render(<RegionSelect provider="aws" onChange={jest.fn()} composeID={parentImage.id} />);
   const selectDropdown = await screen.findByLabelText('Options menu');
   await userEvent.click(selectDropdown);
   return selectDropdown;

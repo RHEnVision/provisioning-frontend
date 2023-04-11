@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
+
+import { GCP_PROVIDER } from '../../../../constants';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
@@ -9,7 +11,7 @@ import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 
 const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID }) => {
-  const [wizardContext] = useWizardContext();
+  const [wizardContext, setWizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: wizardContext.chosenSource ? 'success' : 'default',
     types: wizardContext.chosenInstanceType ? 'success' : 'default',
@@ -20,6 +22,14 @@ const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID })
     const errorExists = Object.values(validations).some((valid) => valid !== 'success');
     setStepValidated(!errorExists);
   }, [validations]);
+
+  const onRegionChange = ({ region, imageID }) => {
+    setWizardContext((prevState) => ({
+      ...prevState,
+      chosenRegion: region,
+      chosenImageID: imageID,
+    }));
+  };
 
   return (
     <Form>
@@ -65,7 +75,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID })
           </Popover>
         }
       >
-        <RegionsSelect composeID={composeID} />
+        <RegionsSelect provider={GCP_PROVIDER} onChange={onRegionChange} composeID={composeID} currentRegion={wizardContext.chosenRegion} />
       </FormGroup>
       <FormGroup
         label="Select machine type"
