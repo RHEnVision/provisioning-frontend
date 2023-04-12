@@ -1,21 +1,22 @@
 import React from 'react';
-import { Button } from '@patternfly/react-core';
+import { Button, Bullseye, Stack, StackItem } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
 import { AWS_PROVIDER, AZURE_PROVIDER } from '../../../../constants';
+import RegionsSelect from '../../../RegionsSelect';
 import { imageProps } from '../../helpers.js';
 
 const DirectProviderLink = ({ image }) => {
   // TODO
   const uploadStatus = image.uploadStatus || { options: {} };
   const uploadOptions = image.uploadOptions || {};
+  const [currentImage, setImage] = React.useState({ imageID: image.id, ...uploadStatus.options });
   let url, text;
 
   switch (image.provider) {
     case AWS_PROVIDER:
       text = 'Launch with AWS console';
-      url =
-        'https://console.aws.amazon.com/ec2/v2/home?region=' + uploadStatus.options.region + '#LaunchInstanceWizard:ami=' + uploadStatus.options.ami;
+      url = 'https://console.aws.amazon.com/ec2/v2/home?region=' + currentImage.region + '#LaunchInstanceWizard:ami=' + currentImage.ami;
       break;
     case AZURE_PROVIDER:
       text = 'View uploaded image';
@@ -33,10 +34,27 @@ const DirectProviderLink = ({ image }) => {
       throw new Error(`Steps requested for unknown provider: ${image.provider}`);
   }
 
+  // Currently only AWS, so the ami is hardcoded
+  const onRegionChange = (image) => {
+    console.log(image);
+    setImage(image);
+  };
+
   return (
-    <Button component="a" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" target="_blank" href={url}>
-      {text}
-    </Button>
+    <Stack>
+      <StackItem>
+        <Button component="a" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" target="_blank" href={url}>
+          {text}
+        </Button>
+      </StackItem>
+      {image.provider === AWS_PROVIDER && (
+        <StackItem>
+          <Bullseye>
+            <RegionsSelect composeID={image.id} provider={image.provider} currentRegion={currentImage.region} onChange={onRegionChange} />
+          </Bullseye>
+        </StackItem>
+      )}
+    </Stack>
   );
 };
 
