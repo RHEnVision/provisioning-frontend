@@ -29,12 +29,17 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
   // filter successful clones images
   if (clonesStatusQueries.length && clonesStatusQueries.every((cloneQuery) => cloneQuery.isLoading === false)) {
     const clonesStatus = clonesStatusQueries?.map((query) => query?.data);
-    const filteredCloned = clonedImages?.filter((_, index) => clonesStatus[index].status === 'success');
-    images.push(...filteredCloned);
+    // enrich the cloned image data
+    clonesStatus?.forEach((status, index) => {
+      clonedImages[index] = { ...clonedImages[index], ...status?.options };
+    });
+    const availableImages = clonedImages?.filter((_, index) => clonesStatus[index].status === 'success');
+    images.push(...availableImages);
   }
 
   const onSelect = (_, selection) => {
-    onChange({ region: selection, imageID: images.find((image) => image.region === selection)?.id });
+    const { id: imageID, ...imageAttrs } = images.find((image) => image.region === selection);
+    onChange({ region: selection, imageID, ...imageAttrs });
     setIsOpen(false);
   };
 
