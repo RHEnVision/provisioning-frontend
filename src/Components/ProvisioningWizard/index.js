@@ -10,6 +10,9 @@ import CustomFooter from './CustomFooter';
 import { imageProps } from './helpers';
 import getSteps from './steps';
 import './steps/Pubkeys/pubkeys.scss';
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { useEffectOnce } from '../Common/Hooks/useEffectOnce';
 
 const DEFAULT_STEP_VALIDATION = {
   sshStep: false,
@@ -23,6 +26,11 @@ const ProvisioningWizard = ({ onClose, image, ...props }) => {
   const [successfulLaunch, setLaunchSuccess] = React.useState();
 
   const { isLoading, error: sourcesError, sources: availableSources } = useSourcesForImage(image, { refetch: stepIdReached <= 2 });
+
+  useEffectOnce(() => {
+    axios.defaults.headers.common['X-Correlation-Id'] = uuidv4();
+    return () => delete axios.defaults.headers.common['X-Correlation-Id'];
+  });
 
   const onCustomClose = () => {
     setConfirming(false);
