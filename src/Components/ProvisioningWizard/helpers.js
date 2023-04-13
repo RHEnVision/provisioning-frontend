@@ -47,7 +47,7 @@ const providerSourceFilter = (image) => {
     case AWS_PROVIDER:
       return (info) => image.sourceIDs?.includes(info.source_id) || image.accountIDs?.includes(info.aws.account_id);
     case AZURE_PROVIDER:
-      return (info) => image.sourceIDs?.includes(info.source_id) || info.azure?.subscription_id === image.uploadOptions?.subscription_id;
+      return (info) => image.uploadOptions?.source_id === info.source_id || info.azure?.subscription_id === image.uploadOptions?.subscription_id;
     default:
       return (info) => image.sourceIDs?.includes(info.source_id);
   }
