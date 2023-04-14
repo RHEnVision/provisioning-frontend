@@ -4,13 +4,14 @@ import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 
 import { GCP_PROVIDER } from '../../../../constants';
+import { imageProps } from '../../helpers';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 
-const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID }) => {
+const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: wizardContext.chosenSource ? 'success' : 'default',
@@ -47,6 +48,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID })
         fieldId="gcp-select-source"
       >
         <SourcesSelect
+          image={image}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -75,7 +77,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID })
           </Popover>
         }
       >
-        <RegionsSelect provider={GCP_PROVIDER} onChange={onRegionChange} composeID={composeID} currentRegion={wizardContext.chosenRegion} />
+        <RegionsSelect provider={GCP_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={wizardContext.chosenRegion} />
       </FormGroup>
       <FormGroup
         label="Select machine type"
@@ -99,7 +101,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID })
         }
       >
         <InstanceTypesSelect
-          architecture={architecture}
+          architecture={image.architecture}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -135,8 +137,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, architecture, composeID })
 };
 
 AccountCustomizationsGCP.propTypes = {
-  architecture: PropTypes.string.isRequired,
-  composeID: PropTypes.string.isRequired,
   setStepValidated: PropTypes.func.isRequired,
+  image: imageProps,
 };
 export default AccountCustomizationsGCP;

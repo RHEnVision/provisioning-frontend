@@ -6,7 +6,7 @@ import { templates } from '../../mocks/fixtures/templates.fixtures';
 
 describe('TemplateSelect', () => {
   test('get all templates options', async () => {
-    render(<TemplateSelect />);
+    render(<TemplateSelect />, { provider: 'aws', contextValues: { chosenSource: '1' } });
     const selectDropdown = await screen.findByLabelText('Select templates');
     await userEvent.click(selectDropdown);
 

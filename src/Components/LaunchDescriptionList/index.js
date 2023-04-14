@@ -2,16 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ExpandableSection, DescriptionList, DescriptionListTerm, DescriptionListGroup, DescriptionListDescription } from '@patternfly/react-core';
 
-import { useQuery } from 'react-query';
-import { sourcesQueryKey } from '../../API/queryKeys';
-import { fetchSourcesList } from '../../API';
+import { useSourcesData } from '../Common/Hooks/sources';
 import { useWizardContext } from '../Common/WizardContext';
 import { instanceType, region } from '../ProvisioningWizard/steps/ReservationProgress/helpers';
 
 const LaunchDescriptionList = ({ imageName }) => {
   const [{ chosenRegion, chosenSshKeyName, uploadedKey, chosenInstanceType, chosenNumOfInstances, chosenSource, sshPublicName, provider }] =
     useWizardContext();
-  const { data: sources } = useQuery(sourcesQueryKey(provider), () => fetchSourcesList(provider));
+  const { sources } = useSourcesData(provider);
   const [isExpanded, setIsExpanded] = React.useState(true);
   const onToggle = (isExpanded) => {
     setIsExpanded(isExpanded);

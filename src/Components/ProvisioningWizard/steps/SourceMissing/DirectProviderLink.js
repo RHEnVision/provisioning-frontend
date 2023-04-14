@@ -7,7 +7,7 @@ import RegionsSelect from '../../../RegionsSelect';
 import { imageProps } from '../../helpers.js';
 
 const DirectProviderLink = ({ image }) => {
-  // TODO
+  // TODO gcp
   const uploadStatus = image.uploadStatus || { options: {} };
   const uploadOptions = image.uploadOptions || {};
   const [currentImage, setImage] = React.useState({ imageID: image.id, ...uploadStatus.options });

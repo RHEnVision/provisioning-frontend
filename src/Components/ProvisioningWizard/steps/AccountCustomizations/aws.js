@@ -5,6 +5,7 @@ import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import { useFlag } from '@unleash/proxy-client-react';
 
 import { AWS_PROVIDER } from '../../../../constants';
+import { imageProps } from '../../helpers';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
@@ -12,7 +13,7 @@ import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 import TemplatesSelect from '../../../TemplateSelect';
 
-const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, imageSourceID }) => {
+const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
   const [{ chosenSource, chosenRegion, chosenInstanceType }, setWizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: chosenSource ? 'success' : 'default',
@@ -50,7 +51,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
         fieldId="aws-select-source"
       >
         <SourcesSelect
-          imageSourceID={imageSourceID}
+          image={image}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -79,7 +80,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
           </Popover>
         }
       >
-        <RegionsSelect provider={AWS_PROVIDER} onChange={onRegionChange} composeID={composeID} currentRegion={chosenRegion} />
+        <RegionsSelect provider={AWS_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={chosenRegion} />
       </FormGroup>
       {templateFlag && (
         <FormGroup
@@ -139,7 +140,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
         }
       >
         <InstanceTypesSelect
-          architecture={architecture}
+          architecture={image.architecture}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -176,9 +177,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, architecture, composeID, i
 
 AccountCustomizationsAWS.propTypes = {
   setStepValidated: PropTypes.func.isRequired,
-  architecture: PropTypes.string.isRequired,
-  composeID: PropTypes.string.isRequired,
-  imageSourceID: PropTypes.number.isRequired,
+  image: imageProps,
 };
 
 export default AccountCustomizationsAWS;

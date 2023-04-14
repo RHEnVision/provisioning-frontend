@@ -1,3 +1,24 @@
+export const awsImage = {
+  provider: 'aws',
+  id: '1197ba12-bcb6-4fbe-a77a-823a75519811',
+  name: 'AWS Image',
+  architecture: 'x86_64',
+};
+
+export const azureImage = {
+  provider: 'azure',
+  id: '6697ba12-bcb6-4fbe-a77a-823a75519811',
+  name: 'Azure Image',
+  architecture: 'x86_64',
+};
+
+export const gcpImage = {
+  provider: 'gcp',
+  id: '3397ba12-bcb6-4fbe-a77a-823a75519811',
+  name: 'GCP Image',
+  architecture: 'x86_64',
+};
+
 export const parentImage = { region: 'us-east-1', id: '0097ba12-bcb6-4fbe-a77a-823a75519811' };
 
 export const clonedImages = {
