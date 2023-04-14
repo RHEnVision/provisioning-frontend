@@ -2,28 +2,43 @@ import React from 'react';
 import SourcesSelect from '.';
 import userEvent from '@testing-library/user-event';
 import { sourcesList } from '../../mocks/fixtures/sources.fixtures';
+import { awsImage, gcpImage } from '../../mocks/fixtures/image.fixtures';
 import { render, screen } from '../../mocks/utils';
 
-const mockContext = require('../Common/WizardContext/initialState');
-
 describe('SourcesSelect', () => {
-  test('preselect aws source', async () => {
-    render(<SourcesSelect imageSourceID={1} setValidation={jest.fn()} />);
-    // wizard context mock is `{chosenSource: 1}`
-    const selectDropdown = await screen.findByText('Source 1');
+  test('no source preselected when multiple available', async () => {
+    render(<SourcesSelect image={{ ...awsImage, sourceIDs: ['1', '2'] }} setValidation={jest.fn()} />);
+    const selectDropdown = await screen.findByText('Select account');
     await userEvent.click(selectDropdown);
+
+    const items = await screen.findAllByLabelText('Source account');
+    expect(items).toHaveLength(sourcesList.length);
   });
 
-  test('preselects the chosen source', async () => {
-    jest.mock('../Common/WizardContext/initialState', () => ({
-      __esModule: true,
-      default: { ...mockContext, provider: 'gcp' },
-    }));
-    render(<SourcesSelect setValidation={jest.fn()} />);
+  test('filters and preselect single available source', async () => {
+    render(<SourcesSelect image={{ ...awsImage, sourceIDs: ['2'] }} setValidation={jest.fn()} />);
+    const selectDropdown = await screen.findByText('Source 2');
+    await userEvent.click(selectDropdown);
+
+    const items = await screen.findAllByLabelText('Source account');
+    expect(items).toHaveLength(1);
+  });
+
+  test('preselect aws source', async () => {
+    render(<SourcesSelect image={{ ...awsImage, sourceIDs: ['1', '2'] }} setValidation={jest.fn()} />, { contextValues: { chosenSource: '1' } });
     const selectDropdown = await screen.findByText('Source 1');
     await userEvent.click(selectDropdown);
 
     const items = await screen.findAllByLabelText('Source account');
     expect(items).toHaveLength(sourcesList.length);
+  });
+
+  test('preselects gcp source', async () => {
+    render(<SourcesSelect image={{ ...gcpImage, sourceIDs: ['10'] }} setValidation={jest.fn()} />, { provider: 'gcp' });
+    const selectDropdown = await screen.findByText('GCP Source 1');
+    await userEvent.click(selectDropdown);
+
+    const items = await screen.findAllByLabelText('Source account');
+    expect(items).toHaveLength(1);
   });
 });

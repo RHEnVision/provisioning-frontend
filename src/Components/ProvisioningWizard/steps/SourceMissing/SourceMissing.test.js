@@ -3,6 +3,7 @@ import React from 'react';
 import SourceMissing from '.';
 
 import { render, screen } from '../../../../mocks/utils';
+import { awsImage, azureImage } from '../../../../mocks/fixtures/image.fixtures';
 
 describe('Source missing', () => {
   describe('Loading state', () => {
@@ -13,57 +14,57 @@ describe('Source missing', () => {
   });
 
   describe('AWS', () => {
-    const awsImage = {
-      provider: 'aws',
+    const image = {
+      ...awsImage,
       uploadStatus: {
         options: { region: 'us-east-1', ami: 'ami-123123' },
       },
     };
 
     test('has create source button', () => {
-      render(<SourceMissing image={awsImage} />);
+      render(<SourceMissing image={image} />);
 
       const sourcesLink = screen.getByRole('link', { name: 'Create Source' });
       expect(sourcesLink).toHaveAttribute('href', '/settings/sources/new');
     });
 
     test('renders direct link', () => {
-      render(<SourceMissing image={awsImage} />);
+      render(<SourceMissing image={image} />);
 
       const directLink = screen.getByRole('link', { name: 'Launch with AWS console' });
       expect(directLink).toHaveAttribute(
         'href',
-        `https://console.aws.amazon.com/ec2/v2/home?region=${awsImage.uploadStatus.options.region}#LaunchInstanceWizard:ami=${awsImage.uploadStatus.options.ami}`
+        `https://console.aws.amazon.com/ec2/v2/home?region=${image.uploadStatus.options.region}#LaunchInstanceWizard:ami=${image.uploadStatus.options.ami}`
       );
     });
   });
 
   describe('Azure', () => {
-    const azureImage = {
-      provider: 'azure',
+    const image = {
+      ...azureImage,
       uploadStatus: { options: { image_name: 'cool-image' } },
       uploadOptions: { tenant_id: '123', subscription_id: '321', resource_group: 'testGroup' },
     };
 
     test('has create source button', () => {
-      render(<SourceMissing image={azureImage} />);
+      render(<SourceMissing image={image} />);
 
       const sourcesLink = screen.getByRole('link', { name: 'Create Source' });
       expect(sourcesLink).toHaveAttribute('href', '/settings/sources/new');
     });
 
     test('renders direct link', () => {
-      render(<SourceMissing image={azureImage} />);
+      render(<SourceMissing image={image} />);
 
       const url =
         'https://portal.azure.com/#@' +
-        azureImage.uploadOptions.tenant_id +
+        image.uploadOptions.tenant_id +
         '/resource/subscriptions/' +
-        azureImage.uploadOptions.subscription_id +
+        image.uploadOptions.subscription_id +
         '/resourceGroups/' +
-        azureImage.uploadOptions.resource_group +
+        image.uploadOptions.resource_group +
         '/providers/Microsoft.Compute/images/' +
-        azureImage.uploadStatus.options.image_name;
+        image.uploadStatus.options.image_name;
 
       const directLink = screen.getByRole('link', { name: 'View uploaded image' });
       expect(directLink).toHaveAttribute('href', url);

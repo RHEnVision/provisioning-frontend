@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../Common/constants';
+import { imageProps } from '../../helpers';
 import { defaultRegionByProvider } from '../../../Common/helpers';
 import { useWizardContext } from '../../../Common/WizardContext';
 import AWS from './aws';
 import GCP from './gcp';
 import Azure from './azure';
 
-const AccountCustomizations = ({ setStepValidated, architecture, composeID, provider, imageSourceID }) => {
+const AccountCustomizations = ({ setStepValidated, image }) => {
   const [, setWizardContext] = useWizardContext();
+  const provider = image.provider;
 
   React.useEffect(() => {
     provider &&
@@ -16,17 +18,17 @@ const AccountCustomizations = ({ setStepValidated, architecture, composeID, prov
         ...prevState,
         provider,
         chosenRegion: defaultRegionByProvider(provider),
-        chosenImageID: composeID,
+        chosenImageID: image.id,
       }));
   }, [provider, setWizardContext]);
 
   switch (provider) {
     case AWS_PROVIDER:
-      return <AWS setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} imageSourceID={imageSourceID} />;
+      return <AWS setStepValidated={setStepValidated} image={image} />;
     case AZURE_PROVIDER:
-      return <Azure setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} />;
+      return <Azure setStepValidated={setStepValidated} image={image} />;
     case GCP_PROVIDER:
-      return <GCP setStepValidated={setStepValidated} architecture={architecture} composeID={composeID} />;
+      return <GCP setStepValidated={setStepValidated} image={image} />;
     default:
       throw new Error(`Can not render AccountCustomizations for unrecognized provider: ${provider}`);
   }
@@ -34,10 +36,7 @@ const AccountCustomizations = ({ setStepValidated, architecture, composeID, prov
 
 AccountCustomizations.propTypes = {
   setStepValidated: PropTypes.func.isRequired,
-  architecture: PropTypes.string.isRequired,
-  composeID: PropTypes.string.isRequired,
-  provider: PropTypes.oneOf([AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER]),
-  imageSourceID: PropTypes.string,
+  image: imageProps,
 };
 
 export default AccountCustomizations;

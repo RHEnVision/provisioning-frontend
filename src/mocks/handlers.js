@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 import { imageBuilderURL, provisioningUrl } from '../API/helpers';
 import { awsInstanceTypeList, azureInstanceTypeList } from './fixtures/instanceTypes.fixtures';
-import { sourcesList } from './fixtures/sources.fixtures';
+import { sourcesList, gcpSourcesList, awsSourceUploadInfo } from './fixtures/sources.fixtures';
 import { pubkeysList } from './fixtures/pubkeys.fixtures';
 import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/image.fixtures';
 import { AWSReservation, getAzureReservation, createdAWSReservation, createdAzureReservation, reservation } from './fixtures/reservation.fixtures';
@@ -9,7 +9,21 @@ import { templates } from './fixtures/templates.fixtures';
 
 export const handlers = [
   rest.get(provisioningUrl('sources'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(sourcesList));
+    const provider = req.url.searchParams.get('provider');
+    if (provider === 'aws') {
+      return res(ctx.status(200), ctx.json(sourcesList));
+    } else if (provider === 'gcp') {
+      return res(ctx.status(200), ctx.json(gcpSourcesList));
+    }
+  }),
+  rest.get(provisioningUrl('sources/:sourceID/upload_info'), (req, res, ctx) => {
+    const { sourceID } = req.params;
+    if (sourceID === '1' || sourceID === '2') {
+      return res(ctx.status(200), ctx.json(awsSourceUploadInfo()));
+    } else if (sourceID === '10') {
+      // GCP upload info not defined yet
+      return res(ctx.status(200), ctx.json({}));
+    }
   }),
   rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(pubkeysList));

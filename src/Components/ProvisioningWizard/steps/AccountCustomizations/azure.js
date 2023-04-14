@@ -4,13 +4,14 @@ import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 
 import { AZURE_PROVIDER } from '../../../../constants';
+import { imageProps } from '../../helpers';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 
-const AccountCustomizationsAzure = ({ setStepValidated, architecture, composeID }) => {
+const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: wizardContext.chosenSource ? 'success' : 'default',
@@ -47,6 +48,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, architecture, composeID 
         fieldId="azure-select-source"
       >
         <SourcesSelect
+          image={image}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -75,7 +77,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, architecture, composeID 
           </Popover>
         }
       >
-        <RegionsSelect provider={AZURE_PROVIDER} currentRegion={wizardContext.chosenRegion} onChange={onRegionChange} composeID={composeID} />
+        <RegionsSelect provider={AZURE_PROVIDER} currentRegion={wizardContext.chosenRegion} onChange={onRegionChange} composeID={image.id} />
       </FormGroup>
       <FormGroup
         label="Select instance size"
@@ -99,7 +101,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, architecture, composeID 
         }
       >
         <InstanceTypesSelect
-          architecture={architecture}
+          architecture={image.architecture}
           setValidation={(validation) =>
             setValidation((prevValidations) => ({
               ...prevValidations,
@@ -135,8 +137,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, architecture, composeID 
 };
 
 AccountCustomizationsAzure.propTypes = {
-  architecture: PropTypes.string.isRequired,
-  composeID: PropTypes.string.isRequired,
   setStepValidated: PropTypes.func.isRequired,
+  image: imageProps,
 };
 export default AccountCustomizationsAzure;

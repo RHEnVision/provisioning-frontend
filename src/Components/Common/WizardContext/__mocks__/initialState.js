@@ -1,5 +1,5 @@
 const initialWizardContext = {
-  chosenSource: 1,
+  chosenSource: undefined,
   provider: 'aws',
   chosenRegion: 'us-east-1',
 };

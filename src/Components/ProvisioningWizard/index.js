@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import { Wizard } from '@patternfly/react-core';
 import React from 'react';
 
-import { WizardProvider } from '../Common/WizardContext';
 import APIProvider from '../Common/Query';
+import { WizardProvider } from '../Common/WizardContext';
+import { useSourcesForImage } from '../Common/Hooks/sources';
 import ConfirmModal from '../ConfirmModal';
 import CustomFooter from './CustomFooter';
-import { imageProps, sourcesForImage } from './helpers';
+import { imageProps } from './helpers';
 import getSteps from './steps';
 import './steps/Pubkeys/pubkeys.scss';
 
@@ -21,7 +22,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   const [isConfirming, setConfirming] = React.useState(false);
   const [successfulLaunch, setLaunchSuccess] = React.useState();
 
-  const { isLoading, error: sourcesError, sources: availableSources } = sourcesForImage(image, { refetch: stepIdReached <= 2 });
+  const { isLoading, error: sourcesError, sources: availableSources } = useSourcesForImage(image, { refetch: stepIdReached <= 2 });
 
   const onCustomClose = () => {
     setConfirming(false);
@@ -55,7 +56,7 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
   };
 
   return (
-    <WizardProvider>
+    <>
       <Wizard
         {...props}
         title="Launch"
@@ -68,11 +69,15 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
         footer={<CustomFooter />}
       />
       <ConfirmModal isOpen={isConfirming} onConfirm={onCustomClose} onCancel={() => setConfirming(false)} />
-    </WizardProvider>
+    </>
   );
 };
 
-const ProvisioningWizardWrapper = (props) => <APIProvider>{props.isOpen && <ProvisioningWizard {...props} />}</APIProvider>;
+const ProvisioningWizardWrapper = (props) => (
+  <WizardProvider>
+    <APIProvider>{props.isOpen && <ProvisioningWizard {...props} />}</APIProvider>
+  </WizardProvider>
+);
 
 ProvisioningWizard.propTypes = {
   isOpen: PropTypes.bool.isRequired,

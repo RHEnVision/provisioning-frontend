@@ -23,28 +23,16 @@ const missingSource = ({ image, isLoading, sourcesError }) => [
   },
 ];
 
-const wizardSteps = ({
-  stepIdReached,
-  image: { name, id, architecture, provider, sourceIDs },
-  stepValidation,
-  setStepValidation,
-  setLaunchSuccess,
-}) => [
+const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, setLaunchSuccess }) => [
   {
     name: 'Account and customization',
     steps: [
       {
-        name: humanizeProvider(provider),
+        name: humanizeProvider(image.provider),
         id: 1,
         enableNext: stepValidation.awsStep,
         component: (
-          <AccountCustomizations
-            provider={provider}
-            architecture={architecture || 'x86_64'}
-            composeID={id}
-            imageSourceID={sourceIDs?.[0]}
-            setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))}
-          />
+          <AccountCustomizations image={image} setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />
         ),
         canJumpTo: stepIdReached >= 1,
       },
@@ -60,14 +48,14 @@ const wizardSteps = ({
   {
     name: 'Review details',
     id: 5,
-    component: <ReviewDetails imageName={name} />,
+    component: <ReviewDetails imageName={image.name} />,
     canJumpTo: stepIdReached >= 5,
     nextButtonText: 'Launch',
   },
   {
     name: 'Finish Progress',
     id: 6,
-    component: <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={id} />,
+    component: <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={image.id} />,
     isFinishedStep: true,
   },
 ];
