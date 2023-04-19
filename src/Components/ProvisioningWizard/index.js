@@ -16,7 +16,7 @@ const DEFAULT_STEP_VALIDATION = {
   awsStep: false,
 };
 
-const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
+const ProvisioningWizard = ({ onClose, image, ...props }) => {
   const [stepIdReached, setStepIdReached] = React.useState(1);
   const [stepValidation, setStepValidation] = React.useState(DEFAULT_STEP_VALIDATION);
   const [isConfirming, setConfirming] = React.useState(false);
@@ -62,7 +62,6 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
         title="Launch"
         description={`Launch image ${image.name}`}
         steps={steps}
-        isOpen
         onClose={onWizardClose}
         onNext={onNext}
         className={'provisioning'}
@@ -75,12 +74,18 @@ const ProvisioningWizard = ({ isOpen, onClose, image, ...props }) => {
 
 const ProvisioningWizardWrapper = (props) => (
   <WizardProvider>
-    <APIProvider>{props.isOpen && <ProvisioningWizard {...props} />}</APIProvider>
+    <APIProvider>
+      <ProvisioningWizard {...props} />
+    </APIProvider>
   </WizardProvider>
 );
 
 ProvisioningWizard.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
+  /*
+  TODO(podvody): Once patternfly/patternfly-react#8972 is fixed we should reintroduce this prop
+  and also update src/Components/ImagesTable/ImageLink.js in ImageBuilder
+  isOpen: PropTypes.bool.isRequired
+  */
   onClose: PropTypes.func,
   image: imageProps,
 };
