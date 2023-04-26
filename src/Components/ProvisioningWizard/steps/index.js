@@ -60,6 +60,6 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
   },
 ];
 
-const steps = (props) => (!props.isLoading && props.availableSources.length > 0 ? wizardSteps(props) : missingSource(props));
+const steps = (props) => (props.availableSources.length > 0 ? wizardSteps(props) : missingSource(props));
 
 export default steps;
