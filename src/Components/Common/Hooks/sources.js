@@ -1,19 +1,9 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useQuery, useQueries } from 'react-query';
 
 import { SOURCES_QUERY_KEY, SOURCE_UPLOAD_INFO_KEY } from '../../../API/queryKeys';
 import { fetchSourcesList, fetchSourceUploadInfo } from '../../../API';
 import { AWS_PROVIDER, AZURE_PROVIDER } from '../../../constants';
-
-export const imageProps = PropTypes.shape({
-  name: PropTypes.string,
-  id: PropTypes.string,
-  provider: PropTypes.string,
-  architecture: PropTypes.string,
-  sourceIDs: PropTypes.arrayOf(PropTypes.string),
-  accountIDs: PropTypes.arrayOf(PropTypes.string),
-}).isRequired;
 
 export const useSourcesData = (provider, { refetch = false } = {}) => {
   const {
@@ -36,7 +26,7 @@ const useSourcesUploadInfos = (provider, { refetch }) => {
 
   const isLoading = isLoadingSources || uploadInfos.some((info) => info.isLoading);
   const infos = [];
-  !isLoading &&
+  !isLoadingSources &&
     sources?.forEach((source, i) => {
       uploadInfos[i].isSuccess && infos.push({ ...uploadInfos[i].data, ...source });
     });
@@ -57,13 +47,13 @@ const providerSourceFilter = (image) => {
 
 export const useSourcesForImage = (image, { refetch = false, onSuccess = () => {} } = {}) => {
   const { isLoading, error, infos } = useSourcesUploadInfos(image.provider, { refetch });
+  const filteredSources = image.isTesting ? infos : infos?.filter(providerSourceFilter(image));
 
   React.useEffect(() => {
     if (!isLoading && !error) {
       onSuccess(filteredSources);
     }
-  }, [isLoading, error]);
+  }, [isLoading]);
 
-  const filteredSources = image.isTesting ? infos : infos?.filter(providerSourceFilter(image));
   return { isLoading, error, sources: filteredSources || [] };
 };

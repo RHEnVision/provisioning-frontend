@@ -2,10 +2,16 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 import { WizardProvider } from '../Components/Common/WizardContext';
 
 const AllProviders = ({ children, provider, ...contextValues }) => {
+  setLogger({
+    log: console.log,
+    warn: console.warn,
+    // ✅ no more errors on the console
+    error: () => {},
+  });
   const queryClient = new QueryClient();
 
   return (

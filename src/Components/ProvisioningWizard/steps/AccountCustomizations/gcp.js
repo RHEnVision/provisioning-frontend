@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
-import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
+import { HelpIcon } from '@patternfly/react-icons';
 
 import { GCP_PROVIDER } from '../../../../constants';
 import { imageProps } from '../../helpers';
