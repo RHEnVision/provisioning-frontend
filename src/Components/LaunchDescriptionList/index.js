@@ -7,7 +7,6 @@ import { useWizardContext } from '../Common/WizardContext';
 import { instanceType, region } from '../ProvisioningWizard/steps/ReservationProgress/helpers';
 import { useQuery } from 'react-query';
 import { fetchLaunchTemplates } from '../../API';
-import { humanizeProvider } from '../Common/helpers';
 
 const LaunchDescriptionList = ({ imageName }) => {
   const [
@@ -30,7 +29,7 @@ const LaunchDescriptionList = ({ imageName }) => {
   const instanceTypeLabel = providerInstanceType.charAt(0).toUpperCase() + providerInstanceType.slice(1);
 
   return (
-    <ExpandableSection toggleText={humanizeProvider(provider)} onToggle={onToggle} isExpanded={isExpanded} isIndented>
+    <ExpandableSection toggleText={provider} onToggle={onToggle} isExpanded={isExpanded} isIndented>
       <DescriptionList isHorizontal>
         <DescriptionListGroup>
           <DescriptionListTerm>Image</DescriptionListTerm>
