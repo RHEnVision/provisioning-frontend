@@ -5,23 +5,32 @@ import { ExpandableSection, DescriptionList, DescriptionListTerm, DescriptionLis
 import { useSourcesData } from '../Common/Hooks/sources';
 import { useWizardContext } from '../Common/WizardContext';
 import { instanceType, region } from '../ProvisioningWizard/steps/ReservationProgress/helpers';
+import { useQuery } from 'react-query';
+import { fetchLaunchTemplates } from '../../API';
+import { humanizeProvider } from '../Common/helpers';
 
 const LaunchDescriptionList = ({ imageName }) => {
-  const [{ chosenRegion, chosenSshKeyName, uploadedKey, chosenInstanceType, chosenNumOfInstances, chosenSource, sshPublicName, provider }] =
-    useWizardContext();
+  const [
+    { chosenRegion, chosenSshKeyName, uploadedKey, chosenInstanceType, chosenNumOfInstances, chosenSource, sshPublicName, provider, chosenTemplate },
+  ] = useWizardContext();
   const { sources } = useSourcesData(provider);
+  const { data: templates } = useQuery(['Templates', `${chosenRegion}-${chosenSource}`], () => fetchLaunchTemplates(chosenSource, chosenRegion), {
+    enabled: !!chosenSource && !!chosenRegion,
+  });
+
   const [isExpanded, setIsExpanded] = React.useState(true);
   const onToggle = (isExpanded) => {
     setIsExpanded(isExpanded);
   };
 
   const getChosenSourceName = () => sources?.find((source) => source.id === chosenSource).name;
+  const templateName = templates.find((template) => template.id === chosenTemplate)?.name;
   const regionLabel = region(provider).charAt(0).toUpperCase() + region(provider).slice(1);
   const providerInstanceType = instanceType(provider).replace('_', ' ');
   const instanceTypeLabel = providerInstanceType.charAt(0).toUpperCase() + providerInstanceType.slice(1);
 
   return (
-    <ExpandableSection toggleText={provider} onToggle={onToggle} isExpanded={isExpanded} isIndented>
+    <ExpandableSection toggleText={humanizeProvider(provider)} onToggle={onToggle} isExpanded={isExpanded} isIndented>
       <DescriptionList isHorizontal>
         <DescriptionListGroup>
           <DescriptionListTerm>Image</DescriptionListTerm>
@@ -47,6 +56,12 @@ const LaunchDescriptionList = ({ imageName }) => {
           <DescriptionListTerm>{uploadedKey ? 'New SSH key' : 'Existing SSH key'}</DescriptionListTerm>
           <DescriptionListDescription>{uploadedKey ? sshPublicName : chosenSshKeyName}</DescriptionListDescription>
         </DescriptionListGroup>
+        {chosenTemplate && (
+          <DescriptionListGroup>
+            <DescriptionListTerm>Launch template</DescriptionListTerm>
+            <DescriptionListDescription>{templateName}</DescriptionListDescription>
+          </DescriptionListGroup>
+        )}
       </DescriptionList>
     </ExpandableSection>
   );
