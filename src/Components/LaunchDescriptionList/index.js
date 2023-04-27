@@ -24,13 +24,13 @@ const LaunchDescriptionList = ({ imageName }) => {
   };
 
   const getChosenSourceName = () => sources?.find((source) => source.id === chosenSource).name;
-  const templateName = templates.find((template) => template.id === chosenTemplate)?.name;
+  const templateName = templates?.find((template) => template.id === chosenTemplate)?.name;
   const regionLabel = region(provider).charAt(0).toUpperCase() + region(provider).slice(1);
   const providerInstanceType = instanceType(provider).replace('_', ' ');
   const instanceTypeLabel = providerInstanceType.charAt(0).toUpperCase() + providerInstanceType.slice(1);
 
   return (
-    <ExpandableSection toggleText={humanizeProvider(provider)} onToggle={onToggle} isExpanded={isExpanded} isIndented>
+    <ExpandableSection toggleText={provider && humanizeProvider(provider)} onToggle={onToggle} isExpanded={isExpanded} isIndented>
       <DescriptionList isHorizontal>
         <DescriptionListGroup>
           <DescriptionListTerm>Image</DescriptionListTerm>
