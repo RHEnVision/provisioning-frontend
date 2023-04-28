@@ -8,13 +8,14 @@ import { instanceType, region } from '../ProvisioningWizard/steps/ReservationPro
 import { useQuery } from 'react-query';
 import { fetchLaunchTemplates } from '../../API';
 import { humanizeProvider } from '../Common/helpers';
+import { TEMPLATES_KEY } from '../../API/queryKeys';
 
 const LaunchDescriptionList = ({ imageName }) => {
   const [
     { chosenRegion, chosenSshKeyName, uploadedKey, chosenInstanceType, chosenNumOfInstances, chosenSource, sshPublicName, provider, chosenTemplate },
   ] = useWizardContext();
   const { sources } = useSourcesData(provider);
-  const { data: templates } = useQuery(['Templates', `${chosenRegion}-${chosenSource}`], () => fetchLaunchTemplates(chosenSource, chosenRegion), {
+  const { data: templates } = useQuery([TEMPLATES_KEY, `${chosenRegion}-${chosenSource}`], () => fetchLaunchTemplates(chosenSource, chosenRegion), {
     enabled: !!chosenSource && !!chosenRegion,
   });
 
