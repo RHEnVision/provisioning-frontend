@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 
 import { useWizardContext } from '../Common/WizardContext';
 import { fetchLaunchTemplates } from '../../API';
+import { TEMPLATES_KEY } from '../../API/queryKeys';
 
 const TemplatesSelect = () => {
   const [{ chosenSource, chosenRegion, chosenTemplate }, setWizardContext] = useWizardContext();
@@ -13,9 +14,13 @@ const TemplatesSelect = () => {
     error,
     isLoading,
     data: templates,
-  } = useQuery(['Templates', `${chosenRegion}-${chosenSource}`], () => fetchLaunchTemplates(chosenSource, chosenRegion), {
+  } = useQuery([TEMPLATES_KEY, `${chosenRegion}-${chosenSource}`], () => fetchLaunchTemplates(chosenSource, chosenRegion), {
     enabled: !!chosenSource && !!chosenRegion,
   });
+
+  const onClear = () => {
+    setWizardContext((prevState) => ({ ...prevState, chosenTemplate: undefined }));
+  };
 
   const onSelect = (_, selectedTemplate, isPlaceholder) => {
     if (!isPlaceholder) {
@@ -48,6 +53,8 @@ const TemplatesSelect = () => {
       onSelect={onSelect}
       placeholderText="Select templates"
       aria-label="Select templates"
+      clearSelectionsAriaLabel="clear template selection"
+      onClear={onClear}
     >
       {templates && selectItemsMapper()}
     </Select>
