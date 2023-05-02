@@ -47,7 +47,10 @@ describe('InstanceTypesSelect', () => {
 });
 
 const mountSelectAndClick = async (provider = 'aws') => {
-  render(<InstanceTypesSelect architecture="x86_64" setValidation={jest.fn()} />, { provider, contextValues: { chosenSource: '1' } });
+  render(<InstanceTypesSelect architecture="x86_64" setValidation={jest.fn()} />, {
+    provider,
+    contextValues: { chosenSource: '1' },
+  });
   const selectDropdown = await screen.findByPlaceholderText('Select instance type');
   await userEvent.click(selectDropdown);
   return selectDropdown;
