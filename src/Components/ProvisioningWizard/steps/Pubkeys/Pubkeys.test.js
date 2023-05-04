@@ -4,6 +4,8 @@ import Pubkeys from '.';
 
 import { render, screen } from '../../../../mocks/utils';
 import { provisioningUrl } from '../../../../API/helpers';
+import PubkeySelect from './PubkeySelect';
+import { pubkeysList } from '../../../../mocks/fixtures/pubkeys.fixtures';
 
 describe('Pubkeys', () => {
   describe('with data', () => {
@@ -27,6 +29,14 @@ describe('Pubkeys', () => {
       render(<Pubkeys setStepValidated={jest.fn()} />);
       const existingRadio = await screen.findByTestId('existing-pubkey-radio');
       expect(existingRadio).toBeDisabled();
+    });
+
+    test('unsupported key format', async () => {
+      render(<PubkeySelect setStepValidated={jest.fn()} />, { contextValues: { provider: 'azure' } });
+      const select = await screen.findByText('Select public key...');
+      await userEvent.click(select);
+      await userEvent.click(screen.getByText(pubkeysList[0].name));
+      expect(screen.getByText('Key format is not support', { exact: false })).toBeInTheDocument();
     });
 
     test('validate selection and keep key selection', async () => {

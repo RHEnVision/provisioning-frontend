@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
+import { Alert, Select, SelectOption, Spinner, FormGroup } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 
 import { PUBKEYS_QUERY_KEY } from '../../../../API/queryKeys';
 import { fetchPubkeysList } from '../../../../API';
 import { useWizardContext } from '../../../Common/WizardContext';
+import { isNotSupportKeyFormat } from './helpers';
+import { humanizeProvider } from '../../../Common/helpers';
 
 const selectOptionObj = (id, name) => ({
   id: id,
@@ -19,9 +21,16 @@ const PubkeySelect = ({ setStepValidated }) => {
   const [selection, setSelection] = React.useState(
     wizardContext.chosenSshKeyId ? selectOptionObj(wizardContext.chosenSshKeyId, wizardContext.chosenSshKeyName) : null
   );
+  const [isKeySupported, setIsKeySupported] = React.useState(true);
 
   React.useEffect(() => {
-    setStepValidated(!!selection);
+    const keyType = pubkeys?.find((key) => key.id === selection?.id)?.type;
+    if (isNotSupportKeyFormat(wizardContext.provider, keyType)) {
+      setStepValidated(false);
+      setIsKeySupported(false);
+    } else {
+      setStepValidated(!!selection);
+    }
   }, [selection]);
 
   const { isLoading, isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
@@ -50,19 +59,26 @@ const PubkeySelect = ({ setStepValidated }) => {
   }
 
   return (
-    <Select
-      ouiaId="select_pubkey"
-      onToggle={(isExpanded) => setIsOpen(isExpanded)}
-      onSelect={onSelect}
-      isOpen={isOpen}
-      selections={selection}
-      placeholderText="Select public key..."
-      aria-label="Select public key"
+    <FormGroup
+      helperTextInvalid={`Key format is not support in ${humanizeProvider(wizardContext.provider)}`}
+      label="Select public key"
+      validated={!isKeySupported && 'error'}
     >
-      {pubkeys.map(({ id, name }) => (
-        <SelectOption aria-label={`Public key ${name}`} key={id} value={selectOptionObj(id, name)} />
-      ))}
-    </Select>
+      <Select
+        ouiaId="select_pubkey"
+        onToggle={(isExpanded) => setIsOpen(isExpanded)}
+        onSelect={onSelect}
+        isOpen={isOpen}
+        selections={selection}
+        placeholderText="Select public key..."
+        aria-label="Select public key"
+        validated={!isKeySupported && 'error'}
+      >
+        {pubkeys.map(({ id, name }) => (
+          <SelectOption aria-label={`Public key ${name}`} key={id} value={selectOptionObj(id, name)} />
+        ))}
+      </Select>
+    </FormGroup>
   );
 };
 
