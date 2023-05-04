@@ -92,6 +92,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
   // polling request
   const { data: polledReservation } = useQuery(['reservation', reservationID], () => fetchReservation(reservationID), {
     enabled: !!reservationID && currentStep < steps.length && !currentError,
+    staleTime: 0, // disable cache
     refetchInterval: (data) => {
       if (data?.success || !!data?.error) return false;
       return currentInterval;
