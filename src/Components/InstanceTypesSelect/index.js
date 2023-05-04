@@ -20,6 +20,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     error,
     data: instanceTypes,
   } = useQuery(['instanceTypes', chosenRegion], () => fetchInstanceTypesList(chosenRegion, provider), {
+    staleTime: 5 * (60 * 1000), // data is considered fresh for 5 minutes (same as cacheTime)
     select: (types) => types.filter((type) => type.architecture === architecture),
     enabled: !!chosenRegion && !!chosenSource,
   });
