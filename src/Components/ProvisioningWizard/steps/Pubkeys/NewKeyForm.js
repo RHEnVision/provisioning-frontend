@@ -1,17 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FormGroup, TextInput, FileUpload } from '@patternfly/react-core';
+import { FormGroup, TextInput, FileUpload, Button, Popover } from '@patternfly/react-core';
+import { HelpIcon } from '@patternfly/react-icons';
+
 import { useWizardContext } from '../../../Common/WizardContext';
+import { UNSUPPORTED_KEYS } from './helpers';
 
 // This is a simple regex format for public ssh key
 const PUBLIC_KEY_FORMAT = '^(ssh|ecdsa)';
-const validatePublicKey = (ssh) => {
-  const regex = new RegExp(PUBLIC_KEY_FORMAT);
-  return regex.test(ssh);
-};
 
 const NewSSHKeyForm = ({ setStepValidated }) => {
-  const [{ sshPublicName, sshPublicKey }, setWizardContext] = useWizardContext();
+  const validatePublicKey = (ssh) => {
+    const regex = new RegExp(PUBLIC_KEY_FORMAT);
+    // checks for unsupported keys format
+    if (UNSUPPORTED_KEYS[provider]?.some((key) => ssh?.startsWith(key))) return false;
+    return regex.test(ssh);
+  };
+  const [{ sshPublicName, sshPublicKey, provider }, setWizardContext] = useWizardContext();
   const [isLoading, setIsLoading] = React.useState();
   const [validations, setValidation] = React.useState({
     sshKeyBody: validatePublicKey(sshPublicKey) ? 'success' : 'default',
@@ -109,15 +114,39 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
         />
       </FormGroup>
       <FormGroup
-        helperTextInvalid="Must be SSH public key format"
+        helperTextInvalid="Public key format is invalid or unsupported"
         label="SSH public key"
         isRequired
         fieldId="ssh-file"
         validated={validations.sshKeyBody}
+        labelIcon={
+          Object.keys(UNSUPPORTED_KEYS).includes(provider) && (
+            <Popover
+              bodyContent={
+                <span>
+                  Azure does not support ed25519 keys, please use RSA key instead. See
+                  <a rel="noreferrer" target="_blank" href="https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-machines/ed25519-ssh-keys">
+                    further information
+                  </a>
+                </span>
+              }
+            >
+              <Button
+                ouiaId="pubkey_help"
+                type="button"
+                aria-label="More info for pubkeys format"
+                onClick={(e) => e.preventDefault()}
+                aria-describedby="public key content"
+                className="pf-c-form__group-label-help"
+                variant="plain"
+              >
+                <HelpIcon noVerticalAlign />
+              </Button>
+            </Popover>
+          )
+        }
       >
         <FileUpload
-          // ouia not supported yet?
-          ouiaId="new_pubkey_file"
           id="public-key-value"
           onDataChange={handleSSHKeyChange}
           allowEditingUploadedText

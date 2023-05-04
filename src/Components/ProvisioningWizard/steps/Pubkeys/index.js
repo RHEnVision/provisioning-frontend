@@ -51,13 +51,7 @@ const PublicKeys = ({ setStepValidated }) => {
           onChange={onOptionChange}
           label="Select existing SSH public key"
           data-testid="existing-pubkey-radio"
-          body={
-            (!wizardContext.uploadedKey || isSelectDisabled) && (
-              <FormGroup label="Select public key">
-                <PubkeySelect setStepValidated={setStepValidated} />
-              </FormGroup>
-            )
-          }
+          body={(!wizardContext.uploadedKey || isSelectDisabled) && <PubkeySelect setStepValidated={setStepValidated} />}
         />
         <Radio
           id="upload-pubkey-radio"
