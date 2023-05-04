@@ -1,4 +1,19 @@
 <!-- insertion marker -->
+<a name="0.20.0"></a>
+
+## [0.20.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.19.0...0.20.0) (2023-05-02)
+
+### Bug Fixes
+
+- **HMS-1573:** add clear button to template select ([cf8de91](https://github.com/RHEnVision/provisioning-frontend/commit/cf8de91d060c32e4e78de166b2415bde8d9c2826))
+- **HMS-1573:** add launch template name in review step ([149b452](https://github.com/RHEnVision/provisioning-frontend/commit/149b452b8ad8f9cfc22d6fae77fe2c34bf4f186f))
+- sources loading when one source failing ([6223e13](https://github.com/RHEnVision/provisioning-frontend/commit/6223e136432a09d0e399cd0100faa3eeb8013421))
+- **HMS-1648:** Remove `isOpen` from Wizard ([36ce777](https://github.com/RHEnVision/provisioning-frontend/commit/36ce7776b55def608afc7892fdb841013037c9ef))
+
+### Code Refactoring
+
+- **HMS-1573:** fix failing tests ([4858ca9](https://github.com/RHEnVision/provisioning-frontend/commit/4858ca92982795d449e8141c160452502964a50d))
+
 <a name="0.19.0"></a>
 
 ## [0.19.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.18.0...0.19.0) (2023-04-19)
