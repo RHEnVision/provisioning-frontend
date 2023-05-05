@@ -16,7 +16,7 @@ This page demonstrates the provisioning UI wizard
 // This default AMI value is taken when no image builder api found
 const IMAGE_BUILDER_URL = '/api/image-builder/v1/composes';
 
-const SamplePage = () => {
+export const SamplePage = () => {
   const [isWizardOpen, setWizardModal] = React.useState(false);
   const [images, setImages] = React.useState([]);
   const [chosenImage, setChosenImage] = React.useState({
@@ -40,7 +40,6 @@ const SamplePage = () => {
       }
     };
 
-    insights?.chrome?.appAction?.('sample-page');
     fetchImagesFromIB();
   }, []);
 
@@ -107,7 +106,7 @@ const SamplePage = () => {
         </GridItem>
         <GridItem span={6}>
           <FormGroup label="Image">
-            <TextInput id="ami" ouiaId="image_id" value={chosenImage.id || ''} onChange={onInputChange} />
+            <TextInput aria-label="manual ami" id="ami" ouiaId="image_id" value={chosenImage.id || ''} onChange={onInputChange} />
           </FormGroup>
         </GridItem>
         <GridItem>
