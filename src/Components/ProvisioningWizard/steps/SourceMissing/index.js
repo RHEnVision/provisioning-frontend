@@ -30,8 +30,8 @@ const SourceMissing = ({ error, image }) => (
     <Title headingLevel="h4" size="lg">
       {(error && failedToFetchTitle) || missingSourceTitle}
     </Title>
-    <EmptyStateBody>{error || missingSourceDescription}</EmptyStateBody>
-    <Button variant="primary" component="a" target="_blank" href="/settings/sources/new">
+    <EmptyStateBody>{error?.message || missingSourceDescription}</EmptyStateBody>
+    <Button variant="primary" component="a" target="_blank" href="/preview/settings/sources/new">
       Create Source
     </Button>
     <EmptyStateSecondaryActions>

@@ -25,7 +25,7 @@ describe('Source missing', () => {
       render(<SourceMissing image={image} />);
 
       const sourcesLink = screen.getByRole('link', { name: 'Create Source' });
-      expect(sourcesLink).toHaveAttribute('href', '/settings/sources/new');
+      expect(sourcesLink).toHaveAttribute('href', '/preview/settings/sources/new');
     });
 
     test('renders direct link', () => {
@@ -50,7 +50,7 @@ describe('Source missing', () => {
       render(<SourceMissing image={image} />);
 
       const sourcesLink = screen.getByRole('link', { name: 'Create Source' });
-      expect(sourcesLink).toHaveAttribute('href', '/settings/sources/new');
+      expect(sourcesLink).toHaveAttribute('href', '/preview/settings/sources/new');
     });
 
     test('renders direct link', () => {
