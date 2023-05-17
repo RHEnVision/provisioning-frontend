@@ -71,7 +71,6 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
       selections={currentRegion}
       onToggle={onToggle}
       onSelect={onSelect}
-      isDisabled={(clonedImages?.length || 0) <= 1}
     >
       {images.map(({ id, region }) => (
         <SelectOption aria-label="Region item" key={id} value={region} />
