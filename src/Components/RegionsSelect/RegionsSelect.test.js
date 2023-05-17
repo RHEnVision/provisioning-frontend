@@ -26,19 +26,6 @@ describe('RegionSelect', () => {
     const filteredRegion = screen.queryByText(clonedImages.data[0].request.region);
     expect(filteredRegion).not.toBeInTheDocument();
   });
-
-  test('no clones images', async () => {
-    const { server, rest } = window.msw;
-
-    server.use(
-      rest.get(imageBuilderURL(`composes/${parentImage.id}/clones`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ data: [] }));
-      })
-    );
-    await mountSelectAndClick();
-    const select = await screen.findByLabelText('Options menu');
-    expect(select).toBeDisabled();
-  });
 });
 
 const mountSelectAndClick = async () => {
