@@ -37,10 +37,10 @@ const PublicKeys = ({ setStepValidated }) => {
   return (
     <Form className="pubkeys">
       <Title ouiaId="pubkey_title" headingLevel="h1">
-        SSH keys authentication
+        SSH key authentication
       </Title>
       <Text ouiaId="pubkey_description">Establish secure, reliable communication and strong encryption to protect data.</Text>
-      <FormGroup role="radiogroup" isStack isRequired label="Select a method to add SSH pubic key">
+      <FormGroup role="radiogroup" isStack isRequired label="Select a method to add SSH public key">
         <Radio
           id="existing-pubkey-radio"
           ouiaId="pubkey_radio"
@@ -61,7 +61,7 @@ const PublicKeys = ({ setStepValidated }) => {
           value={NEW_KEY_OPTION}
           onChange={onOptionChange}
           label="Add and save a new SSH public key"
-          description="Newly added key will be automatically saved. Result of the provisioning will not be affected this process."
+          description="Newly added key will be automatically saved."
           data-testid="upload-pubkey-radio"
           body={wizardContext.uploadedKey && <NewSSHKeyForm setStepValidated={setStepValidated} />}
         />
