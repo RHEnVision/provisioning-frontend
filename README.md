@@ -13,6 +13,10 @@ This project is based on react and uses the `console.redhat.com` micro-frontend 
 For further reading see [dev](https://github.com/RHEnVision/provisioning-frontend/blob/main/docs/dev.md)
 
 ## Setup
+
+### Containerized development environment
+
+For a containerized development environment, including provisioning-backend, db, redis, kafka and other integrated services, for further guidance, go to the [provisioning-compose](https://github.com/RHEnVision/provisioning-compose) repo.
 ### Initial etc/hosts setup
 
 In order to access the https://[env].foo.redhat.com in your browser, you have to add entries to your `/etc/hosts` file. This is a **one-time** setup that has to be done only once (unless you modify hosts) on each machine.

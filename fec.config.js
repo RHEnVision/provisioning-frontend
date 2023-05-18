@@ -14,6 +14,7 @@ module.exports = {
    * Add additional webpack plugins
    */
   plugins: [],
+  _unstableHotReload: process.env.HOT === 'true',
   routesPath: process.env.ROUTES_PATH && resolve(process.env.ROUTES_PATH),
   moduleFederation: {
     exposes: {
