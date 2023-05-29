@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import { useFlag } from '@unleash/proxy-client-react';
 
 import { AWS_PROVIDER } from '../../../../constants';
 import { imageProps } from '../../helpers';
@@ -19,7 +18,6 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
     sources: chosenSource ? 'success' : 'default',
     types: chosenInstanceType ? 'success' : 'default',
   });
-  const templateFlag = useFlag('provisioning.aws.templates');
 
   const onRegionChange = ({ region, imageID }) => {
     setWizardContext((prevState) => ({
@@ -82,39 +80,37 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
       >
         <RegionsSelect provider={AWS_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={chosenRegion} />
       </FormGroup>
-      {templateFlag && (
-        <FormGroup
-          label="Select template"
-          fieldId="aws-select-template"
-          labelIcon={
-            <Popover
-              bodyContent={
-                <span>
-                  Launch templates contains the configuration information to launch an instance. Note that instance type and public SSH key will be
-                  still required and will override template values. For further information and for creating launch templates{' '}
-                  <a rel="noreferrer" target="_blank" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">
-                    click here
-                  </a>
-                </span>
-              }
+      <FormGroup
+        label="Select template"
+        fieldId="aws-select-template"
+        labelIcon={
+          <Popover
+            bodyContent={
+              <span>
+                Launch templates contains the configuration information to launch an instance. Note that instance type and public SSH key will be
+                still required and will override template values. For further information and for creating launch templates{' '}
+                <a rel="noreferrer" target="_blank" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">
+                  click here
+                </a>
+              </span>
+            }
+          >
+            <Button
+              ouiaId="template_help"
+              type="button"
+              aria-label="template field info"
+              onClick={(e) => e.preventDefault()}
+              aria-describedby="aws-select-template"
+              className="pf-c-form__group-label-help"
+              variant="plain"
             >
-              <Button
-                ouiaId="template_help"
-                type="button"
-                aria-label="template field info"
-                onClick={(e) => e.preventDefault()}
-                aria-describedby="aws-select-template"
-                className="pf-c-form__group-label-help"
-                variant="plain"
-              >
-                <HelpIcon noVerticalAlign />
-              </Button>
-            </Popover>
-          }
-        >
-          <TemplatesSelect />
-        </FormGroup>
-      )}
+              <HelpIcon noVerticalAlign />
+            </Button>
+          </Popover>
+        }
+      >
+        <TemplatesSelect />
+      </FormGroup>
       <FormGroup
         label="Select instance type"
         isRequired
