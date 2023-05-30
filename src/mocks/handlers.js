@@ -58,7 +58,7 @@ export const handlers = [
   rest.get(provisioningUrl('reservations/azure/:id'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(getAzureReservation));
   }),
-  rest.get(provisioningUrl('/sources/:id/launch_templates'), (req, res, ctx) => {
+  rest.get(provisioningUrl('sources/:id/launch_templates'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(templates));
   }),
 ];
