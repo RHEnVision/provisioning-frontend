@@ -1,20 +1,29 @@
 <!-- insertion marker -->
-<a name="0.21.0"></a>
+<a name="1.0.0"></a>
 
-## [0.21.0](https://github.com/RHEnVision/provisioning-frontend/compare/summit23a...0.21.0) (2023-05-15)
+## [1.0.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.21.0...1.0.0) (2023-05-31)
 
 ### Features
 
-- **HMS-1614:** Add vCPU limit Warning ([6029c5b](https://github.com/RHEnVision/provisioning-frontend/commit/6029c5ba688bb4ccf0132fb82a85ce42f26379bb))
-- **HMS-1109:** Add correlation id to UI ([03c58b9](https://github.com/RHEnVision/provisioning-frontend/commit/03c58b98da9eaba0ecbeafd2ecbf6c685266bc57))
+- remove feature flag for AWS launch template ([ea2775a](https://github.com/RHEnVision/provisioning-frontend/commit/ea2775adcdb5e8ad33b80309f9faf4931fd485ad))
+- Prolong polling for Azure ([9ce1066](https://github.com/RHEnVision/provisioning-frontend/commit/9ce1066194a58230779769a9ae2acc3807c27dcb))
 
-<a name="summit23a"></a>
+### Bug Fixes
 
-## [summit23a](https://github.com/RHEnVision/provisioning-frontend/compare/0.20.0...summit23a) (2023-05-08)
+- remove double slash from URL ([e4b73a2](https://github.com/RHEnVision/provisioning-frontend/commit/e4b73a2b8834b87ab24de36fbc64cf7881ea5162))
+- **HMS-1799:** fix typos ([fe59358](https://github.com/RHEnVision/provisioning-frontend/commit/fe59358bf743585a3265b71a015fbcacf4b7c79e))
+- Region select disabled when one cloned image exists ([71df35f](https://github.com/RHEnVision/provisioning-frontend/commit/71df35f2d8efa803d34348c5716b2ef79cca006a))
+- **HMS-1748:** use staleTime config ([7acb3ea](https://github.com/RHEnVision/provisioning-frontend/commit/7acb3ea87aef09ea73950fc4b71be5218ea03319))
+
+<a name="0.21.0"></a>
+
+## [0.21.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.20.0...0.21.0) (2023-05-15)
 
 ### Features
 
 - **HMS-1411:**  ed25519 type is unsupported in azure ([519e930](https://github.com/RHEnVision/provisioning-frontend/commit/519e9309272723a8ca3b4dc9408f3fed03e416f3))
+- **HMS-1614:** Add vCPU limit Warning ([6029c5b](https://github.com/RHEnVision/provisioning-frontend/commit/6029c5ba688bb4ccf0132fb82a85ce42f26379bb))
+- **HMS-1109:** Add correlation id to UI ([03c58b9](https://github.com/RHEnVision/provisioning-frontend/commit/03c58b98da9eaba0ecbeafd2ecbf6c685266bc57))
 
 ### Bug Fixes
 
