@@ -3,7 +3,7 @@ import { useQuery, useQueries } from 'react-query';
 
 import { SOURCES_QUERY_KEY, SOURCE_UPLOAD_INFO_KEY } from '../../../API/queryKeys';
 import { fetchSourcesList, fetchSourceUploadInfo } from '../../../API';
-import { AWS_PROVIDER, AZURE_PROVIDER } from '../../../constants';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../constants';
 
 export const useSourcesData = (provider, { refetch = false } = {}) => {
   const {
@@ -40,6 +40,8 @@ const providerSourceFilter = (image) => {
       return (info) => image.sourceIDs?.includes(info.id) || image.accountIDs?.includes(info.aws.account_id);
     case AZURE_PROVIDER:
       return (info) => image.uploadOptions?.source_id === info.id || info.azure?.subscription_id === image.uploadOptions?.subscription_id;
+    case GCP_PROVIDER:
+      return () => true;
     default:
       return (info) => image.sourceIDs?.includes(info.id);
   }
@@ -48,7 +50,6 @@ const providerSourceFilter = (image) => {
 export const useSourcesForImage = (image, { refetch = false, onSuccess = () => {} } = {}) => {
   const { isLoading, error, infos } = useSourcesUploadInfos(image.provider, { refetch });
   const filteredSources = image.isTesting ? infos : infos?.filter(providerSourceFilter(image));
-
   React.useEffect(() => {
     if (!isLoading && !error) {
       onSuccess(filteredSources);

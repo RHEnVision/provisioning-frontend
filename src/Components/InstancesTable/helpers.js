@@ -1,4 +1,4 @@
-import { AWS_PROVIDER, AZURE_PROVIDER } from '../../constants';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../constants';
 
 export const SSHUsername = (provider) => {
   switch (provider) {
@@ -6,6 +6,8 @@ export const SSHUsername = (provider) => {
       return 'ec2-user';
     case AZURE_PROVIDER:
       return 'azureuser';
+    case GCP_PROVIDER:
+      return 'gcpuser';
     default:
       '';
   }

@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 import { imageBuilderURL, provisioningUrl } from '../API/helpers';
 import { awsInstanceTypeList, azureInstanceTypeList } from './fixtures/instanceTypes.fixtures';
-import { sourcesList, gcpSourcesList, awsSourceUploadInfo } from './fixtures/sources.fixtures';
+import { sourcesList, gcpSourcesList, awsSourceUploadInfo, gcpSourceUploadInfo } from './fixtures/sources.fixtures';
 import { pubkeysList } from './fixtures/pubkeys.fixtures';
 import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/image.fixtures';
 import { AWSReservation, getAzureReservation, createdAWSReservation, createdAzureReservation, reservation } from './fixtures/reservation.fixtures';
@@ -21,8 +21,7 @@ export const handlers = [
     if (sourceID === '1' || sourceID === '2') {
       return res(ctx.status(200), ctx.json(awsSourceUploadInfo()));
     } else if (sourceID === '10') {
-      // GCP upload info not defined yet
-      return res(ctx.status(200), ctx.json({}));
+      return res(ctx.status(200), ctx.json(gcpSourceUploadInfo()));
     }
   }),
   rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {

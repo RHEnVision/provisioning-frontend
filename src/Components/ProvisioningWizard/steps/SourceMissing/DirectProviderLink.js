@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Bullseye, Stack, StackItem } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
-import { AWS_PROVIDER, AZURE_PROVIDER } from '../../../../constants';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../../constants';
 import RegionsSelect from '../../../RegionsSelect';
 import { imageProps } from '../../helpers.js';
 
@@ -29,6 +29,10 @@ const DirectProviderLink = ({ image }) => {
         uploadOptions.resource_group +
         '/providers/Microsoft.Compute/images/' +
         uploadStatus.options.image_name;
+      break;
+    case GCP_PROVIDER:
+      text = 'Launch with Google Cloud console';
+      url = 'https://console.cloud.google.com/welcome';
       break;
     default:
       throw new Error(`Steps requested for unknown provider: ${image.provider}`);
