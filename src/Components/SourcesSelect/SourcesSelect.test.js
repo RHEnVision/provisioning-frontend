@@ -33,8 +33,10 @@ describe('SourcesSelect', () => {
     expect(items).toHaveLength(sourcesList.length);
   });
 
-  test('preselects gcp source', async () => {
-    render(<SourcesSelect image={{ ...gcpImage, sourceIDs: ['10'] }} setValidation={jest.fn()} />, { provider: 'gcp' });
+  test('gcp source verifying email', async () => {
+    render(<SourcesSelect image={{ ...gcpImage, accountIDs: ['serviceAccount:example@redhat.com'] }} setValidation={jest.fn()} />, {
+      provider: 'gcp',
+    });
     const selectDropdown = await screen.findByText('GCP Source 1');
     await userEvent.click(selectDropdown);
 
