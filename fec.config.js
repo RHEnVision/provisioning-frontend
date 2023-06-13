@@ -17,9 +17,19 @@ module.exports = {
   _unstableHotReload: process.env.HOT === 'true',
   routesPath: process.env.ROUTES_PATH && resolve(process.env.ROUTES_PATH),
   moduleFederation: {
+    exclude: ['react-router-dom'],
+    shared: [
+      {
+        'react-router-dom': {
+          singleton: true,
+          import: false,
+          requiredVersion: '^6.3.0',
+        },
+      },
+    ],
     exposes: {
       './RootApp': resolve(__dirname, './src/AppEntry'),
-      './ProvisioningWizard': resolve(__dirname, './src/Components/ProvisioningWizard')
-    }
-  }
+      './ProvisioningWizard': resolve(__dirname, './src/Components/ProvisioningWizard'),
+    },
+  },
 };

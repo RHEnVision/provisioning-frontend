@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route as RouterRoute, Routes as RouterRoutes } from 'react-router-dom';
 
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
@@ -21,12 +21,9 @@ export const Routes = () => (
       </Bullseye>
     }
   >
-    <Switch>
-      <Route path="/sample" component={SamplePage} />
-      {/* Finally, catch all unmatched routes */}
-      <Route>
-        <Redirect to="/sample" />
-      </Route>
-    </Switch>
+    <RouterRoutes>
+      <RouterRoute path="/" element={<SamplePage />} />
+      <RouterRoute path="sample" element={<SamplePage />} />
+    </RouterRoutes>
   </Suspense>
 );

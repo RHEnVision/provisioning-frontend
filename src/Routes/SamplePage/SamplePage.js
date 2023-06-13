@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 
 import { Button, GridItem, Grid, Title, FormGroup, TextInput, Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
@@ -121,4 +120,4 @@ export const SamplePage = () => {
   );
 };
 
-export default withRouter(SamplePage);
+export default SamplePage;
