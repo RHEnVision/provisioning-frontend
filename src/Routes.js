@@ -22,10 +22,10 @@ export const Routes = () => (
     }
   >
     <Switch>
-      <Route path="/sample" component={SamplePage} />
+      <Route path="/provisioning" component={SamplePage} />
       {/* Finally, catch all unmatched routes */}
       <Route>
-        <Redirect to="/sample" />
+        <Redirect to="/provisioning" />
       </Route>
     </Switch>
   </Suspense>

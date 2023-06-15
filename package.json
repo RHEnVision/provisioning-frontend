@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "fec build",
+    "build:qe": "node ./scripts/build-qe.js",
     "deploy": "npm-run-all build lint test",
     "lint": "npm-run-all lint:*",
     "lint:js": "eslint config src",
@@ -18,7 +19,7 @@
     "start:stage": "PROXY=true fec dev",
     "start:federated": "fec static",
     "test": "jest",
-    "verify": "npm-run-all build lint test",
+    "verify": "npm-run-all build:qe lint test",
     "dev": "HOT=true PROXY=true ROUTES_PATH=config/routes.config.js fec dev --clouddotEnv stage --uiEnv beta"
   },
   "dependencies": {

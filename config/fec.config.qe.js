@@ -1,4 +1,3 @@
-/* global module, __dirname */
 const { resolve } = require('path');
 
 module.exports = {
@@ -19,7 +18,7 @@ module.exports = {
   moduleFederation: {
     exposes: {
       './RootApp': resolve(__dirname, './src/AppEntry'),
-      './ProvisioningWizard': resolve(__dirname, './src/Components/ProvisioningWizard')
-    }
-  }
+      './ProvisioningWizard': resolve(__dirname, './src/Components/ProvisioningWizard'),
+    },
+  },
 };
