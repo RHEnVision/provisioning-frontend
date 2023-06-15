@@ -1,4 +1,12 @@
 <!-- insertion marker -->
+<a name="1.1.0"></a>
+
+## [1.1.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.0.0...1.1.0) (2023-06-13)
+
+### Features
+
+- **HMS-1907:** add dev script for  containerizing provisioning env ([6641ce4](https://github.com/RHEnVision/provisioning-frontend/commit/6641ce42354a92cc3aaac547aae9c905d72be626))
+
 <a name="1.0.0"></a>
 
 ## [1.0.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.21.0...1.0.0) (2023-05-31)
