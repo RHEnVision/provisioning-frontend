@@ -13,7 +13,7 @@ export const gcpSourcesList = [
   },
 ];
 
-export const gcpSourceUploadInfo = (service_account_principal = 'serviceAccount:example@redhat.com') => ({ gcp: { service_account_principal } });
+export const gcpSourceUploadInfo = () => ({ gcp: {} });
 
 export const awsSourceUploadInfo = (account_id = '123456789') => ({ aws: { account_id } });
 
