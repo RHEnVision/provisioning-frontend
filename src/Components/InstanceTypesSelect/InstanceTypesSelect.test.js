@@ -43,6 +43,12 @@ describe('InstanceTypesSelect', () => {
       const alert = await screen.findByTestId('unsupported_type_alert');
       expect(alert).toBeDefined();
     });
+    test('filter case insensitive', async () => {
+      const dropdown = await mountSelectAndClick('azure');
+      await userEvent.type(dropdown, 'a2_V2');
+      const items = await screen.findAllByLabelText(/^Instance Type/);
+      expect(items).toHaveLength(1);
+    });
   });
 });
 
