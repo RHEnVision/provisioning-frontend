@@ -7,7 +7,7 @@ export const SSHUsername = (provider) => {
     case AZURE_PROVIDER:
       return 'azureuser';
     case GCP_PROVIDER:
-      return 'gcpuser';
+      return 'gcp-user';
     default:
       '';
   }

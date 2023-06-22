@@ -75,3 +75,33 @@ export const getAzureReservation = {
     },
   ],
 };
+
+export const createdGCPReservation = {
+  reservation_id: 67,
+};
+
+export const successfulGCPReservation = {
+  ...reservationGCP,
+  success: true,
+  step: 1,
+};
+
+export const GCPReservation = {
+  instances: [
+    { instance_id: '3003942005876582747', detail: { public_ipv4: '1.1.1.1' } },
+    { instance_id: '3003942005876582748', detail: { public_ipv4: '2.2.2.2' } },
+  ],
+};
+
+export const reservationGCP = {
+  id: 67,
+  provider: 4,
+  created_at: '2023-06-14T16:03:44.700056Z',
+  steps: 1,
+  step_titles: ['Launch instance(s)'],
+  step: 1,
+  status: 'Launched instance(s)',
+  error: '',
+  finished_at: '2023-06-14T16:04:08.965698Z',
+  success: true,
+};
