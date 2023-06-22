@@ -3,7 +3,7 @@ import React from 'react';
 import SourceMissing from '.';
 
 import { render, screen } from '../../../../mocks/utils';
-import { awsImage, azureImage } from '../../../../mocks/fixtures/image.fixtures';
+import { awsImage, azureImage, gcpImage } from '../../../../mocks/fixtures/image.fixtures';
 
 describe('Source missing', () => {
   describe('Loading state', () => {
@@ -67,6 +67,30 @@ describe('Source missing', () => {
         image.uploadStatus.options.image_name;
 
       const directLink = screen.getByRole('link', { name: 'View uploaded image' });
+      expect(directLink).toHaveAttribute('href', url);
+    });
+  });
+
+  describe('GCP', () => {
+    const image = {
+      ...gcpImage,
+      uploadStatus: { options: { image_name: 'cool-image' } },
+      uploadOptions: { accountIDs: 'example@redhat.com' },
+    };
+
+    test('has create source button', () => {
+      render(<SourceMissing image={image} />);
+
+      const sourcesLink = screen.getByRole('link', { name: 'Create Source' });
+      expect(sourcesLink).toHaveAttribute('href', '/preview/settings/sources/new');
+    });
+
+    test('renders direct link', () => {
+      render(<SourceMissing image={image} />);
+
+      const url = 'https://console.cloud.google.com/welcome';
+
+      const directLink = screen.getByRole('link', { name: 'Launch with Google Cloud console' });
       expect(directLink).toHaveAttribute('href', url);
     });
   });

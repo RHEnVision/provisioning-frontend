@@ -4,7 +4,15 @@ import { awsInstanceTypeList, azureInstanceTypeList } from './fixtures/instanceT
 import { sourcesList, gcpSourcesList, awsSourceUploadInfo, gcpSourceUploadInfo } from './fixtures/sources.fixtures';
 import { pubkeysList } from './fixtures/pubkeys.fixtures';
 import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/image.fixtures';
-import { AWSReservation, getAzureReservation, createdAWSReservation, createdAzureReservation, reservation } from './fixtures/reservation.fixtures';
+import {
+  AWSReservation,
+  getAzureReservation,
+  createdAWSReservation,
+  createdAzureReservation,
+  reservation,
+  createdGCPReservation,
+  GCPReservation,
+} from './fixtures/reservation.fixtures';
 import { templates } from './fixtures/templates.fixtures';
 
 export const handlers = [
@@ -45,6 +53,9 @@ export const handlers = [
   rest.post(provisioningUrl('reservations/azure'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(createdAzureReservation));
   }),
+  rest.post(provisioningUrl('reservations/gcp'), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(createdGCPReservation));
+  }),
   rest.post(provisioningUrl('reservations/aws'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(createdAWSReservation));
   }),
@@ -56,6 +67,9 @@ export const handlers = [
   }),
   rest.get(provisioningUrl('reservations/azure/:id'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(getAzureReservation));
+  }),
+  rest.get(provisioningUrl('reservations/gcp/:id'), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(GCPReservation));
   }),
   rest.get(provisioningUrl('sources/:id/launch_templates'), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(templates));
