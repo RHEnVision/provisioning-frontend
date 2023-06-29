@@ -1,4 +1,17 @@
 <!-- insertion marker -->
+<a name="1.2.0"></a>
+
+## [1.2.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.1.0...1.2.0) (2023-06-26)
+
+### Bug Fixes
+
+- **HMSPROV-2012:** fix missing instances table ([5cc1c67](https://github.com/RHEnVision/provisioning-frontend/commit/5cc1c6729c0fc3bc577e9937cae2ca5b0690b03d))
+- **HMS-1917:** Add source filtering in GCP ([58da4d6](https://github.com/RHEnVision/provisioning-frontend/commit/58da4d69b2a51b3ef8ca7465b5a73b8e90975262))
+
+### Code Refactoring
+
+- remove service account from test ([9eb9b28](https://github.com/RHEnVision/provisioning-frontend/commit/9eb9b28e932819e1eb1eb6a9f28edc6845a2e13b))
+
 <a name="1.1.0"></a>
 
 ## [1.1.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.0.0...1.1.0) (2023-06-13)
