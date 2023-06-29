@@ -10,6 +10,7 @@ import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
+import TemplatesSelect from '../../../TemplateSelect';
 
 const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
@@ -78,6 +79,37 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
         }
       >
         <RegionsSelect provider={GCP_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={wizardContext.chosenRegion} />
+      </FormGroup>
+      <FormGroup
+        label="Select template"
+        fieldId="gcp-select-template"
+        labelIcon={
+          <Popover
+            bodyContent={
+              <span>
+                Launch templates contains the configuration information to launch an instance. Note that machine type and public SSH key will be still
+                required and will override template values. For further information and for creating launch templates{' '}
+                <a rel="noreferrer" target="_blank" href="https://cloud.google.com/compute/docs/instance-templates">
+                  click here
+                </a>
+              </span>
+            }
+          >
+            <Button
+              ouiaId="template_help"
+              type="button"
+              aria-label="template field info"
+              onClick={(e) => e.preventDefault()}
+              aria-describedby="gcp-select-template"
+              className="pf-c-form__group-label-help"
+              variant="plain"
+            >
+              <HelpIcon noVerticalAlign />
+            </Button>
+          </Popover>
+        }
+      >
+        <TemplatesSelect />
       </FormGroup>
       <FormGroup
         label="Select machine type"
