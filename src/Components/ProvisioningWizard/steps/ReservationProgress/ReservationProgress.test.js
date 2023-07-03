@@ -84,10 +84,8 @@ describe('Reservation polling', () => {
 
       // show table
       const instancesIDs = await screen.findAllByLabelText('instance id');
-      const instancesDNSs = await screen.findAllByLabelText('instance dns');
       const sshCommands = await screen.findAllByLabelText('ssh command');
       expect(instancesIDs).toHaveLength(getAzureReservation.instances.length);
-      expect(instancesDNSs).toHaveLength(getAzureReservation.instances.length);
 
       const instanceLink1 = getByRole(instancesIDs[0], 'link');
 
@@ -116,10 +114,8 @@ describe('Reservation polling', () => {
 
     // show table
     const instancesIDs = await screen.findAllByLabelText('instance id');
-    const instancesDNSs = await screen.findAllByLabelText('instance dns');
     const sshCommands = await screen.findAllByLabelText('ssh command');
     expect(instancesIDs).toHaveLength(GCPReservation.instances.length);
-    expect(instancesDNSs).toHaveLength(GCPReservation.instances.length);
 
     const instanceLink1 = getByRole(instancesIDs[0], 'link');
 
