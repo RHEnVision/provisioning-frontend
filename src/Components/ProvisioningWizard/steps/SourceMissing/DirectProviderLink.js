@@ -5,9 +5,9 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../../constants';
 import RegionsSelect from '../../../RegionsSelect';
 import { imageProps } from '../../helpers.js';
+import GCPConsoleLaunch from '../../../GCPConsoleLaunch';
 
 const DirectProviderLink = ({ image }) => {
-  // TODO gcp
   const uploadStatus = image.uploadStatus || { options: {} };
   const uploadOptions = image.uploadOptions || {};
   const [currentImage, setImage] = React.useState({ imageID: image.id, ...uploadStatus.options });
@@ -31,8 +31,6 @@ const DirectProviderLink = ({ image }) => {
         uploadStatus.options.image_name;
       break;
     case GCP_PROVIDER:
-      text = 'Launch with Google Cloud console';
-      url = 'https://console.cloud.google.com/welcome';
       break;
     default:
       throw new Error(`Steps requested for unknown provider: ${image.provider}`);
@@ -46,11 +44,15 @@ const DirectProviderLink = ({ image }) => {
 
   return (
     <Stack>
-      <StackItem>
-        <Button component="a" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" target="_blank" href={url}>
-          {text}
-        </Button>
-      </StackItem>
+      {image.provider === GCP_PROVIDER ? (
+        <GCPConsoleLaunch image={image} />
+      ) : (
+        <StackItem>
+          <Button component="a" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" target="_blank" href={url}>
+            {text}
+          </Button>
+        </StackItem>
+      )}
       {image.provider === AWS_PROVIDER && (
         <StackItem>
           <Bullseye>

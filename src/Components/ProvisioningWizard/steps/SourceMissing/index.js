@@ -8,10 +8,13 @@ import { imageProps } from '../../helpers.js';
 
 const failedToFetchTitle = 'Failed to fetch available sources.';
 const missingSourceTitle = 'No sources available';
-const missingSourceDescription =
-  'There are no sources available for use with this image. ' +
-  'Create a source, grant an existing source launch functionality, ' +
-  'or launch directly from the cloud provider console.';
+const missingSourceDescription = (
+  <>
+    <p>There are no sources available for use with this image.</p>
+    <p>Create a source, grant an existing source launch functionality,</p>
+    <p>or launch directly from the cloud provider console.</p>
+  </>
+);
 // TODO: enable once documentation is available.
 // Learn more about launching images [external link icon].
 

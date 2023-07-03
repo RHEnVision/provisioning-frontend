@@ -1,7 +1,5 @@
 import React from 'react';
-
 import SourceMissing from '.';
-
 import { render, screen } from '../../../../mocks/utils';
 import { awsImage, azureImage, gcpImage } from '../../../../mocks/fixtures/image.fixtures';
 
@@ -74,7 +72,7 @@ describe('Source missing', () => {
   describe('GCP', () => {
     const image = {
       ...gcpImage,
-      uploadStatus: { options: { image_name: 'cool-image' } },
+      uploadStatus: { options: { image_name: 'cool-image', project_id: 'test' } },
       uploadOptions: { accountIDs: 'example@redhat.com' },
     };
 
@@ -85,13 +83,16 @@ describe('Source missing', () => {
       expect(sourcesLink).toHaveAttribute('href', '/preview/settings/sources/new');
     });
 
-    test('renders direct link', () => {
+    it('renders the launch command', () => {
       render(<SourceMissing image={image} />);
 
-      const url = 'https://console.cloud.google.com/welcome';
+      const headingElement = screen.getByText(/Launch with Google Cloud Console/i);
+      expect(headingElement).toBeInTheDocument();
 
-      const directLink = screen.getByRole('link', { name: 'Launch with Google Cloud console' });
-      expect(directLink).toHaveAttribute('href', url);
+      const element = screen.getByRole('textbox', { name: 'Copyable input' });
+
+      expect(element).toHaveClass('pf-c-form-control');
+      expect(element).toHaveAttribute('value', 'gcloud compute instances create cool-image-instance --image-project test --image cool-image');
     });
   });
 });
