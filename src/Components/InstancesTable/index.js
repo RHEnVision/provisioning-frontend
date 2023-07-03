@@ -30,6 +30,7 @@ const InstancesTable = ({ reservationID, provider, region }) => {
   };
 
   const instancesPerPage = instances?.slice(paginationOptions.startIdx, paginationOptions.endIdx);
+  const atLeastOneDetailNotEmpty = instancesPerPage?.some((instance) => instance.detail?.public_dns?.length > 0);
 
   return (
     <Card style={{ position: 'relative', marginLeft: '-20%', marginRight: '-20%' }}>
@@ -47,7 +48,7 @@ const InstancesTable = ({ reservationID, provider, region }) => {
         <Thead>
           <Tr>
             <Th>ID</Th>
-            <Th>DNS</Th>
+            {atLeastOneDetailNotEmpty && <Th>DNS</Th>}
             <Th>SSH command</Th>
           </Tr>
         </Thead>
@@ -68,15 +69,17 @@ const InstancesTable = ({ reservationID, provider, region }) => {
                   {humanizeInstanceID(instance_id, provider)}
                 </Button>
               </Td>
-              <Td aria-label="instance dns" dataLabel="DNS">
-                {detail?.public_dns ? (
-                  <ClipboardCopy isReadOnly hoverTip="Copy DNS" clickTip="DNS was copied!" variant="expansion">
-                    {detail?.public_dns}
-                  </ClipboardCopy>
-                ) : (
-                  'N/A'
-                )}
-              </Td>
+              {atLeastOneDetailNotEmpty && (
+                <Td aria-label="instance dns" dataLabel="DNS">
+                  {detail?.public_dns ? (
+                    <ClipboardCopy isReadOnly hoverTip="Copy DNS" clickTip="DNS was copied!" variant="expansion">
+                      {detail?.public_dns}
+                    </ClipboardCopy>
+                  ) : (
+                    'N/A'
+                  )}
+                </Td>
+              )}
               <Td aria-label="ssh command" dataLabel="SSH">
                 {detail?.public_ipv4 ? (
                   <ClipboardCopy isReadOnly hoverTip="Copy SSH command" clickTip="SSH was copied!" variant="expansion">
