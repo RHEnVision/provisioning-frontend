@@ -26,6 +26,7 @@ export const AZURE_STEPS = [
 export const GCP_STEPS = [
   { name: 'Create reservation', description: `Submit requested data` },
   { name: 'Launch instance(s)', description: 'Call Google API' },
+  { name: 'Fetch instance(s) description', description: 'Fetch instance(s) descriptions' },
 ];
 
 export const SSH_STEP = [{ name: 'New SSH key', description: 'Creating new SSH public key resource' }];
