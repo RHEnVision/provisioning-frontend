@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
 import { useQuery, useQueries } from 'react-query';
 
-import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../constants';
+import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER, MULTIPLE_REGION_SUPPORT } from '../../constants';
 import { IMAGE_REGIONS_KEY } from '../../API/queryKeys';
 import { fetchImageClones, fetchImageCloneStatus } from '../../API';
 import { defaultRegionByProvider } from '../Common/helpers';
@@ -71,6 +71,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
       selections={currentRegion}
       onToggle={onToggle}
       onSelect={onSelect}
+      isDisabled={!MULTIPLE_REGION_SUPPORT.includes(provider)}
     >
       {images.map(({ id, region }) => (
         <SelectOption aria-label="Region item" key={id} value={region} />
