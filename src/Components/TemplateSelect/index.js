@@ -51,10 +51,11 @@ const TemplatesSelect = () => {
       onToggle={(openState) => setIsOpen(openState)}
       selections={chosenTemplateName}
       onSelect={onSelect}
-      placeholderText="Select templates"
+      placeholderText={templates?.length === 0 ? 'No template found' : 'Select templates'}
       aria-label="Select templates"
       clearSelectionsAriaLabel="clear template selection"
       onClear={onClear}
+      isDisabled={templates?.length === 0}
     >
       {templates && selectItemsMapper()}
     </Select>

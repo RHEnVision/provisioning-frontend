@@ -3,6 +3,7 @@ import TemplateSelect from '.';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../mocks/utils';
 import { templates } from '../../mocks/fixtures/templates.fixtures';
+import { provisioningUrl } from '../../API/helpers';
 
 describe('TemplateSelect', () => {
   test('get all templates options', async () => {
@@ -21,6 +22,22 @@ describe('TemplateSelect', () => {
     await userEvent.click(await screen.findByText(templates[0].name));
     await userEvent.click(await screen.findByLabelText('clear template selection'));
     const placeholder = await screen.findByText('Select templates');
+    expect(placeholder).toBeInTheDocument();
+  });
+
+  test('when templates array is empty it should be disabled', async () => {
+    const { server, rest } = window.msw;
+    const chosenSource = '1';
+    server.use(
+      rest.get(provisioningUrl(`sources/${chosenSource}/launch_templates`), (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json([]));
+      })
+    );
+    render(<TemplateSelect />, { provider: 'aws', contextValues: { chosenSource: chosenSource } });
+    const selectDropdown = await screen.findByText('No template found');
+    await userEvent.click(selectDropdown);
+
+    const placeholder = await screen.findByText('No template found');
     expect(placeholder).toBeInTheDocument();
   });
 });
