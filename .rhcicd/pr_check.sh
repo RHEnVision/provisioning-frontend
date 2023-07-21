@@ -36,8 +36,35 @@ CICD_URL=https://raw.githubusercontent.com/RedHatInsights/bonfire/master/cicd
 curl -s $CICD_URL/bootstrap.sh > .cicd_bootstrap.sh && source .cicd_bootstrap.sh
 
 # Run ui tests
+export EXTRA_DEPLOY_ARGS="image-builder-crc"
 source "${CICD_ROOT}/deploy_ephemeral_env.sh"
 export COMPONENT_NAME="provisioning-backend"
+
+oc project $NAMESPACE
+
+# ADD the image stubs
+orgID="0369233"
+accountID="3340851"
+
+dbPod=$(oc get pods -o custom-columns=POD:.metadata.name --no-headers | grep 'image-builder-db')
+
+# AWS stub
+imageID="6c0cd30a-d306-4105-aae6-0548c20b9a0a" # created on 2023-07-19
+imageName="pipeline-aws"
+
+composeRequestAWSJson='{"image_name": "'$imageName'", "distribution": "rhel-92", "customizations": {}, "image_requests": [{"image_type": "aws", "architecture": "x86_64", "upload_request": {"type": "aws", "options": {"share_with_accounts": ["093942615996"]}}}]}'
+oc exec $dbPod -- psql -d image-builder -c "INSERT INTO public.composes (job_id, request, created_at, account_number, org_id, image_name, deleted) VALUES
+('$imageID', '$composeRequestAWSJson', '$(date +"%Y-%m-%d %T")', '$orgID', '$accountID', '$imageName', false);"
+
+# GCP stub
+imageID="90be7a52-24d5-4bf1-97e7-cb2b8b2f482b" # created on 2023-07-18
+imageName="pipeline-gcp"
+
+composeRequestGCPJson='{"image_name": "'$imageName'", "distribution": "rhel-92", "customizations": {}, "image_requests": [{"image_type": "gcp", "architecture": "x86_64", "upload_request": {"type": "gcp", "options": {"share_with_accounts": ["user:oezr@redhat.com"]}}}]}'
+oc exec $dbPod -- psql -d image-builder -c "INSERT INTO public.composes (job_id, request, created_at, account_number, org_id, image_name, deleted) VALUES
+('$imageID', '$composeRequestGCPJson', '$(date +"%Y-%m-%d %T")', '$orgID', '$accountID', '$imageName', false);"
+
+
 source "${CICD_ROOT}/cji_smoke_test.sh"
 
 source "${CICD_ROOT}/post_test_results.sh"
