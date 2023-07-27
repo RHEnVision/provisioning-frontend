@@ -1,4 +1,31 @@
 <!-- insertion marker -->
+<a name="1.4.0"></a>
+
+## [1.4.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.3.0...1.4.0) (2023-07-21)
+
+### Features
+
+- **HMS-1955:** Add fetch instance desc step for GCP ([4e62535](https://github.com/RHEnVision/provisioning-frontend/commit/4e62535da04d1e48bd411c23df4ad5b6b7562969))
+- **HMS-1930:** Add image commands clipboard for GCP ([7dedbdd](https://github.com/RHEnVision/provisioning-frontend/commit/7dedbdd416794697916a272977216d718188c390))
+
+### Bug Fixes
+
+- **HMS-2114:** Disable zone selection for GCP images ([70febe7](https://github.com/RHEnVision/provisioning-frontend/commit/70febe7e5957706fe848fc2deb96804d5b95a7f1))
+
+### Code Refactoring
+
+- Disable templates dropdown when templates array is empty ([d107e40](https://github.com/RHEnVision/provisioning-frontend/commit/d107e409fe6e6037d04dd84690c0ef3d9ca54043))
+
+<a name="1.3.0"></a>
+
+## [1.3.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.2.0...1.3.0) (2023-07-09)
+
+### Features
+
+- **HMS-2022:** Show DNS column only if public_dns(s) are not empty ([4ce1c8c](https://github.com/RHEnVision/provisioning-frontend/commit/4ce1c8c8319f3ef87d8bf9e8c0ffb342dab51410))
+- **HMS-1978:** Add launch templates to GCP ([76fec97](https://github.com/RHEnVision/provisioning-frontend/commit/76fec97c548fa6049ba6fe32f299d42f7897719f))
+- **HMS-1879:** Add instance desc table for GCP ([ca06986](https://github.com/RHEnVision/provisioning-frontend/commit/ca069864f01c8348ec25ad885f32b54cdb2a05a9))
+
 <a name="1.2.0"></a>
 
 ## [1.2.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.1.0...1.2.0) (2023-06-26)
@@ -26,14 +53,14 @@
 
 ### Features
 
-- remove feature flag for AWS launch template ([ea2775a](https://github.com/RHEnVision/provisioning-frontend/commit/ea2775adcdb5e8ad33b80309f9faf4931fd485ad))
-- Prolong polling for Azure ([9ce1066](https://github.com/RHEnVision/provisioning-frontend/commit/9ce1066194a58230779769a9ae2acc3807c27dcb))
+- remove feature flag for AWS launch template ([ea2775a](https://github.com/RHEnVision/provisioning-frontend/commit/ea2775adcdb5e8ad33b80309f9faf4931fd485ad)), related to [HMS-1850](https://issues.redhat.com/browse/HMS-1850)
+- Prolong polling for Azure ([9ce1066](https://github.com/RHEnVision/provisioning-frontend/commit/9ce1066194a58230779769a9ae2acc3807c27dcb)), related to [HMS-1553](https://issues.redhat.com/browse/HMS-1553)
 
 ### Bug Fixes
 
-- remove double slash from URL ([e4b73a2](https://github.com/RHEnVision/provisioning-frontend/commit/e4b73a2b8834b87ab24de36fbc64cf7881ea5162))
+- remove double slash from URL ([e4b73a2](https://github.com/RHEnVision/provisioning-frontend/commit/e4b73a2b8834b87ab24de36fbc64cf7881ea5162)), related to [HMS-1858](https://issues.redhat.com/browse/HMS-1858)
 - **HMS-1799:** fix typos ([fe59358](https://github.com/RHEnVision/provisioning-frontend/commit/fe59358bf743585a3265b71a015fbcacf4b7c79e))
-- Region select disabled when one cloned image exists ([71df35f](https://github.com/RHEnVision/provisioning-frontend/commit/71df35f2d8efa803d34348c5716b2ef79cca006a))
+- Region select disabled when one cloned image exists ([71df35f](https://github.com/RHEnVision/provisioning-frontend/commit/71df35f2d8efa803d34348c5716b2ef79cca006a)), related to [HMS-757](https://issues.redhat.com/browse/HMS-757)
 - **HMS-1748:** use staleTime config ([7acb3ea](https://github.com/RHEnVision/provisioning-frontend/commit/7acb3ea87aef09ea73950fc4b71be5218ea03319))
 
 <a name="0.21.0"></a>
@@ -48,7 +75,7 @@
 
 ### Bug Fixes
 
-- Sources link respect preview toggle ([9a188f9](https://github.com/RHEnVision/provisioning-frontend/commit/9a188f9f5e2023fab595cea722842d4098ebd97f))
+- Sources link respect preview toggle ([9a188f9](https://github.com/RHEnVision/provisioning-frontend/commit/9a188f9f5e2023fab595cea722842d4098ebd97f)), related to [HMS-1757](https://issues.redhat.com/browse/HMS-1757)
 
 <a name="0.20.0"></a>
 
@@ -58,7 +85,7 @@
 
 - **HMS-1573:** add clear button to template select ([cf8de91](https://github.com/RHEnVision/provisioning-frontend/commit/cf8de91d060c32e4e78de166b2415bde8d9c2826))
 - **HMS-1573:** add launch template name in review step ([149b452](https://github.com/RHEnVision/provisioning-frontend/commit/149b452b8ad8f9cfc22d6fae77fe2c34bf4f186f))
-- sources loading when one source failing ([6223e13](https://github.com/RHEnVision/provisioning-frontend/commit/6223e136432a09d0e399cd0100faa3eeb8013421))
+- sources loading when one source failing ([6223e13](https://github.com/RHEnVision/provisioning-frontend/commit/6223e136432a09d0e399cd0100faa3eeb8013421)), related to [HMS-1657](https://issues.redhat.com/browse/HMS-1657)
 - **HMS-1648:** Remove `isOpen` from Wizard ([36ce777](https://github.com/RHEnVision/provisioning-frontend/commit/36ce7776b55def608afc7892fdb841013037c9ef))
 
 ### Code Refactoring
@@ -71,11 +98,11 @@
 
 ### Features
 
-- filter source in the select ([88ffd54](https://github.com/RHEnVision/provisioning-frontend/commit/88ffd5413bc43e01a8ab318d113b4e18f0534cd6))
-- support for Azure image deployed to source account ([7fd735b](https://github.com/RHEnVision/provisioning-frontend/commit/7fd735b0ae65bc56c9b28080042e07aa835bf252))
-- Add region select for AWS in Empty state ([2f468cf](https://github.com/RHEnVision/provisioning-frontend/commit/2f468cf2dc6906a07c2b8767caec0ad9b2047be1))
-- Add Azure instance table on Launch success ([ac05138](https://github.com/RHEnVision/provisioning-frontend/commit/ac0513849b96552051493f6270c79a12a447fc1a))
-- add empty state when no source available ([e42c381](https://github.com/RHEnVision/provisioning-frontend/commit/e42c3811861e73252882db6166b64c89e297395e))
+- filter source in the select ([88ffd54](https://github.com/RHEnVision/provisioning-frontend/commit/88ffd5413bc43e01a8ab318d113b4e18f0534cd6)), related to [HMS-1625](https://issues.redhat.com/browse/HMS-1625)
+- support for Azure image deployed to source account ([7fd735b](https://github.com/RHEnVision/provisioning-frontend/commit/7fd735b0ae65bc56c9b28080042e07aa835bf252)), related to [HMS-1409](https://issues.redhat.com/browse/HMS-1409)
+- Add region select for AWS in Empty state ([2f468cf](https://github.com/RHEnVision/provisioning-frontend/commit/2f468cf2dc6906a07c2b8767caec0ad9b2047be1)), related to [HMS-1583](https://issues.redhat.com/browse/HMS-1583)
+- Add Azure instance table on Launch success ([ac05138](https://github.com/RHEnVision/provisioning-frontend/commit/ac0513849b96552051493f6270c79a12a447fc1a)), related to [HMS-1409](https://issues.redhat.com/browse/HMS-1409)
+- add empty state when no source available ([e42c381](https://github.com/RHEnVision/provisioning-frontend/commit/e42c3811861e73252882db6166b64c89e297395e)), related to [HMS-1583](https://issues.redhat.com/browse/HMS-1583)
 - **HMS-1210:** add launch template to wizard (#226) ([459f786](https://github.com/RHEnVision/provisioning-frontend/commit/459f786f3265d91d058493650228320609a67793))
 - **HMS-1477:** mark succesful launch progress ([cd2737f](https://github.com/RHEnVision/provisioning-frontend/commit/cd2737f0dc39e0ee37c8fc9ba05048e9cb4d3aaf))
 
@@ -94,7 +121,7 @@
 
 ### Features
 
-- Add Azure as provider in the wizard ([fc42dd1](https://github.com/RHEnVision/provisioning-frontend/commit/fc42dd1c3cf6057cc1f774e5f66c6a1268f6e994))
+- Add Azure as provider in the wizard ([fc42dd1](https://github.com/RHEnVision/provisioning-frontend/commit/fc42dd1c3cf6057cc1f774e5f66c6a1268f6e994)), related to [HMS-777](https://issues.redhat.com/browse/HMS-777)
 - **HMS-1222:** Add support to a source shared with an image ([ab4b17d](https://github.com/RHEnVision/provisioning-frontend/commit/ab4b17deb1358a4dd442d45151f1985fb7b1a53c))
 - **HMS-761:** add instances description table after launch ([9fab7e5](https://github.com/RHEnVision/provisioning-frontend/commit/9fab7e5581c852c9a38199f195db80a4523bd994))
 
@@ -112,7 +139,7 @@
 
 ### Bug Fixes
 
-- instance type labels (#212) ([5dafb54](https://github.com/RHEnVision/provisioning-frontend/commit/5dafb5432acc85ef01662227f0fcd71b7db046d0))
+- instance type labels (#212) ([5dafb54](https://github.com/RHEnVision/provisioning-frontend/commit/5dafb5432acc85ef01662227f0fcd71b7db046d0)), related to [HMS-1381](https://issues.redhat.com/browse/HMS-1381)
 - **HMS-1361:** fix a 404 api call at first rendering ([5515b07](https://github.com/RHEnVision/provisioning-frontend/commit/5515b076d8e228e2ee71cb983de71c1002d0c5a4))
 - **HMS-1131:** filter out regions with unsuccessful image clones ([08aeb73](https://github.com/RHEnVision/provisioning-frontend/commit/08aeb73b1088508231359617d611f26fa19d37e1))
 
@@ -131,7 +158,7 @@
 ### Code Refactoring
 
 - Add sources filtering by provider ([0f9b14f](https://github.com/RHEnVision/provisioning-frontend/commit/0f9b14f6cb2c4eb71303db62b928cc0084b2c34d))
-- Add custom ids to wizard buttons ([ecb11e6](https://github.com/RHEnVision/provisioning-frontend/commit/ecb11e60aff2613f51e6121458f6a9a2c9c30b06))
+- Add custom ids to wizard buttons ([ecb11e6](https://github.com/RHEnVision/provisioning-frontend/commit/ecb11e60aff2613f51e6121458f6a9a2c9c30b06)), related to [HMS-1127](https://issues.redhat.com/browse/HMS-1127)
 
 <a name="0.15.0"></a>
 
@@ -163,7 +190,7 @@
 
 ### Bug Fixes
 
-- move to useChrome hook ([799f5c6](https://github.com/RHEnVision/provisioning-frontend/commit/799f5c6446cfc78bb0785998bd867b29eaa3a967))
+- move to useChrome hook ([799f5c6](https://github.com/RHEnVision/provisioning-frontend/commit/799f5c6446cfc78bb0785998bd867b29eaa3a967)), related to [HMSPROV-430](https://issues.redhat.com/browse/HMSPROV-430)
 - **HMSPROV-406:** filter instance types with substring ([9343e4f](https://github.com/RHEnVision/provisioning-frontend/commit/9343e4fa08d008324d4239392597b3e2ee6beabe))
 - **HMSPROV-420:** show image dropdown and AMI input at once ([2e5321e](https://github.com/RHEnVision/provisioning-frontend/commit/2e5321e1eb3999cf3883349194a27bacb67d8d07))
 
@@ -177,7 +204,7 @@
 
 ### Features
 
-- add reservation id as hidden field ([a419d49](https://github.com/RHEnVision/provisioning-frontend/commit/a419d49f5b7569db5da738999ec4b99cd46657d5))
+- add reservation id as hidden field ([a419d49](https://github.com/RHEnVision/provisioning-frontend/commit/a419d49f5b7569db5da738999ec4b99cd46657d5)), related to [HMSPROV-359](https://issues.redhat.com/browse/HMSPROV-359)
 
 ### Bug Fixes
 
@@ -190,5 +217,5 @@
 
 ### Bug Fixes
 
-- **pubkeys:** Component refresh does not move cursor ([34b88b7](https://github.com/RHEnVision/provisioning-frontend/commit/34b88b7844ed12e49d13a0ccb84de4ab56800b19))
+- **pubkeys:** Component refresh does not move cursor ([34b88b7](https://github.com/RHEnVision/provisioning-frontend/commit/34b88b7844ed12e49d13a0ccb84de4ab56800b19)), related to [HMSPROV-270](https://issues.redhat.com/browse/HMSPROV-270)
 
