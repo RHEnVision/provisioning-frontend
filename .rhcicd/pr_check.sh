@@ -16,7 +16,7 @@ COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-fronten
 # Options that must be configured by app owner
 # --------------------------------------------
 export IQE_PLUGINS="provisioning"
-export IQE_MARKER_EXPRESSION="ui and smoke"
+export IQE_MARKER_EXPRESSION="ui and smoke and frontend_pr_check"
 export IQE_FILTER_EXPRESSION=""
 export IQE_ENV="ephemeral"
 export IQE_SELENIUM="true"
