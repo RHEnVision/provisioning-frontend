@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { TableComposable, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
-import { Button, ClipboardCopy, Card, Pagination } from '@patternfly/react-core';
+import { Button, ClipboardCopy, Card, Pagination, Spinner, Bullseye } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 
 import { SSHUsername } from './helpers';
@@ -17,7 +17,7 @@ const PER_PAGE_OPTIONS = [
 ];
 const InstancesTable = ({ reservationID, provider, region }) => {
   const [paginationOptions, setPaginationOptions] = React.useState({ perPage: 5, page: 1, startIdx: 0, endIdx: 5 });
-  const { data: instances } = useQuery(['launchInfo', reservationID], () => fetchReservationByProvider(reservationID, provider), {
+  const { data: instances, isLoading } = useQuery(['launchInfo', reservationID], () => fetchReservationByProvider(reservationID, provider), {
     select: (reservation) => reservation?.instances,
   });
 
@@ -32,6 +32,12 @@ const InstancesTable = ({ reservationID, provider, region }) => {
   const instancesPerPage = instances?.slice(paginationOptions.startIdx, paginationOptions.endIdx);
   const atLeastOneDetailNotEmpty = instancesPerPage?.some((instance) => instance.detail?.public_dns?.length > 0);
 
+  if (isLoading)
+    return (
+      <Bullseye>
+        <Spinner isSVG size="xl" />
+      </Bullseye>
+    );
   return (
     <Card style={{ position: 'relative', marginLeft: '-20%', marginRight: '-20%' }}>
       <Pagination
