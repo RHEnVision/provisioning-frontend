@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateSecondaryActions, Title, Spinner } from '@patternfly/react-core';
 import { PlusCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 
 import DirectProviderLink from './DirectProviderLink';
 import { imageProps } from '../../helpers.js';
@@ -27,21 +28,24 @@ const LoadingState = () => (
   </EmptyState>
 );
 
-const SourceMissing = ({ error, image }) => (
-  <EmptyState>
-    <EmptyStateIcon icon={error ? ExclamationCircleIcon : PlusCircleIcon} />
-    <Title headingLevel="h4" size="lg">
-      {(error && failedToFetchTitle) || missingSourceTitle}
-    </Title>
-    <EmptyStateBody>{error?.message || missingSourceDescription}</EmptyStateBody>
-    <Button variant="primary" component="a" target="_blank" href="/preview/settings/sources/new">
-      Create Source
-    </Button>
-    <EmptyStateSecondaryActions>
-      <DirectProviderLink image={image} />
-    </EmptyStateSecondaryActions>
-  </EmptyState>
-);
+const SourceMissing = ({ error, image }) => {
+  const { isBeta } = useChrome();
+  return (
+    <EmptyState>
+      <EmptyStateIcon icon={error ? ExclamationCircleIcon : PlusCircleIcon} />
+      <Title headingLevel="h4" size="lg">
+        {(error && failedToFetchTitle) || missingSourceTitle}
+      </Title>
+      <EmptyStateBody>{error?.message || missingSourceDescription}</EmptyStateBody>
+      <Button variant="primary" component="a" target="_blank" href={`${isBeta() ? '/preview' : ''}/settings/sources/new`}>
+        Create Source
+      </Button>
+      <EmptyStateSecondaryActions>
+        <DirectProviderLink image={image} />
+      </EmptyStateSecondaryActions>
+    </EmptyState>
+  );
+};
 
 SourceMissing.propTypes = {
   error: PropTypes.string,
