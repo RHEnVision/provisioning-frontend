@@ -20,3 +20,7 @@ afterEach(() => {
 });
 
 afterAll(() => server.close());
+
+jest.mock('@redhat-cloud-services/frontend-components/useChrome', () => ({
+  useChrome: () => ({ isBeta: jest.fn(() => true) }),
+}));
