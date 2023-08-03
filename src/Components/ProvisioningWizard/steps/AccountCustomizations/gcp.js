@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { GCP_PROVIDER } from '../../../../constants';
@@ -21,7 +21,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
-    const errorExists = Object.values(validations).some((valid) => valid !== 'success');
+    const errorExists = Object.values(validations).some((valid) => valid == 'error' || valid == 'default');
     setStepValidated(!errorExists);
   }, [validations]);
 
@@ -38,9 +38,6 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
       <Title ouiaId="account_custom_title" headingLevel="h1" size="xl">
         Account and customizations | Google cloud
       </Title>
-      <Text ouiaId="account_custom_description">
-        Configure instances that will run on your Google cloud. All the instances will launch with the same configuration.
-      </Text>
       <FormGroup
         label="Select account"
         validated={validations.sources}
@@ -81,6 +78,39 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
         <RegionsSelect provider={GCP_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={wizardContext.chosenRegion} />
       </FormGroup>
       <FormGroup
+        label="Select machine type"
+        isRequired
+        validated={validations.types}
+        helperTextInvalid="There are problems fetching instance types."
+        helperText={validations.types === 'warning' && 'The selected specification does not meet minimum requirements for this image'}
+        fieldId="gcp-select-machine-types"
+        labelIcon={
+          <Popover headerContent={<div>GCP machine types</div>}>
+            <Button
+              ouiaId="machine_type_help"
+              type="button"
+              aria-label="More info for machine types field"
+              onClick={(e) => e.preventDefault()}
+              aria-describedby="gcp-select-machine-types"
+              className="pf-c-form__group-label-help"
+              variant="plain"
+            >
+              <HelpIcon noVerticalAlign />
+            </Button>
+          </Popover>
+        }
+      >
+        <InstanceTypesSelect
+          architecture={image.architecture}
+          setValidation={(validation) =>
+            setValidation((prevValidations) => ({
+              ...prevValidations,
+              types: validation,
+            }))
+          }
+        />
+      </FormGroup>
+      <FormGroup
         label="Select template"
         fieldId="gcp-select-template"
         labelIcon={
@@ -110,37 +140,6 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
         }
       >
         <TemplatesSelect />
-      </FormGroup>
-      <FormGroup
-        label="Select machine type"
-        isRequired
-        helperTextInvalid="Please pick a value"
-        fieldId="gcp-select-machine-types"
-        labelIcon={
-          <Popover headerContent={<div>GCP machine types</div>}>
-            <Button
-              ouiaId="machine_type_help"
-              type="button"
-              aria-label="More info for machine types field"
-              onClick={(e) => e.preventDefault()}
-              aria-describedby="gcp-select-machine-types"
-              className="pf-c-form__group-label-help"
-              variant="plain"
-            >
-              <HelpIcon noVerticalAlign />
-            </Button>
-          </Popover>
-        }
-      >
-        <InstanceTypesSelect
-          architecture={image.architecture}
-          setValidation={(validation) =>
-            setValidation((prevValidations) => ({
-              ...prevValidations,
-              types: validation,
-            }))
-          }
-        />
       </FormGroup>
       <FormGroup
         label="Count"
