@@ -105,6 +105,12 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
       !data?.success && nextInterval();
       data.success && setLaunchSuccess();
     },
+    onError: () => {
+      setCurrentWarning(
+        `The reservation was created but we can't get the launch progress status.
+           Check your ${humanizeProvider(provider)} console later. If this issue persists, please contact support.`
+      );
+    },
     refetchIntervalInBackground: true,
   });
 
