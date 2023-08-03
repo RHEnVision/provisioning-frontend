@@ -70,6 +70,7 @@ const SourcesSelect = ({ setValidation, image }) => {
       isOpen={isOpen}
       onToggle={(openState) => setIsOpen(openState)}
       selections={selected}
+      maxHeight="180px"
       // TODO decide if to disable the select
       // isDisabled={sources?.length === 1}
       onSelect={onSelect}

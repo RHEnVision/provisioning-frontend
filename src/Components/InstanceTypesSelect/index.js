@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
+import { Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
-const OPTIONS_PER_SCREEN = 5;
+const OPTIONS_PER_SCREEN = 3;
 const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
 
 const InstanceTypesSelect = ({ setValidation, architecture }) => {
@@ -23,6 +23,9 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     staleTime: 5 * (60 * 1000), // data is considered fresh for 5 minutes (same as cacheTime)
     select: (types) => types.filter((type) => type.architecture === architecture),
     enabled: !!chosenRegion && !!chosenSource,
+    onError: () => {
+      setValidation('error');
+    },
   });
 
   if (!chosenSource || chosenSource === '') {
@@ -51,7 +54,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
         ...prevState,
         chosenInstanceType: selection,
       }));
-      setValidation('success');
+      chosenInstanceType.supported ? setValidation('success') : setValidation('warning');
       setIsOpen(false);
     }
   };
@@ -96,38 +99,35 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
   };
 
   if (error) {
-    console.warn('Failed to fetch instance types list');
     return (
       <>
-        <Alert ouiaId="instance_type_alert" variant="warning" isInline title="There are problems fetching instance types" />
-        <Select ouiaId="instance_type_empty" isDisabled placeholderText="No instance types found" toggleAriaLabel="Select instance type" />
+        <Select
+          validated="error"
+          ouiaId="instance_type_empty"
+          isDisabled
+          placeholderText="No instance types found"
+          toggleAriaLabel="Select instance type"
+        />
       </>
     );
   }
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="Contents of the small example" />;
+    return <Spinner isSVG size="sm" aria-label="loading instance type select" />;
   }
 
   const types = filteredTypes || instanceTypes;
 
   return (
     <>
-      {!isTypeSupported && (
-        <Alert
-          data-testid="unsupported_type_alert"
-          ouiaId="instance_type_not_supported_alert"
-          variant="warning"
-          isInline
-          title="Warning: The selected specification does not meet minimum requirements for this image."
-        />
-      )}
       <Select
         ouiaId="select_instance_type"
         variant="typeahead"
+        id="instance_type_select"
+        validated={!isTypeSupported && 'warning'}
         typeAheadAriaLabel="Selected instance type"
         toggleAriaLabel="Select instance type"
         placeholderText="Select instance type"
-        maxHeight="450px"
+        maxHeight="180px"
         isOpen={isOpen}
         selections={chosenInstanceType}
         onToggle={onToggle}

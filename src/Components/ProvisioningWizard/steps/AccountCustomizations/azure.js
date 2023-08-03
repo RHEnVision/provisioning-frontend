@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Text, Button } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { AZURE_PROVIDER } from '../../../../constants';
@@ -20,7 +20,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
 
   React.useEffect(() => {
     // This effect checks if the entire step is validated
-    const errorExists = Object.values(validations).some((valid) => valid !== 'success');
+    const errorExists = Object.values(validations).some((valid) => valid == 'error' || valid == 'default');
     setStepValidated(!errorExists);
   }, [validations]);
 
@@ -37,9 +37,6 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
       <Title ouiaId="account_custom_title" headingLevel="h1" size="xl">
         Account and customizations | Azure
       </Title>
-      <Text ouiaId="account_custom_description">
-        Configure instances that will run on your Azure cloud. All the instances will launch with the same configuration.
-      </Text>
       <FormGroup
         label="Select account"
         validated={validations.sources}
@@ -82,7 +79,9 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
       <FormGroup
         label="Select instance size"
         isRequired
-        helperTextInvalid="Please pick a value"
+        validated={validations.types}
+        helperTextInvalid="There are problems fetching instance types."
+        helperText={validations.types === 'warning' && 'The selected specification does not meet minimum requirements for this image'}
         fieldId="azure-select-instance-size"
         labelIcon={
           <Popover headerContent={<div>Azure instance sizes</div>}>

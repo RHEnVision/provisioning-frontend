@@ -40,8 +40,8 @@ describe('InstanceTypesSelect', () => {
       await mountSelectAndClick();
       const unsupportedInstance = await screen.findByText('t1.nano');
       await userEvent.click(unsupportedInstance);
-      const alert = await screen.findByTestId('unsupported_type_alert');
-      expect(alert).toBeDefined();
+      const selectWrapper = document.querySelector('[data-ouia-component-id=select_instance_type]');
+      expect(selectWrapper).toHaveClass('pf-m-warning');
     });
   });
 });

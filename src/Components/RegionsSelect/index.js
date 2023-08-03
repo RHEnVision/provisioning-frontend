@@ -66,7 +66,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
       variant="typeahead"
       aria-label="Select region"
       label="Select region"
-      maxHeight="450px"
+      maxHeight="180px"
       isOpen={isOpen}
       selections={currentRegion}
       onToggle={onToggle}

@@ -77,19 +77,6 @@ export const azureInstanceTypeList = [
     },
   },
   {
-    name: 'Standard_B1ls',
-    vcpus: 1,
-    cores: 1,
-    memory_mib: 500,
-    storage_gb: 4,
-    supported: false,
-    architecture: 'x86_64',
-    azure: {
-      gen_v1: true,
-      gen_v2: true,
-    },
-  },
-  {
     name: 'Standard_D16ps_v5',
     vcpus: 16,
     cores: 16,

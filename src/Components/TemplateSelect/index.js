@@ -48,9 +48,11 @@ const TemplatesSelect = () => {
     <Select
       ouiaId="select_templates"
       isOpen={isOpen}
+      direction="up"
       onToggle={(openState) => setIsOpen(openState)}
       selections={chosenTemplateName}
       onSelect={onSelect}
+      maxHeight="180px"
       placeholderText={templates?.length === 0 ? 'No template found' : 'Select templates'}
       aria-label="Select templates"
       clearSelectionsAriaLabel="clear template selection"
