@@ -12,6 +12,9 @@ export APP_ROOT=$(pwd)
 # export NODE_BUILD_VERSION=16
 COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
 
+# The latest build container is broken for ephemeral builds now (bad Caddyfile)
+export BUILD_IMAGE_TAG="642ff08"
+
 # --------------------------------------------
 # Options that must be configured by app owner
 # --------------------------------------------
