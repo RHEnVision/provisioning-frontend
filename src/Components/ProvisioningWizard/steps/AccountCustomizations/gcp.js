@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Button } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button, Text } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { GCP_PROVIDER } from '../../../../constants';
@@ -86,7 +86,18 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
         helperText={validations.types === 'warning' && 'The selected specification does not meet minimum requirements for this image'}
         fieldId="gcp-select-machine-types"
         labelIcon={
-          <Popover headerContent={<div>GCP machine types</div>}>
+          <Popover
+            bodyContent={
+              <div>
+                Select GCP instance type based on your computing, memory, networking, or storage needs
+                <br />
+                <br />
+                <b>Tip:</b> You can filter by a query search, i.e:
+                <br />
+                <Text component="small">{'vcpus = 2 and storage > 30 and memory < 4000'}</Text>
+              </div>
+            }
+          >
             <Button
               ouiaId="machine_type_help"
               type="button"

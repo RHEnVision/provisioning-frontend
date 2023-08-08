@@ -49,6 +49,13 @@ describe('InstanceTypesSelect', () => {
       const items = await screen.findAllByLabelText(/^Instance Type/);
       expect(items).toHaveLength(1);
     });
+    test('filter with a query', async () => {
+      const query = 'vcpus > 2 and cores > 2';
+      const dropdown = await mountSelectAndClick();
+      await userEvent.type(dropdown, query);
+      const items = await screen.findAllByLabelText(/^Instance Type/);
+      expect(items).toHaveLength(1);
+    });
   });
 });
 

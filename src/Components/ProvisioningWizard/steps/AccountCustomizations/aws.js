@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Button } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button, Text } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { AWS_PROVIDER } from '../../../../constants';
@@ -87,8 +87,16 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
         fieldId="aws-select-instance-types"
         labelIcon={
           <Popover
-            bodyContent="Select AWS instance type based on your computing,
-           memory, networking, or storage needs"
+            bodyContent={
+              <div>
+                Select AWS instance type based on your computing, memory, networking, or storage needs
+                <br />
+                <br />
+                <b>Tip:</b> You can filter by a query search, i.e:
+                <br />
+                <Text component="small">{'vcpus = 2 and cores < 4 and memory < 4000'}</Text>
+              </div>
+            }
           >
             <Button
               ouiaId="instance_type_help"
