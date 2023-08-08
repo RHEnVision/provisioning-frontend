@@ -4,6 +4,8 @@ import { Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core
 import { useQuery } from 'react-query';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
+import { evaluateQuery } from '../../Utils/querySearch';
+import _throttle from 'lodash/throttle';
 
 const OPTIONS_PER_SCREEN = 3;
 const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
@@ -13,8 +15,9 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [numOptions, setNumOptions] = React.useState(OPTIONS_PER_SCREEN);
   const [filteredTypes, setFilteredTypes] = React.useState(null);
-  const [prevSearch, setPrevSearch] = React.useState('');
   const [isTypeSupported, setTypeSupported] = React.useState(true);
+  const [searchValue, setSearchValue] = React.useState();
+
   const {
     isLoading,
     error,
@@ -49,12 +52,16 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
       clearSelection();
     } else {
       const chosenInstanceType = instanceTypes.find((instanceType) => selection === instanceType.name);
-      setTypeSupported(chosenInstanceType.supported);
-      setWizardContext((prevState) => ({
-        ...prevState,
-        chosenInstanceType: selection,
-      }));
-      chosenInstanceType.supported ? setValidation('success') : setValidation('warning');
+      if (chosenInstanceType) {
+        setTypeSupported(chosenInstanceType.supported);
+        setWizardContext((prevState) => ({
+          ...prevState,
+          chosenInstanceType: selection,
+        }));
+        chosenInstanceType.supported ? setValidation('success') : setValidation('warning');
+      } else {
+        setSearchValue(selection);
+      }
       setIsOpen(false);
     }
   };
@@ -69,13 +76,28 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     setIsOpen(false);
   };
 
-  const onFilter = (_e, inputValue) => {
-    const search = sanitizeSearchValue(inputValue);
-    if (prevSearch !== search) {
-      setNumOptions(OPTIONS_PER_SCREEN);
-      setPrevSearch(search);
-      setFilteredTypes(instanceTypes.filter((i) => i.name.toLowerCase().includes(search.toLowerCase())));
+  const queryFilter = async (search) => {
+    if (search.length > 0) {
+      const { error: queryError, result } = await evaluateQuery(search, instanceTypes);
+      if (queryError) {
+        setFilteredTypes([]);
+      } else if (Array.isArray(result)) {
+        setFilteredTypes(result);
+      } else if (result instanceof Object) {
+        setFilteredTypes([result]);
+      }
     }
+  };
+
+  const onTypeaheadInputChange = (inputValue) => {
+    if (inputValue === '') {
+      setFilteredTypes(null);
+      return;
+    }
+    const search = sanitizeSearchValue(inputValue);
+    setNumOptions(OPTIONS_PER_SCREEN);
+    const throttledFilter = _throttle(queryFilter, 200);
+    throttledFilter(search);
   };
 
   const selectItemsMapper = (types, limit) => {
@@ -129,10 +151,12 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
         placeholderText="Select instance type"
         maxHeight="180px"
         isOpen={isOpen}
-        selections={chosenInstanceType}
+        selections={chosenInstanceType || searchValue}
         onToggle={onToggle}
         onSelect={onSelect}
-        onFilter={onFilter}
+        onFilter={() => {}}
+        isInputValuePersisted
+        onTypeaheadInputChanged={onTypeaheadInputChange}
         {...(numOptions < types?.length && {
           loadingVariant: {
             text: `View more (${types.length - numOptions})`,
