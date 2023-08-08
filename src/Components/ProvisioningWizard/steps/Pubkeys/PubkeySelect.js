@@ -30,6 +30,7 @@ const PubkeySelect = ({ setStepValidated }) => {
       setIsKeySupported(false);
     } else {
       setStepValidated(!!selection);
+      setIsKeySupported(true);
     }
   }, [selection]);
 
