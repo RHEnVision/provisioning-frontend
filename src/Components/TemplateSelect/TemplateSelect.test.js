@@ -12,14 +12,14 @@ describe('TemplateSelect', () => {
     await userEvent.click(selectDropdown);
 
     const items = await screen.findAllByLabelText('template option');
-    expect(items).toHaveLength(templates.length);
+    expect(items).toHaveLength(templates.data.length);
   });
   test('clear chosen template', async () => {
     render(<TemplateSelect />, { provider: 'aws', contextValues: { chosenSource: '1' } });
     const selectDropdown = await screen.findByText('Select templates');
     await userEvent.click(selectDropdown);
 
-    await userEvent.click(await screen.findByText(templates[0].name));
+    await userEvent.click(await screen.findByText(templates.data[0].name));
     await userEvent.click(await screen.findByLabelText('clear template selection'));
     const placeholder = await screen.findByText('Select templates');
     expect(placeholder).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe('TemplateSelect', () => {
     const chosenSource = '1';
     server.use(
       rest.get(provisioningUrl(`sources/${chosenSource}/launch_templates`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([]));
+        return res(ctx.status(200), ctx.json({ data: [] }));
       })
     );
     render(<TemplateSelect />, { provider: 'aws', contextValues: { chosenSource: chosenSource } });

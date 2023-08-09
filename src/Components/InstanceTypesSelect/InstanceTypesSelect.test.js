@@ -8,13 +8,13 @@ describe('InstanceTypesSelect', () => {
   test('populate AWS instance types select', async () => {
     await mountSelectAndClick();
     const items = await screen.findAllByLabelText(/^Instance Type/);
-    expect(items).toHaveLength(awsInstanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
+    expect(items).toHaveLength(awsInstanceTypeList.data.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
   });
 
   test('populate Azure instance types select', async () => {
     await mountSelectAndClick('azure');
     const items = await screen.findAllByLabelText(/^Instance Type/);
-    expect(items).toHaveLength(azureInstanceTypeList.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
+    expect(items).toHaveLength(azureInstanceTypeList.data.filter((type) => type.architecture === 'x86_64').length); // arm64 is filtered
   });
 
   describe('search', () => {

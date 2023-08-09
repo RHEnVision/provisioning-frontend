@@ -23,7 +23,7 @@ describe('Pubkeys', () => {
       const { server, rest } = window.msw;
       server.use(
         rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
-          return res(ctx.status(200), ctx.json([]));
+          return res(ctx.status(200), ctx.json({ data: [] }));
         })
       );
       render(<Pubkeys setStepValidated={jest.fn()} />);
@@ -35,7 +35,7 @@ describe('Pubkeys', () => {
       render(<PubkeySelect setStepValidated={jest.fn()} />, { contextValues: { provider: 'azure' } });
       const select = await screen.findByText('Select public key...');
       await userEvent.click(select);
-      await userEvent.click(screen.getByText(pubkeysList[0].name));
+      await userEvent.click(screen.getByText(pubkeysList.data[0].name));
       expect(screen.getByText('Key format is not support', { exact: false })).toBeInTheDocument();
     });
 
