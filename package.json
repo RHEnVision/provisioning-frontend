@@ -22,10 +22,9 @@
     "dev": "HOT=true PROXY=true ROUTES_PATH=config/routes.config.js fec dev --clouddotEnv stage --uiEnv beta"
   },
   "dependencies": {
-    "@patternfly/react-core": "4.276.8",
-    "@redhat-cloud-services/frontend-components": "^3.9.35",
-    "@redhat-cloud-services/frontend-components-notifications": "^3.2.14",
-    "@redhat-cloud-services/frontend-components-utilities": "^3.5.0",
+    "@patternfly/react-core": "4.276.11",
+    "@redhat-cloud-services/frontend-components": "3.11.2",
+    "@redhat-cloud-services/frontend-components-utilities": "3.7.4",
     "@unleash/proxy-client-react": "^3.5.2",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
@@ -42,7 +41,7 @@
     "@babel/preset-env": "7.21.4",
     "@babel/preset-react": "7.18.6",
     "@redhat-cloud-services/eslint-config-redhat-cloud-services": "^1.3.0",
-    "@redhat-cloud-services/frontend-components-config": "^4.7.3",
+    "@redhat-cloud-services/frontend-components-config": "5.1.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
