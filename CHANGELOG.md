@@ -1,4 +1,16 @@
 <!-- insertion marker -->
+<a name="1.5.0"></a>
+
+## [1.5.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.4.0...1.5.0) (2023-08-09)
+
+### Bug Fixes
+
+- **HMS-2297:** clear key format error ([ee9f948](https://github.com/RHEnVision/provisioning-frontend/commit/ee9f948d50138514fe3933d922d3462e466a0650))
+- **HMS-2256:** enhance wizard first page interface ([d3918a8](https://github.com/RHEnVision/provisioning-frontend/commit/d3918a8dcbb02f65e2369bbbb2120f983776b78f))
+- **HMS-1757:** remove hard coded preview in sources link ([1042947](https://github.com/RHEnVision/provisioning-frontend/commit/1042947ff608dfbb93b5acc3fa38f9322ab1c066))
+- **HMS-2247:** add spinner to instances table ([0139551](https://github.com/RHEnVision/provisioning-frontend/commit/0139551c109afd798dfc9ee3717052172fb5e244))
+- **HMS-1524:** enable case insensitive search ([287ac2c](https://github.com/RHEnVision/provisioning-frontend/commit/287ac2c30ffb3ceb50c2c6641900830b73e4e463))
+
 <a name="1.4.0"></a>
 
 ## [1.4.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.3.0...1.4.0) (2023-07-21)
