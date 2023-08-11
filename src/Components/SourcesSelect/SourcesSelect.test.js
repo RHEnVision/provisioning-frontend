@@ -12,7 +12,7 @@ describe('SourcesSelect', () => {
     await userEvent.click(selectDropdown);
 
     const items = await screen.findAllByLabelText('Source account');
-    expect(items).toHaveLength(sourcesList.length);
+    expect(items).toHaveLength(sourcesList.data.length);
   });
 
   test('filters and preselect single available source', async () => {
@@ -30,7 +30,7 @@ describe('SourcesSelect', () => {
     await userEvent.click(selectDropdown);
 
     const items = await screen.findAllByLabelText('Source account');
-    expect(items).toHaveLength(sourcesList.length);
+    expect(items).toHaveLength(sourcesList.data.length);
   });
 
   test('gcp source verifying email', async () => {

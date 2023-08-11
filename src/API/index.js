@@ -12,7 +12,9 @@ const typesUrlForProvider = (provider, region) => {
 };
 
 export const fetchSourcesList = async (provider) => {
-  const { data } = await axios.get(provisioningUrl(`sources?provider=${provider}`));
+  const {
+    data: { data },
+  } = await axios.get(provisioningUrl(`sources?provider=${provider}`));
   return data;
 };
 
@@ -22,13 +24,17 @@ export const fetchSourceUploadInfo = async (sourceID) => {
 };
 
 export const fetchPubkeysList = async () => {
-  const { data } = await axios.get(provisioningUrl('pubkeys'));
+  const {
+    data: { data },
+  } = await axios.get(provisioningUrl('pubkeys'));
   return data;
 };
 
 export const fetchInstanceTypesList = async (region, provider) => {
   const url = typesUrlForProvider(provider, region);
-  const { data } = await axios.get(url);
+  const {
+    data: { data },
+  } = await axios.get(url);
   return data;
 };
 
@@ -61,6 +67,8 @@ export const fetchReservationByProvider = async (reservationID, provider) => {
 };
 
 export const fetchLaunchTemplates = async (sourceID, region) => {
-  const { data } = await axios.get(provisioningUrl(`sources/${sourceID}/launch_templates?region=${region}`));
+  const {
+    data: { data },
+  } = await axios.get(provisioningUrl(`sources/${sourceID}/launch_templates?region=${region}`));
   return data;
 };
