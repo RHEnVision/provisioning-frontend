@@ -16,6 +16,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
   const [validations, setValidation] = React.useState({
     sources: wizardContext.chosenSource ? 'success' : 'default',
     types: wizardContext.chosenInstanceType ? 'success' : 'default',
+    amount: 'success',
   });
 
   React.useEffect(() => {
@@ -113,6 +114,8 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
         label="Count"
         isRequired
         fieldId="azure-select-instance-counter"
+        validated={validations.amount}
+        helperText={validations.amount === 'warning' && 'Launching many vCPUs might exceed service quota limit.'}
         labelIcon={
           <Popover headerContent={<div>Number of Azure instances</div>}>
             <Button
@@ -129,7 +132,14 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <InstanceCounter />
+        <InstanceCounter
+          setValidation={(validation) =>
+            setValidation((prev) => ({
+              ...prev,
+              amount: validation,
+            }))
+          }
+        />
       </FormGroup>
     </Form>
   );

@@ -17,6 +17,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
   const [validations, setValidation] = React.useState({
     sources: chosenSource ? 'success' : 'default',
     types: chosenInstanceType ? 'success' : 'default',
+    amount: 'success',
   });
 
   const onRegionChange = ({ region, imageID }) => {
@@ -148,6 +149,8 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
         label="Count"
         isRequired
         fieldId="aws-select-instance-counter"
+        validated={validations.amount}
+        helperText={validations.amount === 'warning' && 'Launching many vCPUs might exceed service quota limit.'}
         labelIcon={
           <Popover bodyContent="Specify the number of AWS instances to be launched">
             <Button
@@ -164,7 +167,14 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <InstanceCounter />
+        <InstanceCounter
+          setValidation={(validation) =>
+            setValidation((prev) => ({
+              ...prev,
+              amount: validation,
+            }))
+          }
+        />
       </FormGroup>
     </Form>
   );

@@ -17,6 +17,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
   const [validations, setValidation] = React.useState({
     sources: wizardContext.chosenSource ? 'success' : 'default',
     types: wizardContext.chosenInstanceType ? 'success' : 'default',
+    amount: 'success',
   });
 
   React.useEffect(() => {
@@ -145,6 +146,8 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
         label="Count"
         isRequired
         fieldId="gcp-select-instance-counter"
+        validated={validations.amount}
+        helperText={validations.amount === 'warning' && 'Launching many vCPUs might exceed service quota limit.'}
         labelIcon={
           <Popover headerContent={<div>Number of GCP instances</div>}>
             <Button
@@ -161,7 +164,14 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <InstanceCounter />
+        <InstanceCounter
+          setValidation={(validation) =>
+            setValidation((prev) => ({
+              ...prev,
+              amount: validation,
+            }))
+          }
+        />
       </FormGroup>
     </Form>
   );
