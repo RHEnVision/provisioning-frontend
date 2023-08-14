@@ -23,7 +23,7 @@ describe('InstanceCounter', () => {
 });
 
 const mountAndChangeInput = async (value) => {
-  render(<InstanceCounter />);
+  render(<InstanceCounter setValidation={jest.fn} />);
   const counter = await screen.findByLabelText('number of instances');
   await userEvent.type(counter, value);
   return counter;
