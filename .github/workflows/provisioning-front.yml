@@ -64,7 +64,7 @@ jobs:
   Release-to-build:
     name: "⛵ Release to build repository"
     needs: [build]
-    if: github.ref_name == 'main' || github.ref_name == 'prod-beta' || contains(github.ref_name, 'stable')
+    if: github.ref_name == contains(github.ref_name, 'prod')
     runs-on: ubuntu-latest
     env:
       COMMIT_AUTHOR_USERNAME: GitHub actions
