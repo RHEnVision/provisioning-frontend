@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
+import { Select, SelectOption, Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
 import { useQuery } from 'react-query';
 
 import { useWizardContext } from '../Common/WizardContext';
@@ -31,36 +31,36 @@ const TemplatesSelect = () => {
 
   const selectItemsMapper = () => templates.map(({ name, id }) => <SelectOption aria-label="template option" key={id} value={name}></SelectOption>);
   const chosenTemplateName = chosenTemplate && templates.find((template) => template.id === chosenTemplate)?.name;
-  if (error) {
-    return (
-      <>
-        <Alert ouiaId="select_template_alert" variant="warning" isInline title="There are problems fetching templates" />
-        <Select ouiaId="select_template_empty" isDisabled placeholderText="No templates found" aria-label="Select template" />
-      </>
-    );
-  }
 
   if (isLoading) {
     return <Spinner isSVG size="sm" aria-label="Loading templates" />;
   }
 
   return (
-    <Select
-      ouiaId="select_templates"
-      isOpen={isOpen}
-      direction="up"
-      onToggle={(openState) => setIsOpen(openState)}
-      selections={chosenTemplateName}
-      onSelect={onSelect}
-      maxHeight="180px"
-      placeholderText={templates?.length === 0 ? 'No template found' : 'Select templates'}
-      aria-label="Select templates"
-      clearSelectionsAriaLabel="clear template selection"
-      onClear={onClear}
-      isDisabled={templates?.length === 0}
-    >
-      {templates && selectItemsMapper()}
-    </Select>
+    <>
+      <Select
+        ouiaId="select_templates"
+        isOpen={isOpen}
+        direction="up"
+        onToggle={(openState) => setIsOpen(openState)}
+        selections={chosenTemplateName}
+        onSelect={onSelect}
+        maxHeight="180px"
+        placeholderText={error || templates?.length === 0 ? 'No template found' : 'Select templates'}
+        aria-label="Select templates"
+        clearSelectionsAriaLabel="clear template selection"
+        onClear={onClear}
+        isDisabled={error || templates?.length === 0}
+        validated={error && 'error'}
+      >
+        {templates && selectItemsMapper()}
+      </Select>
+      {error && (
+        <HelperText id="template-error-inline">
+          <HelperTextItem variant="error">{`There are problems fetching templates: ${error?.message}`} </HelperTextItem>
+        </HelperText>
+      )}
+    </>
   );
 };
 
