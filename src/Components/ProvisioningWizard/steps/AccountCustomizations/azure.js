@@ -53,6 +53,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
               sources: validation,
             }))
           }
+          validated={validations.sources}
         />
       </FormGroup>
       <FormGroup
@@ -75,7 +76,13 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <RegionsSelect provider={AZURE_PROVIDER} currentRegion={wizardContext.chosenRegion} onChange={onRegionChange} composeID={image.id} />
+        <RegionsSelect
+          provider={AZURE_PROVIDER}
+          currentRegion={wizardContext.chosenRegion}
+          onChange={onRegionChange}
+          composeID={image.id}
+          validated={'default'}
+        />
       </FormGroup>
       <FormGroup
         label="Select instance size"

@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Button } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button, FormAlert, Alert } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
+import { useQuery } from 'react-query';
 
 import { AWS_PROVIDER } from '../../../../constants';
 import { imageProps } from '../../helpers';
@@ -11,13 +12,23 @@ import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
 import { useWizardContext } from '../../../Common/WizardContext';
 import TemplatesSelect from '../../../TemplateSelect';
+import { checkPermissions } from '../../../../API';
 
 const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
   const [{ chosenSource, chosenRegion, chosenInstanceType }, setWizardContext] = useWizardContext();
+  const { data: missingPermissions } = useQuery(
+    [`permissions`, `${chosenRegion}-${chosenSource}`],
+    () => checkPermissions(image.provider, chosenSource, chosenRegion),
+    {
+      select: (perm) => perm.missing_entities,
+      enabled: !!chosenRegion && !!chosenSource,
+    }
+  );
   const [validations, setValidation] = React.useState({
-    sources: chosenSource ? 'success' : 'default',
+    sources: chosenSource ? ((missingPermissions || []).length == 0 ? 'success' : 'warning') : 'default',
     types: chosenInstanceType ? 'success' : 'default',
     amount: 'success',
+    region: 'default',
   });
 
   const onRegionChange = ({ region, imageID }) => {
@@ -34,18 +45,52 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
     setStepValidated(!errorExists);
   }, [validations]);
 
+  React.useEffect(() => {
+    if ((missingPermissions || []).length != 0) {
+      if (validations.sources !== 'error') {
+        setValidation((prevValidations) => ({
+          ...prevValidations,
+          sources: 'warning',
+        }));
+      }
+      if (validations.region !== 'error') {
+        setValidation((prevValidations) => ({
+          ...prevValidations,
+          region: 'warning',
+        }));
+      }
+    } else {
+      setValidation((prevValidations) => ({
+        ...prevValidations,
+        sources: chosenSource ? 'success' : 'default',
+        region: 'default',
+      }));
+    }
+  }, [missingPermissions]);
+
   return (
     <Form>
       <Title ouiaId="account_custom_title" headingLevel="h1" size="xl">
         Account and customizations | Amazon
       </Title>
-      <FormGroup
-        label="Select account"
-        validated={validations.sources}
-        helperTextInvalid="Please pick a value"
-        isRequired
-        fieldId="aws-select-source"
-      >
+      {(missingPermissions || []).length != 0 && (
+        <FormAlert>
+          <Alert isExpandable isInline variant="warning" title={`Launch might fail due to missing permissions.`}>
+            <>
+              <p>
+                Check if <a href="https://console.aws.amazon.com/iam/">policies</a> in your {image.provider} account for the selected region are set
+                as{' '}
+                <a href="https://github.com/RHEnVision/provisioning-backend/blob/main/docs/configure-amazon-role.md#service-account-policy">
+                  our documentation
+                </a>{' '}
+                recommends. Following permissions might be missing:
+              </p>
+              <p>{(missingPermissions || []).join(', ')}</p>
+            </>
+          </Alert>
+        </FormAlert>
+      )}
+      <FormGroup label="Select account" validated="warning" helperTextInvalid="Please pick a value" isRequired fieldId="aws-select-source">
         <SourcesSelect
           image={image}
           setValidation={(validation) =>
@@ -54,6 +99,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
               sources: validation,
             }))
           }
+          validated={validations.sources}
         />
       </FormGroup>
       <FormGroup
@@ -76,7 +122,13 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <RegionsSelect provider={AWS_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={chosenRegion} />
+        <RegionsSelect
+          provider={AWS_PROVIDER}
+          onChange={onRegionChange}
+          composeID={image.id}
+          currentRegion={chosenRegion}
+          validated={validations.region}
+        />
       </FormGroup>
       <FormGroup
         label="Select instance type"

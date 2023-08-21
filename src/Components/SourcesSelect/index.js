@@ -6,7 +6,7 @@ import { imageProps } from '../ProvisioningWizard/helpers';
 import { useSourcesForImage } from '../Common/Hooks/sources';
 import { useWizardContext } from '../Common/WizardContext';
 
-const SourcesSelect = ({ setValidation, image }) => {
+const SourcesSelect = ({ setValidation, image, validated }) => {
   const [{ chosenSource }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
@@ -19,14 +19,18 @@ const SourcesSelect = ({ setValidation, image }) => {
     onSuccess: (sources) => {
       if (chosenSource) {
         setSelected(selectObject(chosenSource, sources.find((source) => source.id === chosenSource).name));
-        setValidation('success');
+        if (validated !== 'warning') {
+          setValidation('success');
+        }
       } else if (sources.length === 1) {
         setSelected(selectObject(sources[0].id, sources[0].name));
         setWizardContext((prevState) => ({
           ...prevState,
           chosenSource: sources[0].id,
         }));
-        setValidation('success');
+        if (validated !== 'warning') {
+          setValidation('success');
+        }
       }
     },
   });
@@ -42,7 +46,9 @@ const SourcesSelect = ({ setValidation, image }) => {
         ...prevState,
         chosenSource: selection.id,
       }));
-      setValidation('success');
+      if (validated !== 'warning') {
+        setValidation('success');
+      }
     }
     setIsOpen(false);
   };
@@ -76,6 +82,7 @@ const SourcesSelect = ({ setValidation, image }) => {
       onSelect={onSelect}
       placeholderText="Select account"
       aria-label="Select account"
+      validated={validated === 'error' || validated === 'warning' ? validated : 'default'}
     >
       {sources && selectItemsMapper()}
     </Select>
@@ -85,6 +92,7 @@ const SourcesSelect = ({ setValidation, image }) => {
 SourcesSelect.propTypes = {
   setValidation: PropTypes.func.isRequired,
   image: imageProps,
+  validated: PropTypes.string.isRequired,
 };
 
 export default SourcesSelect;

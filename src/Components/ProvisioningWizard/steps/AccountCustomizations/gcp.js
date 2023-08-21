@@ -54,6 +54,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
               sources: validation,
             }))
           }
+          validated={validations.sources}
         />
       </FormGroup>
       <FormGroup
@@ -76,7 +77,13 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <RegionsSelect provider={GCP_PROVIDER} onChange={onRegionChange} composeID={image.id} currentRegion={wizardContext.chosenRegion} />
+        <RegionsSelect
+          provider={GCP_PROVIDER}
+          onChange={onRegionChange}
+          composeID={image.id}
+          currentRegion={wizardContext.chosenRegion}
+          validated={'default'}
+        />
       </FormGroup>
       <FormGroup
         label="Select machine type"

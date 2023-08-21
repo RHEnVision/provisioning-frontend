@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AZURE_PROVIDER } from '../constants';
+import { AWS_PROVIDER, AZURE_PROVIDER } from '../constants';
 import { imageBuilderURL, provisioningUrl } from './helpers';
 
 const typesUrlForProvider = (provider, region) => {
@@ -71,4 +71,13 @@ export const fetchLaunchTemplates = async (sourceID, region) => {
     data: { data },
   } = await axios.get(provisioningUrl(`sources/${sourceID}/launch_templates?region=${region}`));
   return data;
+};
+
+export const checkPermissions = async (provider, sourceID, region) => {
+  switch (provider) {
+    case AWS_PROVIDER: {
+      const { data } = await axios.get(provisioningUrl(`sources/${sourceID}/validate_permissions?region=${region}`));
+      return data;
+    }
+  }
 };

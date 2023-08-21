@@ -8,7 +8,7 @@ import { IMAGE_REGIONS_KEY } from '../../API/queryKeys';
 import { fetchImageClones, fetchImageCloneStatus } from '../../API';
 import { defaultRegionByProvider } from '../Common/helpers';
 
-const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
+const RegionsSelect = ({ provider, currentRegion, composeID, onChange, validated }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const {
@@ -72,6 +72,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
       onToggle={onToggle}
       onSelect={onSelect}
       isDisabled={!MULTIPLE_REGION_SUPPORT.includes(provider)}
+      validated={validated}
     >
       {images.map(({ id, region }) => (
         <SelectOption aria-label="Region item" key={id} value={region} />
@@ -85,6 +86,7 @@ RegionsSelect.propTypes = {
   composeID: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   currentRegion: PropTypes.string,
+  validated: PropTypes.string.isRequired,
 };
 
 export default RegionsSelect;
