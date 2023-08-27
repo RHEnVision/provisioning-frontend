@@ -1,10 +1,13 @@
-import React from 'react';
-import SourceMissing from './SourceMissing';
-import AccountCustomizations from './AccountCustomizations';
-import ReviewDetails from './ReviewDetails';
-import PublicKeys from './Pubkeys';
-import FinishStep from './ReservationProgress';
+import PropTypes from 'prop-types';
+import React, { Suspense } from 'react';
+import { Bullseye, Spinner } from '@patternfly/react-core';
 import { humanizeProvider } from '../../Common/helpers';
+
+const SourceMissing = React.lazy(() => import('./SourceMissing'));
+const AccountCustomizations = React.lazy(() => import('./AccountCustomizations'));
+const ReviewDetails = React.lazy(() => import('./ReviewDetails'));
+const PublicKeys = React.lazy(() => import('./Pubkeys'));
+const FinishStep = React.lazy(() => import('./ReservationProgress'));
 
 const stringIds = {
   1: 'account',
@@ -13,12 +16,31 @@ const stringIds = {
 };
 
 export const stepIdToString = (id) => stringIds[id];
+const Loader = ({ children }) => (
+  <Suspense
+    fallback={
+      <Bullseye>
+        <Spinner isSVG size="lg" />
+      </Bullseye>
+    }
+  >
+    {children}
+  </Suspense>
+);
+
+Loader.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 const missingSource = ({ image, isLoading, sourcesError }) => [
   {
     name: 'Define source',
     id: 1,
-    component: <SourceMissing image={image} isLoading={isLoading} error={sourcesError} />,
+    component: (
+      <Loader>
+        <SourceMissing image={image} isLoading={isLoading} error={sourcesError} />
+      </Loader>
+    ),
     isFinishedStep: true,
   },
 ];
@@ -32,7 +54,9 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
         id: 1,
         enableNext: stepValidation.awsStep,
         component: (
-          <AccountCustomizations image={image} setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />
+          <Loader>
+            <AccountCustomizations image={image} setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />
+          </Loader>
         ),
         canJumpTo: stepIdReached >= 1,
       },
@@ -41,21 +65,33 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
   {
     name: 'SSH key authentication',
     id: 4,
-    component: <PublicKeys setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, sshStep: validated }))} />,
+    component: (
+      <Loader>
+        <PublicKeys setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, sshStep: validated }))} />
+      </Loader>
+    ),
     canJumpTo: stepIdReached >= 4,
     enableNext: stepValidation.sshStep,
   },
   {
     name: 'Review details',
     id: 5,
-    component: <ReviewDetails imageName={image.name} />,
+    component: (
+      <Loader>
+        <ReviewDetails imageName={image.name} />
+      </Loader>
+    ),
     canJumpTo: stepIdReached >= 5,
     nextButtonText: 'Launch',
   },
   {
     name: 'Finish Progress',
     id: 6,
-    component: <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={image.id} />,
+    component: (
+      <Loader>
+        <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={image.id} />
+      </Loader>
+    ),
     isFinishedStep: true,
   },
 ];

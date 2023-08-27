@@ -1,5 +1,7 @@
 /* global module, __dirname */
 const { resolve } = require('path');
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 
 module.exports = {
   appUrl: '/insights/provisioning',
@@ -13,7 +15,7 @@ module.exports = {
   /**
    * Add additional webpack plugins
    */
-  plugins: [],
+  plugins: [process.env.ANALYZED && new BundleAnalyzerPlugin()],
   _unstableHotReload: process.env.HOT === 'true',
   routesPath: process.env.ROUTES_PATH && resolve(process.env.ROUTES_PATH),
   moduleFederation: {
