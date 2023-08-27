@@ -112,7 +112,7 @@ const AccountCustomizationsGCP = ({ setStepValidated, image }) => {
         />
       </FormGroup>
       <FormGroup
-        label="Select template"
+        label="Select template (optional)"
         fieldId="gcp-select-template"
         labelIcon={
           <Popover
