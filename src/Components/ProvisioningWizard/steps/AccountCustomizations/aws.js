@@ -115,7 +115,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
         />
       </FormGroup>
       <FormGroup
-        label="Select template"
+        label="Select template (optional)"
         fieldId="aws-select-template"
         labelIcon={
           <Popover
