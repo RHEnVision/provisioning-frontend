@@ -27,6 +27,7 @@ describe('Pubkeys', () => {
         })
       );
       render(<Pubkeys setStepValidated={jest.fn()} />);
+      await screen.findByText('No SSH key found');
       const existingRadio = await screen.findByTestId('existing-pubkey-radio');
       expect(existingRadio).toBeDisabled();
     });

@@ -36,7 +36,7 @@ describe('ProvisioningWizard', () => {
 
       render(<ProvisioningWizard image={{ ...awsImage, sourceIDs: ['1'] }} />);
       // wait for the sources to load
-      await screen.findByText('Launch image AWS image', { exact: false });
+      await screen.findByText('Select account', undefined, { timeout: 3000 });
 
       const sourceDropdown = await screen.findByText('Source 1');
       expect(sourceDropdown).toBeInTheDocument();

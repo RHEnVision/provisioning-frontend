@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import { server } from '../src/mocks/server';
-import { QueryCache } from 'react-query';
+import { QueryCache } from '@tanstack/react-query';
 
 const queryCache = new QueryCache();
 

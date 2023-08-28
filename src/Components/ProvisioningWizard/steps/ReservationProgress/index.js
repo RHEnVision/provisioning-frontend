@@ -14,7 +14,7 @@ import {
   WizardContextConsumer,
 } from '@patternfly/react-core';
 import { CogsIcon, PendingIcon, CheckCircleIcon } from '@patternfly/react-icons';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useWizardContext } from '../../../Common/WizardContext';
 import { createNewPublicKey, createReservation, fetchReservation } from '../../../../API';

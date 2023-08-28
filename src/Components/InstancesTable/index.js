@@ -3,7 +3,7 @@ import React from 'react';
 import { TableComposable, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Button, ClipboardCopy, Card, Pagination, Spinner, Bullseye } from '@patternfly/react-core';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { SSHUsername } from './helpers';
 import { instanceLink, humanizeInstanceID } from '../Common/instanceHelpers';

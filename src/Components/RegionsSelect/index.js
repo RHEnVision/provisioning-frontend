@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
-import { useQuery, useQueries } from 'react-query';
+import { useQuery, useQueries } from '@tanstack/react-query';
 
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER, MULTIPLE_REGION_SUPPORT } from '../../constants';
 import { IMAGE_REGIONS_KEY } from '../../API/queryKeys';
@@ -19,10 +19,13 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
     select: (images) => images.data?.map((image) => ({ id: image.id, region: image.request.region })),
   });
 
-  const clonesStatusQueries = useQueries(
-    clonedImages?.map((clonedImage) => ({ queryKey: [IMAGE_REGIONS_KEY, clonedImage.id], queryFn: () => fetchImageCloneStatus(clonedImage.id) })) ||
-      []
-  );
+  const queries =
+    clonedImages?.map((clonedImage) => ({
+      queryKey: [IMAGE_REGIONS_KEY, clonedImage.id],
+      queryFn: () => fetchImageCloneStatus(clonedImage.id),
+    })) || [];
+
+  const clonesStatusQueries = useQueries({ queries });
   const isCloneStatusLoading = clonesStatusQueries.some((clone) => clone.isLoading);
   const defaultRegion = { region: provider && defaultRegionByProvider(provider), id: composeID };
   const images = [defaultRegion];

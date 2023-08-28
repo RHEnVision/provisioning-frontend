@@ -5,7 +5,7 @@ import { ExpandableSection, DescriptionList, DescriptionListTerm, DescriptionLis
 import { useSourcesData } from '../Common/Hooks/sources';
 import { useWizardContext } from '../Common/WizardContext';
 import { instanceType, region } from '../ProvisioningWizard/steps/ReservationProgress/helpers';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchLaunchTemplates } from '../../API';
 import { humanizeProvider } from '../Common/helpers';
 import { TEMPLATES_KEY } from '../../API/queryKeys';
