@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Radio, Text, Title } from '@patternfly/react-core';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useWizardContext } from '../../../Common/WizardContext';
 import PubkeySelect from './PubkeySelect';
 import NewSSHKeyForm from './NewKeyForm';

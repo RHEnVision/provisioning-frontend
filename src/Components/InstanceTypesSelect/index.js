@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
@@ -16,7 +16,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
   const [prevSearch, setPrevSearch] = React.useState('');
   const [isTypeSupported, setTypeSupported] = React.useState(true);
   const {
-    isLoading,
+    isInitialLoading: isLoading,
     error,
     data: instanceTypes,
   } = useQuery(['instanceTypes', chosenRegion], () => fetchInstanceTypesList(chosenRegion, provider), {

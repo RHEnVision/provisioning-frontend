@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, SelectOption, Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { useWizardContext } from '../Common/WizardContext';
 import { fetchLaunchTemplates } from '../../API';
@@ -12,7 +12,7 @@ const TemplatesSelect = () => {
 
   const {
     error,
-    isLoading,
+    isInitialLoading: isLoading,
     data: templates,
   } = useQuery([TEMPLATES_KEY, `${chosenRegion}-${chosenSource}`], () => fetchLaunchTemplates(chosenSource, chosenRegion), {
     enabled: !!chosenSource && !!chosenRegion,

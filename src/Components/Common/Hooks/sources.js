@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery, useQueries } from 'react-query';
+import { useQuery, useQueries } from '@tanstack/react-query';
 
 import { SOURCES_QUERY_KEY, SOURCE_UPLOAD_INFO_KEY } from '../../../API/queryKeys';
 import { fetchSourcesList, fetchSourceUploadInfo } from '../../../API';
@@ -8,7 +8,7 @@ import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../constants';
 export const useSourcesData = (provider, { refetch = false } = {}) => {
   const {
     error,
-    isLoading,
+    isInitialLoading: isLoading,
     data: sources,
   } = useQuery([SOURCES_QUERY_KEY, provider], () => fetchSourcesList(provider), {
     enabled: !!provider,
@@ -20,9 +20,13 @@ export const useSourcesData = (provider, { refetch = false } = {}) => {
 const useSourcesUploadInfos = (provider, { refetch }) => {
   const { sources, isLoading: isLoadingSources, error: sourcesError } = useSourcesData(provider, { refetch });
 
-  const uploadInfos = useQueries(
-    sources?.map((source) => ({ queryKey: [SOURCE_UPLOAD_INFO_KEY, source.id], queryFn: () => fetchSourceUploadInfo(source.id), retry: 1 })) || []
-  );
+  const queries =
+    sources?.map((source) => ({
+      queryKey: [SOURCE_UPLOAD_INFO_KEY, source.id],
+      queryFn: () => fetchSourceUploadInfo(source.id),
+      retry: 1,
+    })) || [];
+  const uploadInfos = useQueries({ queries });
 
   const isLoading = isLoadingSources || uploadInfos.some((info) => info.isLoading);
   const infos = [];
@@ -54,7 +58,7 @@ export const useSourcesForImage = (image, { refetch = false, onSuccess = () => {
     if (!isLoading && !error) {
       onSuccess(filteredSources);
     }
-  }, [isLoading]);
+  }, [isLoading, error]);
 
   return { isLoading, error, sources: filteredSources || [] };
 };

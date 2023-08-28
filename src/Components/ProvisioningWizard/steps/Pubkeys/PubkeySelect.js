@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Select, SelectOption, Spinner, FormGroup } from '@patternfly/react-core';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { PUBKEYS_QUERY_KEY } from '../../../../API/queryKeys';
 import { fetchPubkeysList } from '../../../../API';
