@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
+import { Alert, Select, SelectOption, Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 
 import { imageProps } from '../ProvisioningWizard/helpers';
 import { useSourcesForImage } from '../Common/Hooks/sources';
 import { useWizardContext } from '../Common/WizardContext';
 
 const SourcesSelect = ({ setValidation, image }) => {
+  const { isBeta } = useChrome();
   const [{ chosenSource }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
@@ -63,22 +65,42 @@ const SourcesSelect = ({ setValidation, image }) => {
   if (isLoading) {
     return <Spinner isSVG size="sm" aria-label="Loading accounts" />;
   }
+  const isSelectedSourceUnavailable = selected != undefined && sources.find((source) => source.id === selected.id && source.status != 'available');
+
+  let link = isBeta() ? '/preview/settings/sources/' : '/settings/sources/';
+  if (chosenSource) {
+    link = isBeta() ? `/preview/settings/sources/detail/${chosenSource}` : `/settings/sources/detail/${chosenSource}`;
+  }
 
   return (
-    <Select
-      ouiaId="select_account"
-      isOpen={isOpen}
-      onToggle={(openState) => setIsOpen(openState)}
-      selections={selected}
-      maxHeight="180px"
-      // TODO decide if to disable the select
-      // isDisabled={sources?.length === 1}
-      onSelect={onSelect}
-      placeholderText="Select account"
-      aria-label="Select account"
-    >
-      {sources && selectItemsMapper()}
-    </Select>
+    <>
+      <Select
+        ouiaId="select_account"
+        isOpen={isOpen}
+        onToggle={(openState) => setIsOpen(openState)}
+        selections={selected}
+        maxHeight="180px"
+        validated={isSelectedSourceUnavailable && 'warning'}
+        // TODO decide if to disable the select
+        // isDisabled={sources?.length === 1}
+        onSelect={onSelect}
+        placeholderText="Select account"
+        aria-label="Select account"
+      >
+        {sources && selectItemsMapper()}
+      </Select>
+      {isSelectedSourceUnavailable && (
+        <HelperText id="account-error-inline">
+          <HelperTextItem variant="warning">
+            source is unavailable, for more information click{' '}
+            <a href={link} target="_blank" rel="noreferrer">
+              {' '}
+              here{' '}
+            </a>
+          </HelperTextItem>
+        </HelperText>
+      )}
+    </>
   );
 };
 
