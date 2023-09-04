@@ -34,7 +34,7 @@ describe('ProvisioningWizard', () => {
         })
       );
 
-      render(<ProvisioningWizard image={{ ...awsImage, sourceIDs: ['1'] }} />);
+      render(<ProvisioningWizard hasAccess image={{ ...awsImage, sourceIDs: ['1'] }} />);
       // wait for the sources to load
       await screen.findByText('Select account', undefined, { timeout: 10000 });
 
@@ -45,16 +45,23 @@ describe('ProvisioningWizard', () => {
     }, 30000);
 
     test('shows loading sources', () => {
-      render(<ProvisioningWizard image={awsImage} />);
+      render(<ProvisioningWizard hasAccess image={awsImage} />);
       expect(screen.getByText(/Loading available Sources/i)).toBeInTheDocument();
     });
 
     test('shows empty state when no sources matching', async () => {
       // the image has no source info, thus no match
-      render(<ProvisioningWizard image={awsImage} />);
+      render(<ProvisioningWizard hasAccess image={awsImage} />);
       const createBtn = await screen.findByText('Create Source');
 
       expect(createBtn).toBeInTheDocument();
+    });
+
+    test('shows no permissions modal', async () => {
+      render(<ProvisioningWizard onClose={jest.fn} hasAccess={false} image={{ ...awsImage, sourceIDs: ['1'] }} />);
+      const missingPermissionTitle = 'Access permissions needed';
+      const modal = await screen.findByText(missingPermissionTitle);
+      expect(modal).toBeInTheDocument();
     });
   });
 });
