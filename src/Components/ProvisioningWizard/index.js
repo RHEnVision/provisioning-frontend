@@ -13,13 +13,14 @@ import './steps/Pubkeys/pubkeys.scss';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import { useEffectOnce } from '../Common/Hooks/useEffectOnce';
+import PermissionMissing from './steps/NoPermission';
 
 const DEFAULT_STEP_VALIDATION = {
   sshStep: false,
   awsStep: false,
 };
 
-const ProvisioningWizard = ({ onClose, image, ...props }) => {
+const ProvisioningWizard = ({ onClose, hasAccess, image, ...props }) => {
   const [stepIdReached, setStepIdReached] = React.useState(1);
   const [stepValidation, setStepValidation] = React.useState(DEFAULT_STEP_VALIDATION);
   const [isConfirming, setConfirming] = React.useState(false);
@@ -58,10 +59,13 @@ const ProvisioningWizard = ({ onClose, image, ...props }) => {
     setLaunchSuccess,
   });
 
-  const onNext = ({ id, name }, { prevId, prevName }) => {
-    console.debug(`current id: ${id}, current name: ${name}, previous id: ${prevId}, previous name: ${prevName}`);
+  const onNext = ({ id }) => {
     setStepIdReached((prevID) => (prevID < id ? id : prevID));
   };
+
+  if (!hasAccess) {
+    return <PermissionMissing onClose={onClose} image={image} />;
+  }
 
   return (
     <>
