@@ -13,7 +13,6 @@ on:
         type: choice
         options:
           - production
-          - stage-stable
 
 
 jobs:
@@ -36,25 +35,12 @@ jobs:
             echo "Target is production and source ref isn't an ancestor of main"
             exit 1
           fi
-          if ! git merge-base --is-ancestor ${{ github.event.inputs.source }} origin/stage-stable; then
-            echo "Target is production and source ref isn't deployed in stage-stable"
-            echo "The main and stage-stable branches should be in sync, please fix"
-            exit 1
-          fi
-
-      - name: Check stage-stable manual sync
-        if: ${{ github.event.inputs.target == 'stage-stable' }}
-        run: |
-          if [ $(git rev-parse ${{ github.event.inputs.source }}) != $(git rev-parse origin/main) ]; then
-            echo "Target is stage-stable and source ref isn't main"
-            exit 1
-          fi
 
 
   sync:
     name: Sync source and target refs
     needs: check
-    if: ${{ github.event_name == 'push' || success() }}
+    if: ${{ success() }}
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
@@ -70,8 +56,3 @@ jobs:
         run: |
           git push https://${GITHUB_ACTOR}:${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git HEAD:prod-beta
           git push https://${GITHUB_ACTOR}:${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git HEAD:prod-stable
-
-      - name: Sync main to stage-stable
-        if: ${{ github.event_name == 'push' || github.event.inputs.target == 'stage-stable' }}
-        run:
-          git push https://${GITHUB_ACTOR}:${{ secrets.FE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git HEAD:stage-stable
