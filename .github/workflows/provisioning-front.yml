@@ -54,7 +54,7 @@ jobs:
         run: npm test
 
       - name: Run build
-        run: yarn build
+        run: npm run build
 
       - uses: actions/upload-artifact@v3
         with:
