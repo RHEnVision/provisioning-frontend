@@ -1,7 +1,22 @@
 <!-- insertion marker -->
+<a name="1.7.0"></a>
+
+## [1.7.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.6.0...1.7.0) (2023-09-05)
+
+### Features
+
+- **HMS-2444:** migrate to react-query v4 ([bc32c80](https://github.com/RHEnVision/provisioning-frontend/commit/bc32c80652fd10b4b54ffb98726856e14a9d0634))
+- **HMS-2369:** remove stage old deployment ([968ce20](https://github.com/RHEnVision/provisioning-frontend/commit/968ce20c977c6c14858ee3029cd97388245e28b0))
+- **HMS-2301:** add query search for instance types select ([af81237](https://github.com/RHEnVision/provisioning-frontend/commit/af812376623f84357f1465a3e09f56c27115090d))
+
+### Bug Fixes
+
+- **HMS-1913:** add an optinal string to template select ([5967648](https://github.com/RHEnVision/provisioning-frontend/commit/5967648ffe28ec619fd115f7f811c7465225e1ba))
+- **HMS-2428:** reduce the bundle size ([b68193e](https://github.com/RHEnVision/provisioning-frontend/commit/b68193ef2328fcecb68adb1d0eb627e4163182dc))
+
 <a name="1.6.0"></a>
 
-## [1.6.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.5.0...1.6.0) (2023-08-23)
+## [1.6.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.5.0...1.6.0) (2023-08-24)
 
 ### Features
 
@@ -91,20 +106,13 @@
 
 <a name="0.21.0"></a>
 
-## [0.21.0](https://github.com/RHEnVision/provisioning-frontend/compare/summit23a...0.21.0) (2023-05-15)
-
-### Features
-
-- **HMS-1614:** Add vCPU limit Warning ([6029c5b](https://github.com/RHEnVision/provisioning-frontend/commit/6029c5ba688bb4ccf0132fb82a85ce42f26379bb))
-- **HMS-1109:** Add correlation id to UI ([03c58b9](https://github.com/RHEnVision/provisioning-frontend/commit/03c58b98da9eaba0ecbeafd2ecbf6c685266bc57))
-
-<a name="summit23a"></a>
-
-## [summit23a](https://github.com/RHEnVision/provisioning-frontend/compare/0.20.0...summit23a) (2023-05-08)
+## [0.21.0](https://github.com/RHEnVision/provisioning-frontend/compare/0.20.0...0.21.0) (2023-05-15)
 
 ### Features
 
 - **HMS-1411:**  ed25519 type is unsupported in azure ([519e930](https://github.com/RHEnVision/provisioning-frontend/commit/519e9309272723a8ca3b4dc9408f3fed03e416f3))
+- **HMS-1614:** Add vCPU limit Warning ([6029c5b](https://github.com/RHEnVision/provisioning-frontend/commit/6029c5ba688bb4ccf0132fb82a85ce42f26379bb))
+- **HMS-1109:** Add correlation id to UI ([03c58b9](https://github.com/RHEnVision/provisioning-frontend/commit/03c58b98da9eaba0ecbeafd2ecbf6c685266bc57))
 
 ### Bug Fixes
 
@@ -251,3 +259,4 @@
 ### Bug Fixes
 
 - **pubkeys:** Component refresh does not move cursor ([34b88b7](https://github.com/RHEnVision/provisioning-frontend/commit/34b88b7844ed12e49d13a0ccb84de4ab56800b19)), related to [HMSPROV-270](https://issues.redhat.com/browse/HMSPROV-270)
+
