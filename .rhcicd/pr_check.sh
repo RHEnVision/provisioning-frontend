@@ -28,8 +28,6 @@ set -exv
 # source is preferred to | bash -s in this case to avoid a subshell
 source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
 
-source $WORKSPACE/.rhcicd/sonarqube.sh
-
 # Install bonfire repo/initialize
 CICD_URL=https://raw.githubusercontent.com/RedHatInsights/bonfire/master/cicd
 # shellcheck source=/dev/null

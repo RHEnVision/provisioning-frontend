@@ -19,8 +19,6 @@ BUILD_RESULTS=$?
 # cleanup docker builds as sonar user do not have perms to read them
 rm -r $PWD/.docker || true
 
-source $WORKSPACE/.rhcicd/sonarqube.sh || true
-
 # Stubbed out for now
 mkdir -p $WORKSPACE/artifacts
 cat << EOF > $WORKSPACE/artifacts/junit-dummy.xml
