@@ -34,7 +34,7 @@
     "jsonata": "^2.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-tracked": "^1.7.10",
+    "react-tracked": "^1.7.11",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
