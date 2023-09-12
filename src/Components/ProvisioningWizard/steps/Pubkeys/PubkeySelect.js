@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Select, SelectOption, Spinner, FormGroup } from '@patternfly/react-core';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { PUBKEYS_QUERY_KEY } from '../../../../API/queryKeys';
 import { fetchPubkeysList } from '../../../../API';
 import { useWizardContext } from '../../../Common/WizardContext';
 import { isNotSupportKeyFormat } from './helpers';
 import { humanizeProvider } from '../../../Common/helpers';
+import { LIMIT } from '../../../../API/helpers';
 
 const selectOptionObj = (id, name) => ({
   id: id,
@@ -34,7 +35,17 @@ const PubkeySelect = ({ setStepValidated }) => {
     }
   }, [selection]);
 
-  const { isLoading, isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
+  const { data, fetchNextPage, isLoading, isError, hasNextPage } = useInfiniteQuery({
+    queryKey: [PUBKEYS_QUERY_KEY],
+    queryFn: ({ pageParam = 0 }) => fetchPubkeysList(pageParam),
+    getNextPageParam: (lastPage) => {
+      const nextOffset = lastPage.data?.length < lastPage.metadata?.total ? lastPage.offset + LIMIT : false;
+      return nextOffset;
+    },
+  });
+
+  const total = data?.pages[0]?.metadata?.total || 0;
+  const pubkeys = data?.pages.map((page) => page.data).flat() || [];
 
   const onSelect = (event, value) => {
     setWizardContext((prevState) => ({
@@ -61,7 +72,7 @@ const PubkeySelect = ({ setStepValidated }) => {
 
   return (
     <FormGroup
-      helperTextInvalid={`Key format is not support in ${humanizeProvider(wizardContext.provider)}`}
+      helperTextInvalid={`Key format is not supported in ${humanizeProvider(wizardContext.provider)}`}
       label="Select public key"
       validated={!isKeySupported && 'error'}
     >
@@ -73,11 +84,25 @@ const PubkeySelect = ({ setStepValidated }) => {
         selections={selection}
         placeholderText="Select public key..."
         aria-label="Select public key"
-        validated={!isKeySupported && 'error'}
+        {...(pubkeys &&
+          hasNextPage &&
+          pubkeys.length < total && {
+            loadingVariant: {
+              text: `View more (${total - pubkeys.length})`,
+              onClick: () => {
+                fetchNextPage();
+              },
+            },
+          })}
       >
-        {pubkeys.map(({ id, name }) => (
-          <SelectOption aria-label={`Public key ${name}`} key={id} value={selectOptionObj(id, name)} />
-        ))}
+        {pubkeys &&
+          data.pages.map((group, i) => (
+            <React.Fragment key={i}>
+              {group.data.map((pubkey) => (
+                <SelectOption aria-label={`Public key ${pubkey.name}`} key={pubkey.id} value={selectOptionObj(pubkey.id, pubkey.name)} />
+              ))}
+            </React.Fragment>
+          ))}
       </Select>
     </FormGroup>
   );
