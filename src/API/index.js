@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AZURE_PROVIDER } from '../constants';
-import { imageBuilderURL, provisioningUrl } from './helpers';
+import { LIMIT, imageBuilderURL, provisioningUrl } from './helpers';
 
 const typesUrlForProvider = (provider, region) => {
   switch (provider) {
@@ -23,11 +23,11 @@ export const fetchSourceUploadInfo = async (sourceID) => {
   return data;
 };
 
-export const fetchPubkeysList = async () => {
+export const fetchPubkeysList = async (offset = 0) => {
   const {
-    data: { data },
-  } = await axios.get(provisioningUrl('pubkeys'));
-  return data;
+    data: { data, metadata },
+  } = await axios.get(provisioningUrl(`pubkeys?limit=${LIMIT}&offset=${offset}`));
+  return { data, metadata, offset };
 };
 
 export const fetchInstanceTypesList = async (region, provider) => {

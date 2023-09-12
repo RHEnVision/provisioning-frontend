@@ -1,19 +1,25 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, FormGroup, Radio, Text, Title } from '@patternfly/react-core';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useWizardContext } from '../../../Common/WizardContext';
 import PubkeySelect from './PubkeySelect';
 import NewSSHKeyForm from './NewKeyForm';
 import { PUBKEYS_QUERY_KEY } from '../../../../API/queryKeys';
 import { fetchPubkeysList } from '../../../../API';
+import { OFFSET } from '../../../../API/helpers';
 
 const EXIST_KEY_OPTION = 'existKey';
 const NEW_KEY_OPTION = 'newKey';
 
 const PublicKeys = ({ setStepValidated }) => {
   const [wizardContext, setWizardContext] = useWizardContext();
-  const { isError, data: pubkeys } = useQuery(PUBKEYS_QUERY_KEY, fetchPubkeysList);
+  const { isError, data } = useInfiniteQuery({
+    queryKey: [PUBKEYS_QUERY_KEY],
+    queryFn: () => fetchPubkeysList(OFFSET),
+    // we care just about the first page here
+    getNextPageParam: () => 0,
+  });
   const [isSelectDisabled, disableSelect] = React.useState(false);
 
   const switchTo = (optionKey) => {
@@ -28,11 +34,11 @@ const PublicKeys = ({ setStepValidated }) => {
   };
 
   React.useEffect(() => {
-    if (isError || pubkeys?.length < 1) {
+    if (isError || data?.pages?.[0]?.data?.length < 1) {
       disableSelect(true);
       switchTo(NEW_KEY_OPTION);
     }
-  }, [isError, pubkeys]);
+  }, [isError, data]);
 
   return (
     <Form className="pubkeys">

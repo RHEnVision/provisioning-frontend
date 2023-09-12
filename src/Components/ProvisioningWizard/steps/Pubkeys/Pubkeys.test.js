@@ -2,7 +2,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import Pubkeys from '.';
 
-import { render, screen } from '../../../../mocks/utils';
+import { render, screen, waitFor } from '../../../../mocks/utils';
 import { provisioningUrl } from '../../../../API/helpers';
 import PubkeySelect from './PubkeySelect';
 import { pubkeysList } from '../../../../mocks/fixtures/pubkeys.fixtures';
@@ -19,7 +19,61 @@ describe('Pubkeys', () => {
       expect(items).toHaveLength(2);
     });
 
+    test('view more with click', async () => {
+      const { server, rest } = window.msw;
+      server.use(
+        rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              data: [{ id: 2, name: 'pk2' }],
+              metadata: { total: 2 },
+            })
+          );
+        })
+      );
+
+      render(<Pubkeys setStepValidated={jest.fn()} />);
+      const existingRadio = screen.getByTestId('existing-pubkey-radio');
+      expect(existingRadio).toBeChecked();
+      const select = await screen.findByText('Select public key...');
+      await userEvent.click(select);
+      const items = screen.getAllByLabelText(/^Public key/);
+      expect(items).toHaveLength(1);
+      const viewMore1 = screen.getByText('View more (1)');
+      expect(viewMore1).toBeInTheDocument();
+
+      await userEvent.click(viewMore1);
+      await waitFor(() => {
+        const newItems = screen.getAllByLabelText(/^Public key/);
+        expect(newItems).toHaveLength(2);
+      });
+
+      const viewMore = screen.queryByText(/View more /);
+      expect(viewMore).toBeNull();
+    });
+
     test('select is disabled when error', async () => {
+      const { server, rest } = window.msw;
+      server.use(
+        rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
+          return res(
+            ctx.status(500),
+            ctx.json({
+              msg: 'error',
+              trace_id: 'trcid',
+              error: 'stack trace',
+            })
+          );
+        })
+      );
+      render(<Pubkeys setStepValidated={jest.fn()} />);
+      await screen.findByText('No SSH key found');
+      const existingRadio = await screen.findByTestId('existing-pubkey-radio');
+      expect(existingRadio).toBeDisabled();
+    });
+
+    test('select is disabled when there are no keys', async () => {
       const { server, rest } = window.msw;
       server.use(
         rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
