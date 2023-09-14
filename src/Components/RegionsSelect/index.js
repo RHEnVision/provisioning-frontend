@@ -30,7 +30,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
   const defaultRegion = { region: provider && defaultRegionByProvider(provider), id: composeID };
   const images = [defaultRegion];
   // filter successful clones images
-  if (clonesStatusQueries.length && clonesStatusQueries.every((cloneQuery) => cloneQuery.isLoading === false)) {
+  if (clonesStatusQueries.length && !isCloneStatusLoading) {
     const clonesStatus = clonesStatusQueries?.map((query) => query?.data);
     // enrich the cloned image data
     clonesStatus?.forEach((status, index) => {
