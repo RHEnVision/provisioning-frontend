@@ -1,20 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { ClipboardCopy, StackItem } from '@patternfly/react-core';
-import { imageProps } from '../ProvisioningWizard/helpers';
+import { imageProps } from '../../helpers';
 import './GCPConsoleLaunch.scss';
 
 const launchInstanceCommand = (options) => {
   return `gcloud compute instances create ${options.image_name}-instance --image-project ${options.project_id} --image ${options.image_name}`;
 };
 
-const GCPConsoleLaunch = ({ image }) => {
+const GCPConsoleLaunch = ({ text, image }) => {
   return (
     <>
-      <br />
-      <p>or</p>
-      <br />
       <StackItem>
-        <strong> Launch with Google Cloud Console </strong>
+        <strong>{text}</strong>
       </StackItem>
       <StackItem isFilled>
         <ClipboardCopy
@@ -34,6 +32,7 @@ const GCPConsoleLaunch = ({ image }) => {
 
 GCPConsoleLaunch.propTypes = {
   image: imageProps,
+  text: PropTypes.string,
 };
 
 export default GCPConsoleLaunch;

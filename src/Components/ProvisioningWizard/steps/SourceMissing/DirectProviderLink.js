@@ -5,7 +5,7 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../../constants';
 import RegionsSelect from '../../../RegionsSelect';
 import { imageProps } from '../../helpers.js';
-import GCPConsoleLaunch from '../../../GCPConsoleLaunch';
+import GCPConsoleLaunch from './GCPConsoleLaunch';
 
 const DirectProviderLink = ({ image }) => {
   const uploadStatus = image.uploadStatus || { options: {} };
@@ -31,21 +31,21 @@ const DirectProviderLink = ({ image }) => {
         uploadStatus.options.image_name;
       break;
     case GCP_PROVIDER:
+      text = 'Launch with Google Cloud Console';
       break;
     default:
       throw new Error(`Steps requested for unknown provider: ${image.provider}`);
   }
 
-  // Currently only AWS, so the ami is hardcoded
+  // Currently only used for AWS
   const onRegionChange = (image) => {
-    console.log(image);
     setImage(image);
   };
 
   return (
     <Stack>
       {image.provider === GCP_PROVIDER ? (
-        <GCPConsoleLaunch image={image} />
+        <GCPConsoleLaunch text={text} image={image} />
       ) : (
         <StackItem>
           <Button component="a" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" target="_blank" href={url}>
