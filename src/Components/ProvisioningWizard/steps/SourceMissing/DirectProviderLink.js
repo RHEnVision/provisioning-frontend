@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Bullseye, Stack, StackItem } from '@patternfly/react-core';
+import { Button, FormGroup, Bullseye, Stack, StackItem } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../../constants';
@@ -56,7 +56,9 @@ const DirectProviderLink = ({ image }) => {
       {image.provider === AWS_PROVIDER && (
         <StackItem>
           <Bullseye>
-            <RegionsSelect composeID={image.id} provider={image.provider} currentRegion={currentImage.region} onChange={onRegionChange} />
+            <FormGroup>
+              <RegionsSelect composeID={image.id} provider={image.provider} currentRegion={currentImage.region} onChange={onRegionChange} />
+            </FormGroup>
           </Bullseye>
         </StackItem>
       )}
