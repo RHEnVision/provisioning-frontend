@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Select, SelectOption, Spinner } from '@patternfly/react-core';
+import { FormHelperText, HelperText, HelperTextItem, Select, SelectOption, Spinner } from '@patternfly/react-core';
 import { useQuery, useQueries } from '@tanstack/react-query';
 
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER, MULTIPLE_REGION_SUPPORT } from '../../constants';
@@ -53,8 +53,19 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
   if (isError) {
     return (
       <>
-        <Alert ouiaId="regions_alert" variant="warning" isInline title="There are problems fetching image's regions" />
-        <Select ouiaId="regions_empty" isDisabled placeholderText="No regions have been found" />
+        <Select
+          aria-label="Select region"
+          label="Select region"
+          validated="error"
+          ouiaId="regions_empty"
+          isDisabled
+          placeholderText="No regions have been found"
+        />
+        <FormHelperText isHidden={false} component="div">
+          <HelperText className="region-select-load-error">
+            <HelperTextItem variant="error">There are problems fetching available regions for this image.</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
       </>
     );
   }
