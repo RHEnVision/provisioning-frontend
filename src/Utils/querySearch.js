@@ -2,9 +2,10 @@ const jsonata = require('jsonata');
 
 const OPERATORS = ['<', '>', '='];
 
-const parseQuery = (query) => {
+export const parseQuery = (query) => {
   query = query.replace('memory', 'memory_mib');
   query = query.replace('storage', 'storage_gb');
+  query = query.replace(/vcpu(\W|$)/i, 'vcpus$1');
   if (OPERATORS.every((operator) => !query.includes(operator))) {
     query = `name ~> /${query}/i`;
   }
