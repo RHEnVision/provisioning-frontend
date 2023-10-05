@@ -46,6 +46,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
       chosenImageID,
       provider,
       chosenTemplate,
+      azureResourceGroup,
     },
   ] = useWizardContext();
   const { nextInterval, currentInterval } = useInterval(POLLING_BACKOFF_INTERVAL);
@@ -65,6 +66,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
     [region(provider)]: chosenRegion,
     pubkey_id: chosenSshKeyId,
     ...(chosenTemplate && { launch_template_id: chosenTemplate }),
+    ...(azureResourceGroup && { resource_group: azureResourceGroup }),
   });
 
   React.useEffect(() => {

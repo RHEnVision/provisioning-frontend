@@ -4,3 +4,4 @@ export const PUBKEYS_QUERY_KEY = ['pubkeys'];
 export const instanceTypesQueryKeys = (region) => ['instanceTypes', region];
 export const IMAGE_REGIONS_KEY = 'image_region';
 export const TEMPLATES_KEY = 'templates';
+export const AZURE_RG_KEY = 'azure_resource_group';

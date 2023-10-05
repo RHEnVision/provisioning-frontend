@@ -72,3 +72,10 @@ export const fetchLaunchTemplates = async (sourceID, region) => {
   } = await axios.get(provisioningUrl(`sources/${sourceID}/launch_templates?region=${region}`));
   return data;
 };
+
+export const fetchResourceGroups = async (sourceID) => {
+  const {
+    data: { azure },
+  } = await axios.get(provisioningUrl(`sources/${sourceID}/upload_info`));
+  return azure?.resource_groups;
+};

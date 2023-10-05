@@ -5,13 +5,18 @@ import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WizardProvider } from '../Components/Common/WizardContext';
 
-const AllProviders = ({ children, provider, ...contextValues }) => {
+const AllProviders = ({ children, provider, queryRetries = false, ...contextValues }) => {
   const queryClient = new QueryClient({
     logger: {
       log: console.log,
       warn: console.warn,
       // ✅ no more errors on the console
       error: () => {},
+    },
+    defaultOptions: {
+      queries: {
+        retry: queryRetries,
+      },
     },
   });
 
