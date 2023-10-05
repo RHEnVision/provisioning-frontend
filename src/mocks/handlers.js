@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 import { imageBuilderURL, provisioningUrl } from '../API/helpers';
 import { awsInstanceTypeList, azureInstanceTypeList } from './fixtures/instanceTypes.fixtures';
-import { sourcesList, gcpSourcesList, awsSourceUploadInfo, gcpSourceUploadInfo } from './fixtures/sources.fixtures';
+import { sourcesList, gcpSourcesList, awsSourceUploadInfo, azureSourceUploadInfo, gcpSourceUploadInfo } from './fixtures/sources.fixtures';
 import { pubkeysList } from './fixtures/pubkeys.fixtures';
 import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/image.fixtures';
 import {
@@ -30,6 +30,8 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(awsSourceUploadInfo()));
     } else if (sourceID === '10') {
       return res(ctx.status(200), ctx.json(gcpSourceUploadInfo()));
+    } else if (sourceID === '66') {
+      return res(ctx.status(200), ctx.json(azureSourceUploadInfo));
     }
   }),
   rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {

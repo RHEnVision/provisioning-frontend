@@ -17,9 +17,27 @@ export const gcpSourcesList = {
   ],
 };
 
+export const azureSourcesList = {
+  data: [
+    {
+      name: 'Azure Source 1',
+      id: '66',
+    },
+  ],
+};
+
 export const gcpSourceUploadInfo = () => ({ gcp: {} });
 
 export const awsSourceUploadInfo = (account_id = '123456789') => ({ aws: { account_id } });
+
+export const azureSourceUploadInfo = {
+  azure: {
+    resource_groups: ['testGroup', 'Cool Group'],
+    subscription_id: '617807e1-e4e0-4855-983c-1e3ce1e49674',
+    tenant_id: '617807e1-e4e0-481c-983c-be3ce1e49253',
+  },
+  provider: 'azure',
+};
 
 export const awsSourceFailedUploadInfo = () => ({
   msg: 'AWS API error: unable to get AWS upload info',

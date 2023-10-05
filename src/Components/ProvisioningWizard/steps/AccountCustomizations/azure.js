@@ -9,6 +9,7 @@ import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
 import RegionsSelect from '../../../RegionsSelect';
+import AzureResourceGroup from '../../../AzureResourceGroup';
 import { useWizardContext } from '../../../Common/WizardContext';
 
 const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
@@ -76,6 +77,30 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
         }
       >
         <RegionsSelect provider={AZURE_PROVIDER} currentRegion={wizardContext.chosenRegion} onChange={onRegionChange} composeID={image.id} />
+      </FormGroup>
+      <FormGroup
+        label="Azure resource group"
+        fieldId="azure-resource-group-select"
+        labelIcon={
+          <Popover
+            headerContent={<div>Azure resource group</div>}
+            bodyContent={<div>Azure resource group to deploy the VM resources into. If left blank, defaults to &lsquo;redhat-deployed&rsquo;.</div>}
+          >
+            <Button
+              ouiaId="resource_group_help"
+              type="button"
+              aria-label="More info for resource group field"
+              onClick={(e) => e.preventDefault()}
+              aria-describedby="azure-resource-group-select"
+              className="pf-c-form__group-label-help"
+              variant="plain"
+            >
+              <HelpIcon noVerticalAlign />
+            </Button>
+          </Popover>
+        }
+      >
+        <AzureResourceGroup />
       </FormGroup>
       <FormGroup
         label="Select instance size"
