@@ -10,6 +10,31 @@ import _throttle from 'lodash/throttle';
 const OPTIONS_PER_SCREEN = 3;
 const sanitizeSearchValue = (str) => str.replace(/\\+$/, '');
 
+/**
+ * Transforms the input architecture to a more general one following the same
+ * pattern matching that the one found in the backend.
+ */
+const mapArchitectures = (arch) => {
+  switch (arch) {
+    case 'x86_64_mac':
+      return 'apple-x86_64';
+    case 'arm64_mac':
+      return 'apple-arm64';
+    case 'i386':
+      return 'i386';
+    case 'x86-64':
+    case 'x86_64':
+    case 'x64':
+      return 'x86_64';
+    case 'aarch64':
+    case 'arm64':
+    case 'Arm64':
+    case 'arm':
+      return 'arm64';
+  }
+  return undefined;
+};
+
 const InstanceTypesSelect = ({ setValidation, architecture }) => {
   const [{ chosenInstanceType, chosenRegion, chosenSource, provider }, setWizardContext] = useWizardContext();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -24,7 +49,10 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
     data: instanceTypes,
   } = useQuery(['instanceTypes', chosenRegion], () => fetchInstanceTypesList(chosenRegion, provider), {
     staleTime: 5 * (60 * 1000), // data is considered fresh for 5 minutes (same as cacheTime)
-    select: (types) => types.filter((type) => type.architecture === architecture),
+    // The backend is mapping the architectures to reduce their diversity to a
+    // more limited set of options. To make sure to match with the user's
+    // desired architecture apply the same transformation in the filter.
+    select: (types) => types.filter((type) => type.architecture === mapArchitectures(architecture)),
     enabled: !!chosenRegion && !!chosenSource,
     onError: () => {
       setValidation('error');

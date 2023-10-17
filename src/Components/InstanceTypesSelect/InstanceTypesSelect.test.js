@@ -4,7 +4,7 @@ import InstanceTypesSelect from '.';
 import { awsInstanceTypeList, azureInstanceTypeList } from '../../mocks/fixtures/instanceTypes.fixtures';
 import { render, screen } from '../../mocks/utils';
 
-describe('InstanceTypesSelect', () => {
+describe('InstanceTypesSelect x86_64', () => {
   test('populate AWS instance types select', async () => {
     await mountSelectAndClick();
     const items = await screen.findAllByLabelText(/^Instance Type/);
@@ -59,8 +59,29 @@ describe('InstanceTypesSelect', () => {
   });
 });
 
-const mountSelectAndClick = async (provider = 'aws') => {
-  render(<InstanceTypesSelect architecture="x86_64" setValidation={jest.fn()} />, {
+describe('test architecture mapping for instance selection', () => {
+  const X86_64 = 'x86_64';
+  const ARM64 = 'arm64';
+  const allX86s = ['x86-64', 'x86_64', 'x64'];
+  allX86s.forEach((x86) => {
+    test(x86, async () => {
+      await mountSelectAndClick('aws', x86);
+      const items = await screen.findAllByLabelText(/^Instance Type/);
+      expect(items).toHaveLength(awsInstanceTypeList.data.filter((type) => type.architecture === X86_64).length);
+    });
+  });
+  const allArch = ['aarch64', 'arm64', 'Arm64', 'arm'];
+  allArch.forEach((arm) => {
+    test(arm, async () => {
+      await mountSelectAndClick('aws', arm);
+      const items = await screen.findAllByLabelText(/^Instance Type/);
+      expect(items).toHaveLength(awsInstanceTypeList.data.filter((type) => type.architecture === ARM64).length);
+    });
+  });
+});
+
+const mountSelectAndClick = async (provider = 'aws', architecture = 'x86_64') => {
+  render(<InstanceTypesSelect architecture={architecture} setValidation={jest.fn()} />, {
     provider,
     contextValues: { chosenSource: '1' },
   });
