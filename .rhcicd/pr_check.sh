@@ -40,7 +40,7 @@ export COMPONENT_NAME="provisioning-backend"
 
 oc project $NAMESPACE
 
-export AWS_ACCOUNT_ID="093942615996"
+export AWS_ACCOUNT_ID="988542195534"
 source <(curl -ksSL https://gitlab.cee.redhat.com/satellite-services/hms-cicd/-/raw/main/images_db_stub.sh)
 
 source "${CICD_ROOT}/cji_smoke_test.sh"
