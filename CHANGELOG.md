@@ -1,4 +1,14 @@
 <!-- insertion marker -->
+<a name="1.9.0"></a>
+
+## [1.9.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.8.0...1.9.0) (2023-10-18)
+
+### Features
+
+- **[HMS-1135](https://issues.redhat.com/browse/HMS-1135):** improve arch compatibility ([8ae104a](https://github.com/RHEnVision/provisioning-frontend/commit/8ae104a0d984492f2f3d764b923994ddfdfc827c))
+- **[HMS-1772](https://issues.redhat.com/browse/HMS-1772):** Allow selecting custom resource group ([3e73a67](https://github.com/RHEnVision/provisioning-frontend/commit/3e73a67fa9779537536225be62ba034813eb9017))
+- **[HMS-2227](https://issues.redhat.com/browse/HMS-2227):** Add pubkey pagination ([341eb9d](https://github.com/RHEnVision/provisioning-frontend/commit/341eb9d592ed64b9219d5a7b0395281bcf20d034))
+
 <a name="1.8.0"></a>
 
 ## [1.8.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.7.0...1.8.0) (2023-10-04)
