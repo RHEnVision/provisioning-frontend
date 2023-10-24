@@ -3,17 +3,15 @@ import React from 'react';
 import { Form, FormGroup, Popover, Title, Button, Text } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
-import { AZURE_PROVIDER } from '../../../../constants';
-import { imageProps } from '../../helpers';
+import { imageProps, imageAzureResourceGroup } from '../../helpers';
 import SourcesSelect from '../../../SourcesSelect';
 import InstanceCounter from '../../../InstanceCounter';
 import InstanceTypesSelect from '../../../InstanceTypesSelect';
-import RegionsSelect from '../../../RegionsSelect';
 import AzureResourceGroup from '../../../AzureResourceGroup';
 import { useWizardContext } from '../../../Common/WizardContext';
 
 const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
-  const [wizardContext, setWizardContext] = useWizardContext();
+  const [wizardContext] = useWizardContext();
   const [validations, setValidation] = React.useState({
     sources: wizardContext.chosenSource ? 'success' : 'default',
     types: wizardContext.chosenInstanceType ? 'success' : 'default',
@@ -25,14 +23,6 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
     const errorExists = Object.values(validations).some((valid) => valid == 'error' || valid == 'default');
     setStepValidated(!errorExists);
   }, [validations]);
-
-  const onRegionChange = ({ region, imageID }) => {
-    setWizardContext((prevState) => ({
-      ...prevState,
-      chosenRegion: region,
-      chosenImageID: imageID,
-    }));
-  };
 
   return (
     <Form>
@@ -57,34 +47,17 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
         />
       </FormGroup>
       <FormGroup
-        label="Select location"
-        isRequired
-        fieldId="azure-select-location"
-        labelIcon={
-          <Popover headerContent={<div>Azure locations</div>}>
-            <Button
-              ouiaId="location_help"
-              type="button"
-              aria-label="More info for location field"
-              onClick={(e) => e.preventDefault()}
-              aria-describedby="azure-select-location"
-              className="pf-c-form__group-label-help"
-              variant="plain"
-            >
-              <HelpIcon noVerticalAlign />
-            </Button>
-          </Popover>
-        }
-      >
-        <RegionsSelect provider={AZURE_PROVIDER} currentRegion={wizardContext.chosenRegion} onChange={onRegionChange} composeID={image.id} />
-      </FormGroup>
-      <FormGroup
         label="Azure resource group"
         fieldId="azure-resource-group-select"
         labelIcon={
           <Popover
             headerContent={<div>Azure resource group</div>}
-            bodyContent={<div>Azure resource group to deploy the VM resources into. If left blank, defaults to &lsquo;redhat-deployed&rsquo;.</div>}
+            bodyContent={
+              <div>
+                <p>Azure resource group to deploy the VM resources into. Defaults to the resource group image is located in.</p>
+                <p>The location (Azure region) of the resource group is used for all resources deployed.</p>
+              </div>
+            }
           >
             <Button
               ouiaId="resource_group_help"
@@ -100,7 +73,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
           </Popover>
         }
       >
-        <AzureResourceGroup />
+        <AzureResourceGroup imageResourceGroup={imageAzureResourceGroup(image)} />
       </FormGroup>
       <FormGroup
         label="Select instance size"

@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { ExpandableSection, DescriptionList, DescriptionListTerm, DescriptionListGroup, DescriptionListDescription } from '@patternfly/react-core';
 
+import { imageProps, imageAzureResourceGroup } from '../ProvisioningWizard/helpers';
 import { useSourcesData } from '../Common/Hooks/sources';
 import { useWizardContext } from '../Common/WizardContext';
 import { instanceType, region } from '../ProvisioningWizard/steps/ReservationProgress/helpers';
@@ -11,7 +11,7 @@ import { humanizeProvider } from '../Common/helpers';
 import { TEMPLATES_KEY } from '../../API/queryKeys';
 import { AZURE_PROVIDER } from '../../constants';
 
-const LaunchDescriptionList = ({ imageName }) => {
+const LaunchDescriptionList = ({ image }) => {
   const [
     {
       chosenRegion,
@@ -47,16 +47,16 @@ const LaunchDescriptionList = ({ imageName }) => {
       <DescriptionList isHorizontal>
         <DescriptionListGroup>
           <DescriptionListTerm>Image</DescriptionListTerm>
-          <DescriptionListDescription>{imageName}</DescriptionListDescription>
+          <DescriptionListDescription>{image.name}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>Account</DescriptionListTerm>
           <DescriptionListDescription>{getChosenSourceName()}</DescriptionListDescription>
         </DescriptionListGroup>
-        {provider === AZURE_PROVIDER && azureResourceGroup && (
+        {provider === AZURE_PROVIDER && (
           <DescriptionListGroup>
             <DescriptionListTerm>Resource group</DescriptionListTerm>
-            <DescriptionListDescription>{azureResourceGroup}</DescriptionListDescription>
+            <DescriptionListDescription>{azureResourceGroup || <i>{imageAzureResourceGroup(image)}</i>}</DescriptionListDescription>
           </DescriptionListGroup>
         )}
         <DescriptionListGroup>
@@ -87,6 +87,6 @@ const LaunchDescriptionList = ({ imageName }) => {
 };
 
 LaunchDescriptionList.propTypes = {
-  imageName: PropTypes.string.isRequired,
+  image: imageProps,
 };
 export default LaunchDescriptionList;

@@ -10,3 +10,5 @@ export const imageProps = PropTypes.shape({
   sourceIDs: PropTypes.arrayOf(PropTypes.string),
   accountIDs: PropTypes.arrayOf(PropTypes.string),
 }).isRequired;
+
+export const imageAzureResourceGroup = (image) => image.uploadOptions?.resource_group;
