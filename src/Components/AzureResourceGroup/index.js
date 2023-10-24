@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
@@ -6,10 +7,10 @@ import { AZURE_RG_KEY } from '../../API/queryKeys';
 import { fetchResourceGroups } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
 
-const AzureResourceGroup = () => {
+const AzureResourceGroup = ({ imageResourceGroup }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [{ chosenSource, azureResourceGroup }, setWizardContext] = useWizardContext();
-  const [selection, setSelection] = React.useState(azureResourceGroup);
+  const [selection, setSelection] = React.useState(azureResourceGroup || imageResourceGroup);
 
   const {
     isInitialLoading: isLoading,
@@ -17,7 +18,7 @@ const AzureResourceGroup = () => {
     data: resourceGroups,
   } = useQuery([AZURE_RG_KEY, chosenSource], () => fetchResourceGroups(chosenSource), {
     staleTime: 30 * 1000, // data is considered fresh for 30 seconds
-    enabled: !!chosenSource,
+    enabled: !!chosenSource && !imageResourceGroup,
   });
 
   if (!chosenSource || chosenSource === '') {
@@ -84,15 +85,24 @@ const AzureResourceGroup = () => {
       isOpen={isOpen}
       onClear={clearSelection}
       selections={selection}
-      placeholderText="redhat-deployed (default)"
+      isDisabled={!!imageResourceGroup}
+      placeholderText="(default) image resource group"
       typeAheadAriaLabel="Select resource group"
       maxHeight="220px"
     >
-      {resourceGroups.map((name, idx) => (
+      {(resourceGroups || [selection]).map((name, idx) => (
         <SelectOption aria-label={`Resource group ${name}`} key={idx} value={name} />
       ))}
     </Select>
   );
+};
+
+AzureResourceGroup.propTypes = {
+  imageResourceGroup: PropTypes.string,
+};
+
+AzureResourceGroup.defaultProps = {
+  imageResourceGroup: null,
 };
 
 export default AzureResourceGroup;
