@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+
+import { imageProps } from '../../helpers';
 import { Title, Text, Alert, AlertActionLink } from '@patternfly/react-core';
 import LaunchDescriptionList from '../../../LaunchDescriptionList';
 import useLocalStorage from '../../../Common/Hooks/useLocalStorage';
 
-const ReviewDetails = ({ imageName }) => {
+const ReviewDetails = ({ image }) => {
   const [showNotificationBanner, setNotificationBanner] = useLocalStorage('rh_launch_notification_banner', true);
 
   return (
@@ -47,12 +48,12 @@ const ReviewDetails = ({ imageName }) => {
           </>
         </Alert>
       )}
-      <LaunchDescriptionList imageName={imageName} />
+      <LaunchDescriptionList image={image} />
     </div>
   );
 };
 
 ReviewDetails.propTypes = {
-  imageName: PropTypes.string.isRequired,
+  image: imageProps,
 };
 export default ReviewDetails;

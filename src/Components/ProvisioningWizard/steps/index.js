@@ -78,7 +78,7 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
     id: 5,
     component: (
       <Loader>
-        <ReviewDetails imageName={image.name} />
+        <ReviewDetails image={image} />
       </Loader>
     ),
     canJumpTo: stepIdReached >= 5,

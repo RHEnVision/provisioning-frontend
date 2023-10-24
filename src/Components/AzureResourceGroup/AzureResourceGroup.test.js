@@ -6,6 +6,11 @@ import { azureSourceUploadInfo } from '../../mocks/fixtures/sources.fixtures';
 import AzureResourceGroup from '.';
 
 describe('AzureResourceGroup', () => {
+  test('set the image resource group as placeholder to inform user', async () => {
+    const rgSelect = await mountSelectAndOpen('Image RG');
+    expect(rgSelect).toHaveAttribute('placeholder', 'Image RG (default - image resource group)');
+  });
+
   test('populate resource group select', async () => {
     await mountSelectAndOpen();
     const items = await screen.findAllByLabelText(/^Resource group/);
@@ -29,8 +34,8 @@ describe('AzureResourceGroup', () => {
   });
 });
 
-const mountSelectAndOpen = async () => {
-  render(<AzureResourceGroup />, {
+const mountSelectAndOpen = async (imageResourceGroup = null) => {
+  render(<AzureResourceGroup imageResourceGroup={imageResourceGroup} />, {
     contextValues: { chosenSource: '66' },
   });
   const selectDropdown = await screen.findByLabelText('Select resource group');
