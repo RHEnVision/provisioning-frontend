@@ -23,7 +23,7 @@
     "dev": "HOT=true PROXY=true ROUTES_PATH=config/routes.config.js fec dev --clouddotEnv stage --uiEnv beta"
   },
   "dependencies": {
-    "@patternfly/react-core": "4.276.12",
+    "@patternfly/react-core": "4.278.0",
     "@patternfly/react-table": "4.113.4",
     "@redhat-cloud-services/frontend-components": "3.11.8",
     "@redhat-cloud-services/frontend-components-utilities": "3.7.6",
