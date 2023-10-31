@@ -18,8 +18,9 @@ const ReviewDetails = ({ imageName }) => {
       {showNotificationBanner && (
         <Alert
           variant="info"
+          isExpandable
           isInline
-          title="Notification integration"
+          title="Get notified on finished Launch by email, webhook or slack"
           actionLinks={[
             <AlertActionLink
               key="more_details_btn"
