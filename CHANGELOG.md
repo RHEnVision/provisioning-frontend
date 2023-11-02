@@ -1,4 +1,16 @@
 <!-- insertion marker -->
+<a name="1.10.0"></a>
+
+## [1.10.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.9.0...1.10.0) (2023-11-02)
+
+### Features
+
+- **[HMS-2255](https://issues.redhat.com/browse/HMS-2255):** deploy to image RG by default ([8c946d2](https://github.com/RHEnVision/provisioning-frontend/commit/8c946d23d77a1972301fefeb01c52ffdf6be7c44))
+
+### Bug Fixes
+
+- Replace 'vCPU' with 'vcpus' ([1c11b5b](https://github.com/RHEnVision/provisioning-frontend/commit/1c11b5b7cd6e6a3d5d65d840e5d6ba024dd90f55)), related to [HMS-2301](https://issues.redhat.com/browse/HMS-2301)
+
 <a name="1.9.0"></a>
 
 ## [1.9.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.8.0...1.9.0) (2023-10-18)
