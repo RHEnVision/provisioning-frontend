@@ -53,16 +53,17 @@ const LaunchDescriptionList = ({ image }) => {
           <DescriptionListTerm>Account</DescriptionListTerm>
           <DescriptionListDescription>{getChosenSourceName()}</DescriptionListDescription>
         </DescriptionListGroup>
-        {provider === AZURE_PROVIDER && (
+        {(provider === AZURE_PROVIDER && (
           <DescriptionListGroup>
             <DescriptionListTerm>Resource group</DescriptionListTerm>
             <DescriptionListDescription>{azureResourceGroup || <i>{imageAzureResourceGroup(image)}</i>}</DescriptionListDescription>
           </DescriptionListGroup>
+        )) || (
+          <DescriptionListGroup>
+            <DescriptionListTerm>{regionLabel}</DescriptionListTerm>
+            <DescriptionListDescription>{chosenRegion}</DescriptionListDescription>
+          </DescriptionListGroup>
         )}
-        <DescriptionListGroup>
-          <DescriptionListTerm>{regionLabel}</DescriptionListTerm>
-          <DescriptionListDescription>{chosenRegion}</DescriptionListDescription>
-        </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>{instanceTypeLabel}</DescriptionListTerm>
           <DescriptionListDescription>{chosenInstanceType}</DescriptionListDescription>
