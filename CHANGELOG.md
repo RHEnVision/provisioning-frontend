@@ -1,4 +1,12 @@
 <!-- insertion marker -->
+<a name="1.11.0"></a>
+
+## [1.11.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.10.0...1.11.0) (2023-11-03)
+
+### Bug Fixes
+
+- do not show region in review for Azure provider ([f73b3d6](https://github.com/RHEnVision/provisioning-frontend/commit/f73b3d6979b6420b621970edc8d160dcb69b9293)), related to [HMS-2255](https://issues.redhat.com/browse/HMS-2255)
+
 <a name="1.10.0"></a>
 
 ## [1.10.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.9.0...1.10.0) (2023-11-02)
