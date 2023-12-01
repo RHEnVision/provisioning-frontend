@@ -6,6 +6,7 @@ import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER } from '../../../../constant
 import RegionsSelect from '../../../RegionsSelect';
 import { imageProps } from '../../helpers.js';
 import GCPConsoleLaunch from './GCPConsoleLaunch';
+import GCPCreateImage from './GCPCreateImage';
 
 const DirectProviderLink = ({ image }) => {
   const uploadStatus = image.uploadStatus || { options: {} };
@@ -45,7 +46,10 @@ const DirectProviderLink = ({ image }) => {
   return (
     <Stack>
       {image.provider === GCP_PROVIDER ? (
-        <GCPConsoleLaunch text={text} image={image} />
+        <>
+          <GCPConsoleLaunch text={text} image={image} />
+          <GCPCreateImage text="Copy image to your account" image={image} />
+        </>
       ) : (
         <StackItem>
           <Button component="a" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" target="_blank" href={url}>

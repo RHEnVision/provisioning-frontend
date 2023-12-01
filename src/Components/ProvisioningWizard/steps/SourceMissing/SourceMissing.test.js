@@ -1,6 +1,6 @@
 import React from 'react';
 import SourceMissing from '.';
-import { render, screen } from '../../../../mocks/utils';
+import { render, screen, within } from '../../../../mocks/utils';
 import { awsImage, azureImage, gcpImage } from '../../../../mocks/fixtures/image.fixtures';
 
 describe('Source missing', () => {
@@ -89,10 +89,16 @@ describe('Source missing', () => {
       const headingElement = screen.getByText(/Launch with Google Cloud Console/i);
       expect(headingElement).toBeInTheDocument();
 
-      const element = screen.getByRole('textbox', { name: 'Copyable input' });
+      const launchImageBox = within(screen.getByTestId('gcp-launch-instance')).getByRole('textbox', { name: 'Copyable input' });
+      expect(launchImageBox).toHaveClass('pf-c-form-control');
+      expect(launchImageBox).toHaveAttribute('value', 'gcloud compute instances create cool-image-instance --image-project test --image cool-image');
 
-      expect(element).toHaveClass('pf-c-form-control');
-      expect(element).toHaveAttribute('value', 'gcloud compute instances create cool-image-instance --image-project test --image cool-image');
+      const copyImageBox = within(screen.getByTestId('gcp-copy-image')).getByRole('textbox', { name: 'Copyable input' });
+      expect(copyImageBox).toHaveClass('pf-c-form-control');
+      expect(copyImageBox).toHaveAttribute(
+        'value',
+        'gcloud compute images create cool-image-copy --source-image-project test --source-image cool-image'
+      );
     });
   });
 });

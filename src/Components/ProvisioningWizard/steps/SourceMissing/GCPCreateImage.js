@@ -4,11 +4,11 @@ import { ClipboardCopy, StackItem } from '@patternfly/react-core';
 import { imageProps } from '../../helpers';
 import './GCP.scss';
 
-const launchInstanceCommand = (options) => {
-  return `gcloud compute instances create ${options.image_name}-instance --image-project ${options.project_id} --image ${options.image_name}`;
+const createImageCommand = (options) => {
+  return `gcloud compute images create ${options.image_name}-copy --source-image-project ${options.project_id} --source-image ${options.image_name}`;
 };
 
-const GCPConsoleLaunch = ({ text, image }) => {
+const GCPCreateImage = ({ text, image }) => {
   return (
     <>
       <StackItem>
@@ -19,21 +19,21 @@ const GCPConsoleLaunch = ({ text, image }) => {
           className="custom-clipboard-copy"
           hoverTip="Copy"
           clickTip="Copied"
-          ouiaId="gcp-launch-instance"
-          data-testid="gcp-launch-instance"
+          ouiaId="gcp-copy-image"
+          data-testid="gcp-copy-image"
           variant="expansion"
           isReadOnly
         >
-          {launchInstanceCommand(image.uploadStatus.options)}
+          {createImageCommand(image.uploadStatus.options)}
         </ClipboardCopy>
       </StackItem>
     </>
   );
 };
 
-GCPConsoleLaunch.propTypes = {
+GCPCreateImage.propTypes = {
   image: imageProps,
   text: PropTypes.string,
 };
 
-export default GCPConsoleLaunch;
+export default GCPCreateImage;
