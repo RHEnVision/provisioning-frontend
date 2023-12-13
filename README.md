@@ -77,7 +77,7 @@ index 948d2d7..63c16d8 100644
    };
 ```
 
-Run image builder by `STAGE=true npm run prod-stable`.
+Run image builder by `STAGE=true npm run prod-stable`
 
 The app is now running at https://stage.foo.redhat.com:1337/insights/image-builder
 
