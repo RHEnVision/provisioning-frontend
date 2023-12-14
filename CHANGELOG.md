@@ -1,4 +1,12 @@
 <!-- insertion marker -->
+<a name="1.12.0"></a>
+
+## [1.12.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.11.0...1.12.0) (2023-12-05)
+
+### Bug Fixes
+
+- **[HMS-3203](https://issues.redhat.com/browse/HMS-3203):** Add GCP copy image command when missing a source ([4a154a6](https://github.com/RHEnVision/provisioning-frontend/commit/4a154a6783baa49a7a6332a38d2fa59f8e44a524))
+
 <a name="1.11.0"></a>
 
 ## [1.11.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.10.0...1.11.0) (2023-11-03)
