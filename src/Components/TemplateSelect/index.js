@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select, SelectOption, Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { useQuery } from '@tanstack/react-query';
 
 import { useWizardContext } from '../Common/WizardContext';
@@ -33,7 +34,7 @@ const TemplatesSelect = () => {
   const chosenTemplateName = chosenTemplate && templates.find((template) => template.id === chosenTemplate)?.name;
 
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="Loading templates" />;
+    return <Spinner size="sm" aria-label="Loading templates" />;
   }
 
   return (
@@ -42,7 +43,7 @@ const TemplatesSelect = () => {
         ouiaId="select_templates"
         isOpen={isOpen}
         direction="up"
-        onToggle={(openState) => setIsOpen(openState)}
+        onToggle={(_event, openState) => setIsOpen(openState)}
         selections={chosenTemplateName}
         onSelect={onSelect}
         maxHeight="180px"

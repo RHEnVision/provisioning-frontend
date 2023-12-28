@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Select, SelectOption, Spinner, FormGroup } from '@patternfly/react-core';
+import { Alert, Spinner, FormGroup, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { PUBKEYS_QUERY_KEY } from '../../../../API/queryKeys';
@@ -58,7 +59,7 @@ const PubkeySelect = ({ setStepValidated }) => {
   };
 
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="Loading saved SSH keys" />;
+    return <Spinner size="sm" aria-label="Loading saved SSH keys" />;
   }
 
   if (isError || (pubkeys && pubkeys.length < 1)) {
@@ -71,15 +72,12 @@ const PubkeySelect = ({ setStepValidated }) => {
   }
 
   return (
-    <FormGroup
-      helperTextInvalid={`Key format is not supported in ${humanizeProvider(wizardContext.provider)}`}
-      label="Select public key"
-      validated={!isKeySupported && 'error'}
-    >
+    <FormGroup label="Select public key">
       <Select
         ouiaId="select_pubkey"
-        onToggle={(isExpanded) => setIsOpen(isExpanded)}
+        onToggle={(_event, isExpanded) => setIsOpen(isExpanded)}
         onSelect={onSelect}
+        validated={!isKeySupported && 'error'}
         isOpen={isOpen}
         selections={selection}
         placeholderText="Select public key..."
@@ -104,6 +102,11 @@ const PubkeySelect = ({ setStepValidated }) => {
             </React.Fragment>
           ))}
       </Select>
+      {!isKeySupported && (
+        <HelperText>
+          <HelperTextItem variant="error">{`Key format is not supported in ${humanizeProvider(wizardContext.provider)}`}</HelperTextItem>
+        </HelperText>
+      )}
     </FormGroup>
   );
 };

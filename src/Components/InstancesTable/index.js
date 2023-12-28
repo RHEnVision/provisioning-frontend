@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { TableComposable, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
+import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import { ExportIcon, ExternalLinkAltIcon } from '@patternfly/react-icons';
-import { Button, ClipboardCopy, Card, Pagination, Spinner, Bullseye, EmptyStatePrimary } from '@patternfly/react-core';
+import { Button, ClipboardCopy, Card, Pagination, Spinner, Bullseye, EmptyStateActions } from '@patternfly/react-core';
 import { useQuery } from '@tanstack/react-query';
 
 import { SSHUsername, exportToCSV } from './helpers';
@@ -35,7 +35,7 @@ const InstancesTable = ({ reservationID, provider, region }) => {
   if (isLoading)
     return (
       <Bullseye>
-        <Spinner isSVG size="xl" />
+        <Spinner size="xl" />
       </Bullseye>
     );
   return (
@@ -51,7 +51,7 @@ const InstancesTable = ({ reservationID, provider, region }) => {
           isCompact
           ouiaId="instances-pagination"
         />
-        <TableComposable ouiaId="instances table" aria-label="instances description table" variant="compact">
+        <Table ouiaId="instances table" aria-label="instances description table" variant="compact">
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -99,13 +99,13 @@ const InstancesTable = ({ reservationID, provider, region }) => {
               </Tr>
             ))}
           </Tbody>
-        </TableComposable>
+        </Table>
       </Card>
-      <EmptyStatePrimary>
+      <EmptyStateActions>
         <Button variant="link" icon={<ExportIcon />} iconPosition="left" onClick={() => exportToCSV(instances)}>
           Export to CSV
         </Button>
-      </EmptyStatePrimary>
+      </EmptyStateActions>
     </>
   );
 };

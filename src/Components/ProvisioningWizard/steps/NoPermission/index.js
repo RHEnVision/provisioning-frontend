@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateSecondaryActions, Title } from '@patternfly/react-core';
+import { Button, EmptyState, EmptyStateHeader, EmptyStateBody, EmptyStateIcon, EmptyStateFooter, EmptyStateActions } from '@patternfly/react-core';
 import { LockIcon } from '@patternfly/react-icons';
 import DirectProviderLink from '../SourceMissing/DirectProviderLink';
 import { imageProps } from '../../helpers';
@@ -16,17 +16,16 @@ const missingPermissionDescription = (
 const PermissionMissing = ({ image, onClose }) => {
   return (
     <EmptyState>
-      <EmptyStateIcon icon={LockIcon} />
-      <Title headingLevel="h4" size="lg">
-        {missingPermissionTitle}
-      </Title>
+      <EmptyStateHeader titleText={missingPermissionTitle} icon={<EmptyStateIcon icon={LockIcon} />} />
       <EmptyStateBody>{missingPermissionDescription}</EmptyStateBody>
       <DirectProviderLink image={image} />
-      <EmptyStateSecondaryActions>
-        <Button variant="link" onClick={onClose}>
-          Close
-        </Button>
-      </EmptyStateSecondaryActions>
+      <EmptyStateFooter>
+        <EmptyStateActions>
+          <Button variant="link" onClick={onClose}>
+            Close
+          </Button>
+        </EmptyStateActions>
+      </EmptyStateFooter>
     </EmptyState>
   );
 };

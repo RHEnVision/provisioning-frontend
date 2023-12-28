@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Wizard } from '@patternfly/react-core';
+import { Wizard } from '@patternfly/react-core/deprecated';
 import React from 'react';
 
 import APIProvider from '../Common/Query';

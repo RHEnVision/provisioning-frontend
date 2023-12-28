@@ -6,13 +6,15 @@ import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
-  EmptyStateSecondaryActions,
-  Title,
+  Button,
+  EmptyStateHeader,
+  EmptyStateFooter,
+  EmptyStateActions,
   Text,
   Popover,
-  Button,
-  WizardContextConsumer,
 } from '@patternfly/react-core';
+
+import { WizardContextConsumer } from '@patternfly/react-core/deprecated';
 import { CogsIcon, PendingIcon, CheckCircleIcon } from '@patternfly/react-icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -137,11 +139,17 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
   return (
     <WizardContextConsumer>
       {({ goToStepById, onClose }) => (
-        <EmptyState variant="large">
-          <EmptyStateIcon color={(polledReservation?.success && '#3E8635') || null} icon={polledReservation?.success ? CheckCircleIcon : CogsIcon} />
-          <Title headingLevel="h4" size="lg" ouiaId="launch-status">
-            {polledReservation?.success ? 'System(s) launched successfully' : 'Launching system(s)'}
-          </Title>
+        <EmptyState variant="lg">
+          <EmptyStateHeader
+            headingLevel="h4"
+            titleText={polledReservation?.success ? 'System(s) launched successfully' : 'Launching system(s)'}
+            icon={
+              <EmptyStateIcon
+                color={(polledReservation?.success && '#3E8635') || null}
+                icon={polledReservation?.success ? CheckCircleIcon : CogsIcon}
+              />
+            }
+          ></EmptyStateHeader>
           {reservationID && (
             <Text component="small" ouiaId="launch-id">
               {`launch ID: ${reservationID}`}
@@ -169,7 +177,7 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
                                 aria-label={`${name} error message`}
                                 headerContent={currentError ? 'Error' : 'Warning'}
                                 bodyContent={currentError || currentWarning}
-                                reference={stepRef}
+                                triggerRef={stepRef}
                                 position="right"
                               />
                             )
@@ -191,11 +199,13 @@ const ReservationProgress = ({ setLaunchSuccess }) => {
               Edit
             </Button>
           )}
-          <EmptyStateSecondaryActions>
-            <Button variant="link" isDisabled={!currentError && currentStep < 2} onClick={onClose}>
-              Close
-            </Button>
-          </EmptyStateSecondaryActions>
+          <EmptyStateFooter>
+            <EmptyStateActions>
+              <Button variant="link" isDisabled={!currentError && currentStep < 2} onClick={onClose}>
+                Close
+              </Button>
+            </EmptyStateActions>
+          </EmptyStateFooter>
         </EmptyState>
       )}
     </WizardContextConsumer>

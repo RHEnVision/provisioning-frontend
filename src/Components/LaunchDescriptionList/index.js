@@ -43,7 +43,12 @@ const LaunchDescriptionList = ({ image }) => {
   const instanceTypeLabel = providerInstanceType.charAt(0).toUpperCase() + providerInstanceType.slice(1);
 
   return (
-    <ExpandableSection toggleText={provider && humanizeProvider(provider)} onToggle={onToggle} isExpanded={isExpanded} isIndented>
+    <ExpandableSection
+      toggleText={provider && humanizeProvider(provider)}
+      onToggle={(_event, isExpanded) => onToggle(isExpanded)}
+      isExpanded={isExpanded}
+      isIndented
+    >
       <DescriptionList isHorizontal>
         <DescriptionListGroup>
           <DescriptionListTerm>Image</DescriptionListTerm>

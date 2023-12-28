@@ -5,8 +5,9 @@ import {
   EmptyState,
   EmptyStateBody,
   EmptyStateIcon,
-  EmptyStateSecondaryActions,
-  Title,
+  EmptyStateActions,
+  EmptyStateFooter,
+  EmptyStateHeader,
   Spinner,
   Stack,
   StackItem,
@@ -33,10 +34,7 @@ const missingSourceDescription = (
 
 const LoadingState = () => (
   <EmptyState>
-    <EmptyStateIcon variant="container" component={Spinner} />
-    <Title size="lg" headingLevel="h4">
-      Loading available Sources
-    </Title>
+    <EmptyStateHeader headingLevel="h4" titleText="Loading available Sources" icon={<EmptyStateIcon icon={Spinner} />} />
   </EmptyState>
 );
 
@@ -44,22 +42,27 @@ const SourceMissing = ({ error, image }) => {
   const { isBeta } = useChrome();
   return (
     <EmptyState>
-      <EmptyStateIcon icon={error ? ExclamationCircleIcon : PlusCircleIcon} />
-      <Title headingLevel="h4" size="lg">
-        {(error && failedToFetchTitle) || missingSourceTitle}
-      </Title>
+      <EmptyStateHeader
+        headingLevel="h4"
+        titleText={(error && failedToFetchTitle) || missingSourceTitle}
+        icon={<EmptyStateIcon icon={error ? ExclamationCircleIcon : PlusCircleIcon} />}
+      />
       <EmptyStateBody>{error?.message || missingSourceDescription}</EmptyStateBody>
-      <Button variant="primary" component="a" target="_blank" href={`${isBeta() ? '/preview' : ''}/settings/sources/new`}>
-        Create Source
-      </Button>
-      <EmptyStateSecondaryActions>
-        <Stack>
-          <StackItem className="sources-empty-state-divider">or</StackItem>
-          <StackItem>
-            <DirectProviderLink image={image} />
-          </StackItem>
-        </Stack>
-      </EmptyStateSecondaryActions>
+      <EmptyStateFooter>
+        <EmptyStateActions>
+          <Button variant="primary" component="a" target="_blank" href={`${isBeta() ? '/preview' : ''}/settings/sources/new`}>
+            Create Source
+          </Button>
+        </EmptyStateActions>
+        <EmptyStateActions>
+          <Stack>
+            <StackItem className="sources-empty-state-divider">or</StackItem>
+            <StackItem>
+              <DirectProviderLink image={image} />
+            </StackItem>
+          </Stack>
+        </EmptyStateActions>
+      </EmptyStateFooter>
     </EmptyState>
   );
 };

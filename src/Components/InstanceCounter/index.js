@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
-import { NumberInput } from '@patternfly/react-core';
+import { HelperText, HelperTextItem, NumberInput } from '@patternfly/react-core';
 import { useWizardContext } from '../Common/WizardContext';
 import { useQuery } from '@tanstack/react-query';
 import { MAX_INSTANCES, MIN_INSTANCES, MAX_VCPU } from './constants';
@@ -75,6 +75,11 @@ const InstanceCounter = ({ setValidation }) => {
         minusBtnAriaLabel="instances-minus"
         plusBtnAriaLabel="instances-plus"
       />
+      {isWarning && (
+        <HelperText>
+          <HelperTextItem variant="warning">Launching many vCPUs might exceed service quota limit.</HelperTextItem>
+        </HelperText>
+      )}
     </>
   );
 };

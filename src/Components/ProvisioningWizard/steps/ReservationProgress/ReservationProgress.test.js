@@ -39,7 +39,7 @@ describe('Reservation polling', () => {
       mountProgressBar();
 
       const createReservationStep = await screen.findByLabelText(`${constants.AWS_STEPS[0].name}`, { exact: false });
-      expect(createReservationStep).toHaveClass('pf-m-success');
+      expect(createReservationStep).toHaveClass('pf-m-info');
 
       // polling #1
       server.use(

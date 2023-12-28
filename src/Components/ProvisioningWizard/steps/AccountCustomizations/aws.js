@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Button, Text } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button, Text, Icon } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { AWS_PROVIDER } from '../../../../constants';
@@ -39,13 +39,7 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
       <Title ouiaId="account_custom_title" headingLevel="h1" size="xl">
         Account and customizations | Amazon
       </Title>
-      <FormGroup
-        label="Select account"
-        validated={validations.sources}
-        helperTextInvalid="Please pick a value"
-        isRequired
-        fieldId="aws-select-source"
-      >
+      <FormGroup label="Select account" isRequired fieldId="aws-select-source">
         <SourcesSelect
           image={image}
           setValidation={(validation) =>
@@ -71,7 +65,9 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }
@@ -81,9 +77,6 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
       <FormGroup
         label="Select instance type"
         isRequired
-        validated={validations.types}
-        helperTextInvalid="There are problems fetching instance types."
-        helperText={validations.types === 'warning' && 'The selected specification does not meet minimum requirements for this image'}
         fieldId="aws-select-instance-types"
         labelIcon={
           <Popover
@@ -107,7 +100,9 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }
@@ -146,7 +141,9 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }
@@ -157,8 +154,6 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
         label="Count"
         isRequired
         fieldId="aws-select-instance-counter"
-        validated={validations.amount}
-        helperText={validations.amount === 'warning' && 'Launching many vCPUs might exceed service quota limit.'}
         labelIcon={
           <Popover bodyContent="Specify the number of AWS instances to be launched">
             <Button
@@ -170,7 +165,9 @@ const AccountCustomizationsAWS = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }

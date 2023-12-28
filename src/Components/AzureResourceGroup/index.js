@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
+import { Spinner, TextInput } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { useQuery } from '@tanstack/react-query';
 import { AZURE_RG_KEY } from '../../API/queryKeys';
 import { fetchResourceGroups } from '../../API';
@@ -37,7 +38,7 @@ const AzureResourceGroup = ({ imageResourceGroup }) => {
   }
 
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="loading resource groups" />;
+    return <Spinner size="sm" aria-label="loading resource groups" />;
   }
 
   if (error) {
@@ -80,7 +81,7 @@ const AzureResourceGroup = ({ imageResourceGroup }) => {
     <Select
       variant="typeahead"
       ouiaId="select_resource_group"
-      onToggle={(isExpanded) => setIsOpen(isExpanded)}
+      onToggle={(_event, isExpanded) => setIsOpen(isExpanded)}
       onSelect={onSelect}
       isOpen={isOpen}
       onClear={clearSelection}
