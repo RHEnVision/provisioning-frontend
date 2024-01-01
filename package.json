@@ -25,7 +25,7 @@
   "dependencies": {
     "@patternfly/react-core": "4.278.0",
     "@patternfly/react-table": "4.113.4",
-    "@redhat-cloud-services/frontend-components": "3.11.8",
+    "@redhat-cloud-services/frontend-components": "3.11.10",
     "@redhat-cloud-services/frontend-components-utilities": "3.7.6",
     "@tanstack/react-query": "^4.33.0",
     "@unleash/proxy-client-react": "^3.5.2",
