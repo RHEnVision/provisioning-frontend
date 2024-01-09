@@ -1,4 +1,6 @@
 import React from 'react';
+import { server } from '../../mocks/server';
+import { http, HttpResponse } from 'msw';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../mocks/utils';
 import { provisioningUrl } from '../../API/helpers';
@@ -18,11 +20,9 @@ describe('AzureResourceGroup', () => {
   });
 
   test('handles error', async () => {
-    const { server, rest } = window.msw;
-
     server.use(
-      rest.get(provisioningUrl('sources/:sourceID/upload_info'), (req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ msg: 'AWS API error: unable to get AWS upload info' }));
+      http.get(provisioningUrl('sources/:sourceID/upload_info'), () => {
+        return new HttpResponse(null, { status: 500 });
       })
     );
 

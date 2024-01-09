@@ -1,7 +1,8 @@
 import React from 'react';
 import RegionSelect from '.';
 import userEvent from '@testing-library/user-event';
-
+import { server } from '../../mocks/server';
+import { http, HttpResponse } from 'msw';
 import { clonedImages, failureCloneStatus, parentImage } from '../../mocks/fixtures/image.fixtures';
 import { render, screen } from '../../mocks/utils';
 import { imageBuilderURL } from '../../API/helpers';
@@ -15,10 +16,9 @@ describe('RegionSelect', () => {
   });
 
   test('filter out regions with unsuccessful cloned image', async () => {
-    const { server, rest } = window.msw;
     server.use(
-      rest.get(imageBuilderURL(`clones/${clonedImages.data[0].id}`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(failureCloneStatus));
+      http.get(imageBuilderURL(`clones/${clonedImages.data[0].id}`), () => {
+        return HttpResponse.json(failureCloneStatus);
       })
     );
     await mountSelectAndClick();

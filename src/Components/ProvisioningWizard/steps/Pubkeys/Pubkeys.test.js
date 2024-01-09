@@ -1,7 +1,8 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import Pubkeys from '.';
-
+import { server } from '../../../../mocks/server';
+import { http, HttpResponse } from 'msw';
 import { render, screen, waitFor } from '../../../../mocks/utils';
 import { provisioningUrl } from '../../../../API/helpers';
 import PubkeySelect from './PubkeySelect';
@@ -20,16 +21,12 @@ describe('Pubkeys', () => {
     });
 
     test('view more with click', async () => {
-      const { server, rest } = window.msw;
       server.use(
-        rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
-          return res(
-            ctx.status(200),
-            ctx.json({
-              data: [{ id: 2, name: 'pk2' }],
-              metadata: { total: 2 },
-            })
-          );
+        http.get(provisioningUrl('pubkeys'), () => {
+          return HttpResponse.json({
+            data: [{ id: 2, name: 'pk2' }],
+            metadata: { total: 2 },
+          });
         })
       );
 
@@ -54,17 +51,9 @@ describe('Pubkeys', () => {
     });
 
     test('select is disabled when error', async () => {
-      const { server, rest } = window.msw;
       server.use(
-        rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
-          return res(
-            ctx.status(500),
-            ctx.json({
-              msg: 'error',
-              trace_id: 'trcid',
-              error: 'stack trace',
-            })
-          );
+        http.get(provisioningUrl('pubkeys'), () => {
+          return new HttpResponse(null, { status: 500 });
         })
       );
       render(<Pubkeys setStepValidated={jest.fn()} />);
@@ -74,10 +63,9 @@ describe('Pubkeys', () => {
     });
 
     test('select is disabled when there are no keys', async () => {
-      const { server, rest } = window.msw;
       server.use(
-        rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
-          return res(ctx.status(200), ctx.json({ data: [] }));
+        http.get(provisioningUrl('pubkeys'), () => {
+          return HttpResponse.json({ data: [] });
         })
       );
       render(<Pubkeys setStepValidated={jest.fn()} />);

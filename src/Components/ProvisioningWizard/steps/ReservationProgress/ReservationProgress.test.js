@@ -1,5 +1,7 @@
 import React from 'react';
 import ReservationProgress from '.';
+import { server } from '../../../../mocks/server';
+import { http, HttpResponse, delay } from 'msw';
 import userEvent from '@testing-library/user-event';
 import { provisioningUrl } from '../../../../API/helpers';
 import {
@@ -20,12 +22,11 @@ describe('Reservation polling', () => {
     jest.resetModules();
   });
   test('progress fails during polling', async () => {
-    const { server, rest } = window.msw;
     mountProgressBar();
 
     server.use(
-      rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(errorReservation));
+      http.get(provisioningUrl(`reservations/:id`), () => {
+        return HttpResponse.json(errorReservation);
       })
     );
     const transferKeyErrorStep = await screen.findByRole('button', { name: constants.AWS_STEPS[1].name });
@@ -35,7 +36,6 @@ describe('Reservation polling', () => {
 
   describe('progress success flow', () => {
     test('basics works', async () => {
-      const { server, rest } = window.msw;
       mountProgressBar();
 
       const createReservationStep = await screen.findByLabelText(`${constants.AWS_STEPS[0].name}`, { exact: false });
@@ -43,8 +43,8 @@ describe('Reservation polling', () => {
 
       // polling #1
       server.use(
-        rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
-          return res(ctx.status(200), ctx.json(polledReservation));
+        http.get(provisioningUrl(`reservations/:id`), () => {
+          return HttpResponse.json(polledReservation);
         })
       );
       const transferKeyStep = await screen.findByLabelText(`${constants.AWS_STEPS[1].name} success`, { exact: false });
@@ -52,8 +52,8 @@ describe('Reservation polling', () => {
 
       // polling #2 - reservation launched successfully
       server.use(
-        rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
-          return res(ctx.status(200), ctx.json(successfulReservation));
+        http.get(provisioningUrl(`reservations/:id`), () => {
+          return HttpResponse.json(successfulReservation);
         })
       );
       const successText = await screen.findByText('System(s) launched successfully');
@@ -71,12 +71,11 @@ describe('Reservation polling', () => {
     });
 
     test('Azure instance table', async () => {
-      const { server, rest } = window.msw;
       mountProgressBar('azure', 'eastus');
 
       server.use(
-        rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
-          return res(ctx.status(200), ctx.json(successfulAzureReservation));
+        http.get(provisioningUrl(`reservations/:id`), () => {
+          return HttpResponse.json(successfulAzureReservation);
         })
       );
       const successText = await screen.findByText('System(s) launched successfully');
@@ -101,12 +100,11 @@ describe('Reservation polling', () => {
   });
 
   test('GCP instance table', async () => {
-    const { server, rest } = window.msw;
     mountProgressBar('gcp', 'us-central1-a');
 
     server.use(
-      rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(successfulGCPReservation));
+      http.get(provisioningUrl(`reservations/:id`), () => {
+        return HttpResponse.json(successfulGCPReservation);
       })
     );
     const successText = await screen.findByText('System(s) launched successfully');
@@ -134,12 +132,12 @@ describe('Reservation polling', () => {
       'The launch progress is slower than expected, but we are still on it. It is safe to close this window and check your Amazon cloud console later';
     // eslint-disable-next-line
     constants.POLLING_BACKOFF_INTERVAL = [1];
-    const { server, rest } = window.msw;
     mountProgressBar();
 
     server.use(
-      rest.get(provisioningUrl(`reservations/:id`), (req, res, ctx) => {
-        return res(ctx.delay(10), ctx.json(polledReservation));
+      http.get(provisioningUrl(`reservations/:id`), async () => {
+        await delay(10);
+        return HttpResponse.json(polledReservation);
       })
     );
     const stepWithTimeoutWarning = await screen.findByRole('button', { name: constants.AWS_STEPS[2].name });
