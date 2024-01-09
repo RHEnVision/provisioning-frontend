@@ -20,7 +20,7 @@ const Loader = ({ children }) => (
   <Suspense
     fallback={
       <Bullseye>
-        <Spinner isSVG size="lg" />
+        <Spinner size="lg" />
       </Bullseye>
     }
   >

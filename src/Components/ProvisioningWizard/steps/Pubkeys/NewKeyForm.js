@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FormGroup, TextInput, FileUpload, Button, Popover } from '@patternfly/react-core';
+import { FormGroup, TextInput, FileUpload, Button, Popover, HelperText, HelperTextItem, Icon } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { useWizardContext } from '../../../Common/WizardContext';
@@ -102,23 +102,26 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
 
   return (
     <FormGroup isStack>
-      <FormGroup validated={validations.sshKeyName} helperTextInvalid="Name is required" label="Name" isRequired fieldId="ssh-name">
+      <FormGroup label="Name" isRequired fieldId="ssh-name">
         <TextInput
           ouiaId="new_pubkey_name"
           validated={validations.sshKeyName}
           value={keyName}
           id="public-key-name"
-          onChange={handleNameChange}
+          onChange={(_event, value) => handleNameChange(value)}
           onBlur={handleNameBlur}
           type="text"
         />
+        {validations.sshKeyName === 'error' && (
+          <HelperText>
+            <HelperTextItem variant="error">Name is required</HelperTextItem>
+          </HelperText>
+        )}
       </FormGroup>
       <FormGroup
-        helperTextInvalid="Public key format is invalid or unsupported"
         label="SSH public key"
         isRequired
         fieldId="ssh-file"
-        validated={validations.sshKeyBody}
         labelIcon={
           Object.keys(UNSUPPORTED_KEYS).includes(provider) && (
             <Popover
@@ -140,7 +143,9 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
                 className="pf-c-form__group-label-help"
                 variant="plain"
               >
-                <HelpIcon noVerticalAlign />
+                <Icon isInline>
+                  <HelpIcon />
+                </Icon>
               </Button>
             </Popover>
           )
@@ -148,9 +153,9 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
       >
         <FileUpload
           id="public-key-value"
-          onDataChange={handleSSHKeyChange}
+          onDataChange={(_event, value) => handleSSHKeyChange(value)}
           allowEditingUploadedText
-          onTextChange={handleSSHKeyText}
+          onTextChange={(_event, text) => handleSSHKeyText(text)}
           onTextAreaBlur={handleSSHKeyTextBlur}
           type="text"
           value={publicKey}
@@ -162,6 +167,11 @@ const NewSSHKeyForm = ({ setStepValidated }) => {
           isLoading={isLoading}
           filenamePlaceholder="Drag a file here"
         />
+        {validations.sshKeyBody === 'error' && (
+          <HelperText>
+            <HelperTextItem variant="error">Public key format is invalid or unsupported</HelperTextItem>
+          </HelperText>
+        )}
       </FormGroup>
     </FormGroup>
   );

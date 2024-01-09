@@ -56,10 +56,6 @@ module.exports = {
           preventFullImport: false,
           skipDefaultConversion: true,
         },
-        '@patternfly/react-table': {
-          skipDefaultConversion: true,
-          transform: `@patternfly/react-table/dist/esm`,
-        },
       },
       'react-icons',
     ],

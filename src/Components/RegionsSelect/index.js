@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FormHelperText, HelperText, HelperTextItem, Select, SelectOption, Spinner } from '@patternfly/react-core';
+import { FormHelperText, HelperText, HelperTextItem, Spinner } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { useQuery, useQueries } from '@tanstack/react-query';
 
 import { AWS_PROVIDER, AZURE_PROVIDER, GCP_PROVIDER, MULTIPLE_REGION_SUPPORT } from '../../constants';
@@ -61,7 +62,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
           isDisabled
           placeholderText="No regions have been found"
         />
-        <FormHelperText isHidden={false} component="div">
+        <FormHelperText>
           <HelperText className="region-select-load-error">
             <HelperTextItem variant="error">There are problems fetching available regions for this image.</HelperTextItem>
           </HelperText>
@@ -71,7 +72,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
   }
 
   if (isLoading || isCloneStatusLoading) {
-    return <Spinner isSVG size="sm" aria-label="loading available regions" />;
+    return <Spinner size="sm" aria-label="loading available regions" />;
   }
 
   return (
@@ -83,7 +84,7 @@ const RegionsSelect = ({ provider, currentRegion, composeID, onChange }) => {
       maxHeight="180px"
       isOpen={isOpen}
       selections={currentRegion}
-      onToggle={onToggle}
+      onToggle={(_event, isOpen) => onToggle(isOpen)}
       onSelect={onSelect}
       isDisabled={!MULTIPLE_REGION_SUPPORT.includes(provider)}
     >

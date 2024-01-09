@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form, FormGroup, Popover, Title, Button, Text } from '@patternfly/react-core';
+import { Form, FormGroup, Popover, Title, Button, Text, Icon } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 
 import { imageProps, imageAzureResourceGroup } from '../../helpers';
@@ -29,13 +29,7 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
       <Title ouiaId="account_custom_title" headingLevel="h1" size="xl">
         Account and customizations | Azure
       </Title>
-      <FormGroup
-        label="Select account"
-        validated={validations.sources}
-        helperTextInvalid="Please pick a value"
-        isRequired
-        fieldId="azure-select-source"
-      >
+      <FormGroup label="Select account" isRequired fieldId="azure-select-source">
         <SourcesSelect
           image={image}
           setValidation={(validation) =>
@@ -68,7 +62,9 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }
@@ -78,9 +74,6 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
       <FormGroup
         label="Select instance size"
         isRequired
-        validated={validations.types}
-        helperTextInvalid="There are problems fetching instance types."
-        helperText={validations.types === 'warning' && 'The selected specification does not meet minimum requirements for this image'}
         fieldId="azure-select-instance-size"
         labelIcon={
           <Popover
@@ -104,7 +97,9 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }
@@ -123,8 +118,6 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
         label="Count"
         isRequired
         fieldId="azure-select-instance-counter"
-        validated={validations.amount}
-        helperText={validations.amount === 'warning' && 'Launching many vCPUs might exceed service quota limit.'}
         labelIcon={
           <Popover headerContent={<div>Number of Azure instances</div>}>
             <Button
@@ -136,7 +129,9 @@ const AccountCustomizationsAzure = ({ setStepValidated, image }) => {
               className="pf-c-form__group-label-help"
               variant="plain"
             >
-              <HelpIcon noVerticalAlign />
+              <Icon isInline>
+                <HelpIcon />
+              </Icon>
             </Button>
           </Popover>
         }

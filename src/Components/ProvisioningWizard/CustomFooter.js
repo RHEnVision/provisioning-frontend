@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, ButtonVariant, WizardFooter, WizardContextConsumer } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
+import { WizardFooter, WizardContextConsumer } from '@patternfly/react-core/deprecated';
 import styles from '@patternfly/react-styles/css/components/Wizard/wizard';
 
 import { stepIdToString } from './steps';

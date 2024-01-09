@@ -90,11 +90,9 @@ describe('Source missing', () => {
       expect(headingElement).toBeInTheDocument();
 
       const launchImageBox = within(screen.getByTestId('gcp-launch-instance')).getByRole('textbox', { name: 'Copyable input' });
-      expect(launchImageBox).toHaveClass('pf-c-form-control');
       expect(launchImageBox).toHaveAttribute('value', 'gcloud compute instances create cool-image-instance --image-project test --image cool-image');
 
       const copyImageBox = within(screen.getByTestId('gcp-copy-image')).getByRole('textbox', { name: 'Copyable input' });
-      expect(copyImageBox).toHaveClass('pf-c-form-control');
       expect(copyImageBox).toHaveAttribute(
         'value',
         'gcloud compute images create cool-image-copy --source-image-project test --source-image cool-image'

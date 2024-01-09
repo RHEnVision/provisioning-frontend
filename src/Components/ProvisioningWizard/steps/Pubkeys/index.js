@@ -54,7 +54,7 @@ const PublicKeys = ({ setStepValidated }) => {
           isDisabled={isSelectDisabled}
           name="ssh-keys-radio"
           value={EXIST_KEY_OPTION}
-          onChange={onOptionChange}
+          onChange={(event, _) => onOptionChange(_, event)}
           label="Select existing SSH public key"
           data-testid="existing-pubkey-radio"
           body={(!wizardContext.uploadedKey || isSelectDisabled) && <PubkeySelect setStepValidated={setStepValidated} />}
@@ -65,7 +65,7 @@ const PublicKeys = ({ setStepValidated }) => {
           isChecked={wizardContext.uploadedKey}
           name="ssh-keys-radio"
           value={NEW_KEY_OPTION}
-          onChange={onOptionChange}
+          onChange={(event, _) => onOptionChange(_, event)}
           label="Add and save a new SSH public key"
           description="Newly added key will be automatically saved."
           data-testid="upload-pubkey-radio"

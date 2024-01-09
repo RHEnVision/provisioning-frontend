@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Spinner, Select, SelectOption, TextInput } from '@patternfly/react-core';
+import { Spinner, TextInput, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { useQuery } from '@tanstack/react-query';
 import { fetchInstanceTypesList } from '../../API';
 import { useWizardContext } from '../Common/WizardContext';
@@ -158,11 +159,14 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
           placeholderText="No instance types found"
           toggleAriaLabel="Select instance type"
         />
+        <HelperText>
+          <HelperTextItem variant="error">There are problems fetching instance types. Please try again later.</HelperTextItem>
+        </HelperText>
       </>
     );
   }
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="loading instance type select" />;
+    return <Spinner size="sm" aria-label="loading instance type select" />;
   }
 
   const types = filteredTypes || instanceTypes;
@@ -180,7 +184,7 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
         maxHeight="180px"
         isOpen={isOpen}
         selections={chosenInstanceType || searchValue}
-        onToggle={onToggle}
+        onToggle={(_event, isOpen) => onToggle(isOpen)}
         onSelect={onSelect}
         onFilter={() => {}}
         isInputValuePersisted
@@ -194,6 +198,11 @@ const InstanceTypesSelect = ({ setValidation, architecture }) => {
       >
         {selectItemsMapper(types, numOptions)}
       </Select>
+      <HelperText>
+        {!isTypeSupported && (
+          <HelperTextItem variant="warning">The selected specification does not meet minimum requirements for this image</HelperTextItem>
+        )}
+      </HelperText>
     </>
   );
 };

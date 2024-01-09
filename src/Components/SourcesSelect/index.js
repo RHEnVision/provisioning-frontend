@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Select, SelectOption, Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Alert, Spinner, HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 
 import { imageProps } from '../ProvisioningWizard/helpers';
@@ -63,7 +64,7 @@ const SourcesSelect = ({ setValidation, image }) => {
   }
 
   if (isLoading) {
-    return <Spinner isSVG size="sm" aria-label="Loading accounts" />;
+    return <Spinner size="sm" aria-label="Loading accounts" />;
   }
   const isSelectedSourceUnavailable = selected != undefined && sources.find((source) => source.id === selected.id && source.status != 'available');
 
@@ -77,7 +78,7 @@ const SourcesSelect = ({ setValidation, image }) => {
       <Select
         ouiaId="select_account"
         isOpen={isOpen}
-        onToggle={(openState) => setIsOpen(openState)}
+        onToggle={(_event, openState) => setIsOpen(openState)}
         selections={selected}
         maxHeight="180px"
         validated={isSelectedSourceUnavailable && 'warning'}
