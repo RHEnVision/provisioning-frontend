@@ -1,5 +1,7 @@
 import React from 'react';
 import TemplateSelect from '.';
+import { server } from '../../mocks/server';
+import { http, HttpResponse } from 'msw';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../mocks/utils';
 import { templates } from '../../mocks/fixtures/templates.fixtures';
@@ -26,11 +28,10 @@ describe('TemplateSelect', () => {
   });
 
   test('when templates array is empty it should be disabled', async () => {
-    const { server, rest } = window.msw;
     const chosenSource = '1';
     server.use(
-      rest.get(provisioningUrl(`sources/${chosenSource}/launch_templates`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ data: [] }));
+      http.get(provisioningUrl(`sources/${chosenSource}/launch_templates`), () => {
+        return HttpResponse.json({ data: [] });
       })
     );
     render(<TemplateSelect />, { provider: 'aws', contextValues: { chosenSource: chosenSource } });

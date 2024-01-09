@@ -1,35 +1,33 @@
 import React from 'react';
-
+import { server } from '../../mocks/server';
+import { http, HttpResponse } from 'msw';
 import { render, screen } from '../../mocks/utils';
 import { imageBuilderURL, provisioningUrl } from '../../API/helpers';
 
 import ProvisioningWizard from '.';
 
 import { awsImage } from '../../mocks/fixtures/image.fixtures';
-import { awsSourceFailedUploadInfo, awsSourceUploadInfo } from '../../mocks/fixtures/sources.fixtures';
+import { awsSourceUploadInfo } from '../../mocks/fixtures/sources.fixtures';
 
 describe('ProvisioningWizard', () => {
   beforeEach(() => {
-    const { server, rest } = window.msw;
     // no clones
     server.use(
-      rest.get(imageBuilderURL(`composes/${awsImage.id}/clones`), (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ data: [], meta: { count: 0 } }));
+      http.get(imageBuilderURL(`composes/${awsImage.id}/clones`), () => {
+        return HttpResponse.json({ data: [], meta: { count: 0 } });
       })
     );
   });
 
   describe('Available source validation', () => {
     test('handles unreachable - invalid - source gracefuly', async () => {
-      const { server, rest } = window.msw;
-
       server.use(
-        rest.get(provisioningUrl('sources/:sourceID/upload_info'), (req, res, ctx) => {
-          const { sourceID } = req.params;
+        http.get(provisioningUrl('sources/:sourceID/upload_info'), ({ params }) => {
+          const { sourceID } = params;
           if (sourceID === '1') {
-            return res(ctx.status(200), ctx.json(awsSourceUploadInfo()));
+            return HttpResponse.json(awsSourceUploadInfo());
           } else if (sourceID === '2') {
-            return res(ctx.status(500), ctx.json(awsSourceFailedUploadInfo));
+            return new HttpResponse(null, { status: 500 });
           }
         })
       );

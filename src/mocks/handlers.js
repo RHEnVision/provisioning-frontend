@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { imageBuilderURL, provisioningUrl } from '../API/helpers';
 import { awsInstanceTypeList, azureInstanceTypeList } from './fixtures/instanceTypes.fixtures';
 import { sourcesList, gcpSourcesList, awsSourceUploadInfo, azureSourceUploadInfo, gcpSourceUploadInfo } from './fixtures/sources.fixtures';
@@ -16,64 +16,67 @@ import {
 import { templates } from './fixtures/templates.fixtures';
 
 export const handlers = [
-  rest.get(provisioningUrl('sources'), (req, res, ctx) => {
-    const provider = req.url.searchParams.get('provider');
+  http.get(provisioningUrl('sources'), ({ request }) => {
+    const url = new URL(request.url);
+    const provider = url.searchParams.get('provider');
     if (provider === 'aws') {
-      return res(ctx.status(200), ctx.json(sourcesList));
+      return HttpResponse.json(sourcesList);
     } else if (provider === 'gcp') {
-      return res(ctx.status(200), ctx.json(gcpSourcesList));
+      return HttpResponse.json(gcpSourcesList);
     }
   }),
-  rest.get(provisioningUrl('sources/:sourceID/upload_info'), (req, res, ctx) => {
-    const { sourceID } = req.params;
+  http.get(provisioningUrl('sources/:sourceID/upload_info'), ({ params }) => {
+    const { sourceID } = params;
     if (sourceID === '1' || sourceID === '2') {
-      return res(ctx.status(200), ctx.json(awsSourceUploadInfo()));
+      return HttpResponse.json(awsSourceUploadInfo());
     } else if (sourceID === '10') {
-      return res(ctx.status(200), ctx.json(gcpSourceUploadInfo()));
+      return HttpResponse.json(gcpSourceUploadInfo());
     } else if (sourceID === '66') {
-      return res(ctx.status(200), ctx.json(azureSourceUploadInfo));
+      return HttpResponse.json(azureSourceUploadInfo);
     }
   }),
-  rest.get(provisioningUrl('pubkeys'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(pubkeysList));
+  http.get(provisioningUrl('pubkeys'), () => {
+    return HttpResponse.json(pubkeysList);
   }),
-  rest.get(provisioningUrl('instance_types/aws'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(awsInstanceTypeList));
+  http.get(provisioningUrl('instance_types/aws'), () => {
+    return HttpResponse.json(awsInstanceTypeList);
   }),
-  rest.get(provisioningUrl('instance_types/azure'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(azureInstanceTypeList));
+  http.get(provisioningUrl('instance_types/azure'), () => {
+    return HttpResponse.json(azureInstanceTypeList);
   }),
-  rest.get(imageBuilderURL(`composes/${parentImage.id}/clones`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(clonedImages));
+  http.get(imageBuilderURL(`composes/${parentImage.id}/clones`), () => {
+    return HttpResponse.json(clonedImages);
   }),
-  rest.get(imageBuilderURL(`clones/:id`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(successfulCloneStatus));
+  http.get(imageBuilderURL(`clones/:id`), () => {
+    return HttpResponse.json(successfulCloneStatus);
   }),
-  rest.post(provisioningUrl('pubkeys'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(provisioningUrl('pubkeys'), () => {
+    return new HttpResponse(null, {
+      status: 200,
+    });
   }),
-  rest.post(provisioningUrl('reservations/azure'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(createdAzureReservation));
+  http.post(provisioningUrl('reservations/azure'), () => {
+    return HttpResponse.json(createdAzureReservation);
   }),
-  rest.post(provisioningUrl('reservations/gcp'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(createdGCPReservation));
+  http.post(provisioningUrl('reservations/gcp'), () => {
+    return HttpResponse.json(createdGCPReservation);
   }),
-  rest.post(provisioningUrl('reservations/aws'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(createdAWSReservation));
+  http.post(provisioningUrl('reservations/aws'), () => {
+    return HttpResponse.json(createdAWSReservation);
   }),
-  rest.get(provisioningUrl('reservations/:id'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(reservation));
+  http.get(provisioningUrl('reservations/:id'), () => {
+    return HttpResponse.json(reservation);
   }),
-  rest.get(provisioningUrl('reservations/aws/:id'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(AWSReservation));
+  http.get(provisioningUrl('reservations/aws/:id'), () => {
+    return HttpResponse.json(AWSReservation);
   }),
-  rest.get(provisioningUrl('reservations/azure/:id'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(getAzureReservation));
+  http.get(provisioningUrl('reservations/azure/:id'), () => {
+    return HttpResponse.json(getAzureReservation);
   }),
-  rest.get(provisioningUrl('reservations/gcp/:id'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(GCPReservation));
+  http.get(provisioningUrl('reservations/gcp/:id'), () => {
+    return HttpResponse.json(GCPReservation);
   }),
-  rest.get(provisioningUrl('sources/:id/launch_templates'), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(templates));
+  http.get(provisioningUrl('sources/:id/launch_templates'), () => {
+    return HttpResponse.json(templates);
   }),
 ];
