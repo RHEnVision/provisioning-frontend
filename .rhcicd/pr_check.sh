@@ -29,7 +29,7 @@ set -exv
 source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
 
 # Install bonfire repo/initialize
-CICD_URL=https://raw.githubusercontent.com/RedHatInsights/bonfire/master/cicd
+CICD_URL=https://raw.githubusercontent.com/RedHatInsights/cicd-tools/main
 # shellcheck source=/dev/null
 curl -s $CICD_URL/bootstrap.sh > .cicd_bootstrap.sh && source .cicd_bootstrap.sh
 
