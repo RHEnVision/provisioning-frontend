@@ -1,4 +1,16 @@
 <!-- insertion marker -->
+<a name="1.13.0"></a>
+
+## [1.13.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.12.0...1.13.0) (2024-01-24)
+
+### Features
+
+- **[HMS-3332](https://issues.redhat.com/browse/HMS-3332):** Migrate to PF5 (#365) ([295c472](https://github.com/RHEnVision/provisioning-frontend/commit/295c472c36f4edd71f0d8b4dd90774d33950d5b0))
+
+### Bug Fixes
+
+- **[HMS-3373](https://issues.redhat.com/browse/HMS-3373):** update msw and frontend-components-config ([dfc42cf](https://github.com/RHEnVision/provisioning-frontend/commit/dfc42cff973439172a06f2d423219f2fbe3644b7))
+
 <a name="1.12.0"></a>
 
 ## [1.12.0](https://github.com/RHEnVision/provisioning-frontend/compare/1.11.0...1.12.0) (2023-12-05)
