@@ -49,12 +49,34 @@ describe('InstanceTypesSelect x86_64', () => {
       const items = await screen.findAllByLabelText(/^Instance Type/);
       expect(items).toHaveLength(1);
     });
-    test('filter with a query', async () => {
-      const query = 'vcpus > 2 and cores > 2';
+    test('filter with a query greater than', async () => {
+      const query = 'vcpus > 2 and cores > 2 and memory > 1024';
       const dropdown = await mountSelectAndClick();
       await userEvent.type(dropdown, query);
       const items = await screen.findAllByLabelText(/^Instance Type/);
       expect(items).toHaveLength(1);
+    });
+    test('filter with a query less than', async () => {
+      const query = 'vcpus < 2 and cores < 2 and memory < 1024';
+      const dropdown = await mountSelectAndClick();
+      await userEvent.type(dropdown, query);
+      const items = await screen.findAllByLabelText(/^Instance Type/);
+      expect(items).toHaveLength(1);
+    });
+    test('filter with a query combination', async () => {
+      const query = 'vcpus < 3 and cores > 1 and memory = 1024';
+      const dropdown = await mountSelectAndClick();
+      await userEvent.type(dropdown, query);
+      const input = await screen.findByLabelText('Selected instance type');
+      expect(input).toBeInTheDocument();
+    });
+    test('filter with a query equal', async () => {
+      const query = 'vcpus = 2 and cores = 2 and memory = 1024';
+      const dropdown = await mountSelectAndClick();
+      await userEvent.type(dropdown, query);
+      const inputs = await screen.findAllByLabelText('Selected instance type');
+      expect(inputs.length).toBe(1);
+      expect(inputs[0]).toBeInTheDocument();
     });
   });
 });
