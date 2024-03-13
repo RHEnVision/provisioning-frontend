@@ -24,7 +24,7 @@
     "postinstall": "ts-patch install"
   },
   "dependencies": {
-    "@patternfly/react-core": "5.1.2",
+    "@patternfly/react-core": "5.2.2",
     "@patternfly/react-table": "5.1.2",
     "@redhat-cloud-services/frontend-components": "4.2.4",
     "@redhat-cloud-services/frontend-components-utilities": "4.0.7",
