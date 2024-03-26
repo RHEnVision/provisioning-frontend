@@ -145,7 +145,7 @@ parameters:
 - name: IQE_TEST_IMPORTANCE
   value: ''
 - name: IQE_SEL_IMAGE
-  value: 'selenium/standalone-chrome:4.18.1-20240224'
+  value: 'quay.io/cloudservices/selenium-standalone-chrome:4.18.1-20240224'
 - name: IQE_BROWSERLOG
   value: "1"
 - name: IQE_NETLOG
