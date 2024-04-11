@@ -34,7 +34,7 @@ const CustomFooter = () => (
             )}
             {!activeStep.hideCancelButton && (
               <div className={styles.wizardFooterCancel}>
-                <Button variant={ButtonVariant.link} onClick={onClose}>
+                <Button id={`wizard-provisioning-cancel-${stepIdToString(activeStep.id)}`} variant={ButtonVariant.link} onClick={onClose}>
                   Cancel
                 </Button>
               </div>
