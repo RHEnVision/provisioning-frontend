@@ -78,6 +78,7 @@ const ProvisioningWizard = ({ onClose, hasAccess, image, ...props }) => {
         onNext={onNext}
         className={'provisioning'}
         footer={<CustomFooter />}
+        closeButtonAriaLabel="Close launch wizard"
       />
       <ConfirmModal isOpen={isConfirming} onConfirm={onCustomClose} onCancel={() => setConfirming(false)} />
     </>
