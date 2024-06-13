@@ -3,8 +3,8 @@
 # --------------------------------------------
 # Export vars for helper scripts to use
 # --------------------------------------------
-export APP_NAME="provisioning"  # name of app-sre "application" folder this component lives in
-export COMPONENT_NAME="provisioning-frontend"  # name of resourceTemplate component for deploy
+export APP_NAME="provisioning"                # name of app-sre "application" folder this component lives in
+export COMPONENT_NAME="provisioning-frontend" # name of resourceTemplate component for deploy
 # IMAGE should match the quay repo set by app.yaml in app-interface
 export IMAGE="quay.io/cloudservices/provisioning-frontend"
 export WORKSPACE=${WORKSPACE:-$APP_ROOT} # if running in jenkins, use the build's workspace
@@ -21,8 +21,9 @@ export IQE_FILTER_EXPRESSION=""
 export IQE_ENV="ephemeral"
 export IQE_SELENIUM="true"
 export IQE_CJI_TIMEOUT="30m"
-export DEPLOY_TIMEOUT="900"  # 15min
+export DEPLOY_TIMEOUT="900" # 15min
 export DEPLOY_FRONTENDS="true"
+export REF_ENV="insights-stage"
 
 set -exv
 # source is preferred to | bash -s in this case to avoid a subshell
@@ -31,7 +32,7 @@ source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
 # Install bonfire repo/initialize
 CICD_URL=https://raw.githubusercontent.com/RedHatInsights/cicd-tools/main
 # shellcheck source=/dev/null
-curl -s $CICD_URL/bootstrap.sh > .cicd_bootstrap.sh && source .cicd_bootstrap.sh
+curl -s $CICD_URL/bootstrap.sh >.cicd_bootstrap.sh && source .cicd_bootstrap.sh
 
 # Run ui tests
 export EXTRA_DEPLOY_ARGS="image-builder-crc"
