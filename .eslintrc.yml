@@ -4,3 +4,6 @@ globals:
   shallow: readonly
   render: 'readonly'
   mount: 'readonly'
+rules:
+  # We are transforming the imports in babel, so we don't need to enforce this rule
+  rulesdir/forbid-pf-relative-imports: 'off'
