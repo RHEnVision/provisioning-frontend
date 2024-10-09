@@ -21,7 +21,7 @@ export IQE_FILTER_EXPRESSION=""
 export IQE_ENV="ephemeral"
 export IQE_SELENIUM="true"
 export IQE_CJI_TIMEOUT="60m"
-export DEPLOY_TIMEOUT="900" # 15min
+export DEPLOY_TIMEOUT="1200" # 20min hack, should be 15min
 export DEPLOY_FRONTENDS="true"
 export REF_ENV="insights-stage"
 
