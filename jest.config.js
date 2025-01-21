@@ -3,6 +3,7 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.js', '!src/**/stories/*'],
   coverageDirectory: './coverage/',
   transform: {
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
     '\\.[jt]sx?$': 'babel-jest',
   },
   moduleNameMapper: {

@@ -35,6 +35,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-tracked": "^1.7.10",
+    "ts-jest": "^29.2.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
