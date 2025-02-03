@@ -37,10 +37,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -55,8 +55,3 @@ jobs:
 
       - name: Run build
         run: npm run build
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: dist/*
