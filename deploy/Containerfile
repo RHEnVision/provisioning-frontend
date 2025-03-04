@@ -1,0 +1,30 @@
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.5-1731603585 as builder
+
+USER root
+
+RUN dnf install jq -y
+
+ADD https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/refs/heads/master/universal_build.sh \
+    https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/refs/heads/master/build_app_info.sh \
+    https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/refs/heads/master/server_config_gen.sh \
+    /opt/app-root/bin/
+RUN chown default /opt/app-root/bin/universal_build.sh /opt/app-root/bin/build_app_info.sh /opt/app-root/bin/server_config_gen.sh; \
+    chmod a+x /opt/app-root/bin/universal_build.sh /opt/app-root/bin/build_app_info.sh /opt/app-root/bin/server_config_gen.sh
+
+USER default
+
+RUN npm i -g yarn
+
+COPY --chown=default . .
+
+RUN universal_build.sh
+
+FROM quay.io/redhat-services-prod/hcm-eng-prod-tenant/caddy-ubi:0d6954b
+
+COPY LICENSE /licenses/
+
+ENV CADDY_TLS_MODE http_port 8000
+
+COPY --from=builder /opt/app-root/src/Caddyfile /etc/caddy/Caddyfile
+COPY --from=builder /opt/app-root/src/dist dist
+COPY package.json .
