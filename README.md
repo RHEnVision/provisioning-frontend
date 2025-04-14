@@ -1,6 +1,6 @@
 # provisioning-frontend
 
-Provisioning frontend service for `console.redhat.com`
+Provisioning frontend service for `console.redhat.com`.
 
 ## Development
 This project is based on react and uses the `console.redhat.com` micro-frontend architecture
