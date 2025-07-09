@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Suspense } from 'react';
-import { Bullseye, Spinner } from '@patternfly/react-core';
+import { Alert, AlertActionLink, Button, Bullseye, Spinner } from '@patternfly/react-core';
+import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 import { humanizeProvider } from '../../Common/helpers';
 
 const SourceMissing = React.lazy(() => import('./SourceMissing'));
@@ -45,6 +46,40 @@ const missingSource = ({ image, isLoading, sourcesError }) => [
   },
 ];
 
+const DecommissioningAlert = () => (
+  <Alert
+    variant="info"
+    isInline
+    title="Upcoming decommission of the Image Builder Launch service"
+    className="pf-v6-u-mt-sm pf-v6-u-mb-sm"
+    actionLinks={
+      <React.Fragment>
+        <AlertActionLink>
+          <Button component="a" target="_blank" variant="link" icon={<ExternalLinkAltIcon />} iconPosition="right" isInline href="TBD/">
+            TBD
+          </Button>
+        </AlertActionLink>
+      </React.Fragment>
+    }
+  >
+    <p>
+      As of [TBD: date], the Image Builder Launch service will be discontinued. It will no longer be possible to launch instances directly from custom
+      images using this service. After this date, custom images must be launched by following the cloud provider&apos;s standard procedures.
+    </p>
+    <p>[TBD: Insert info source clean up if necessary]</p>
+  </Alert>
+);
+
+const StepContentWrapper = ({ children }) => (
+  <>
+    <DecommissioningAlert />
+    {children}
+  </>
+);
+StepContentWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, setLaunchSuccess }) => [
   {
     name: 'Account and customization',
@@ -54,9 +89,11 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
         id: 1,
         enableNext: stepValidation.awsStep,
         component: (
-          <Loader>
-            <AccountCustomizations image={image} setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />
-          </Loader>
+          <StepContentWrapper>
+            <Loader>
+              <AccountCustomizations image={image} setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, awsStep: validated }))} />
+            </Loader>
+          </StepContentWrapper>
         ),
         canJumpTo: stepIdReached >= 1,
       },
@@ -66,9 +103,11 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
     name: 'SSH key authentication',
     id: 4,
     component: (
-      <Loader>
-        <PublicKeys setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, sshStep: validated }))} />
-      </Loader>
+      <StepContentWrapper>
+        <Loader>
+          <PublicKeys setStepValidated={(validated) => setStepValidation((prev) => ({ ...prev, sshStep: validated }))} />
+        </Loader>
+      </StepContentWrapper>
     ),
     canJumpTo: stepIdReached >= 4,
     enableNext: stepValidation.sshStep,
@@ -77,9 +116,11 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
     name: 'Review details',
     id: 5,
     component: (
-      <Loader>
-        <ReviewDetails image={image} />
-      </Loader>
+      <StepContentWrapper>
+        <Loader>
+          <ReviewDetails image={image} />
+        </Loader>
+      </StepContentWrapper>
     ),
     canJumpTo: stepIdReached >= 5,
     nextButtonText: 'Launch',
@@ -88,9 +129,11 @@ const wizardSteps = ({ stepIdReached, image, stepValidation, setStepValidation, 
     name: 'Finish Progress',
     id: 6,
     component: (
-      <Loader>
-        <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={image.id} />
-      </Loader>
+      <StepContentWrapper>
+        <Loader>
+          <FinishStep setLaunchSuccess={() => setLaunchSuccess(true)} imageID={image.id} />
+        </Loader>
+      </StepContentWrapper>
     ),
     isFinishedStep: true,
   },
