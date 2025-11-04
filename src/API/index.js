@@ -2,6 +2,18 @@ import axios from 'axios';
 import { AZURE_PROVIDER } from '../constants';
 import { LIMIT, imageBuilderURL, provisioningUrl } from './helpers';
 
+axios.interceptors.request.use(
+  (config) => {
+    if (process.env.NODE_ENV !== 'test' && (config.method === 'post' || config.method === 'put')) {
+      return Promise.reject(new Error(`Write operations are not available in this environment, service is decommissioned`));
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 const typesUrlForProvider = (provider, region) => {
   switch (provider) {
     case AZURE_PROVIDER:

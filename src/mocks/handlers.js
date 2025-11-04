@@ -7,11 +7,11 @@ import { clonedImages, parentImage, successfulCloneStatus } from './fixtures/ima
 import {
   AWSReservation,
   getAzureReservation,
+  reservation,
+  GCPReservation,
   createdAWSReservation,
   createdAzureReservation,
-  reservation,
   createdGCPReservation,
-  GCPReservation,
 } from './fixtures/reservation.fixtures';
 import { templates } from './fixtures/templates.fixtures';
 
@@ -50,20 +50,6 @@ export const handlers = [
   http.get(imageBuilderURL(`clones/:id`), () => {
     return HttpResponse.json(successfulCloneStatus);
   }),
-  http.post(provisioningUrl('pubkeys'), () => {
-    return new HttpResponse(null, {
-      status: 200,
-    });
-  }),
-  http.post(provisioningUrl('reservations/azure'), () => {
-    return HttpResponse.json(createdAzureReservation);
-  }),
-  http.post(provisioningUrl('reservations/gcp'), () => {
-    return HttpResponse.json(createdGCPReservation);
-  }),
-  http.post(provisioningUrl('reservations/aws'), () => {
-    return HttpResponse.json(createdAWSReservation);
-  }),
   http.get(provisioningUrl('reservations/:id'), () => {
     return HttpResponse.json(reservation);
   }),
@@ -78,5 +64,17 @@ export const handlers = [
   }),
   http.get(provisioningUrl('sources/:id/launch_templates'), () => {
     return HttpResponse.json(templates);
+  }),
+  http.post(provisioningUrl('pubkeys'), () => {
+    return HttpResponse.json({ id: 1 }, { status: 200 });
+  }),
+  http.post(provisioningUrl('reservations/azure'), () => {
+    return HttpResponse.json(createdAzureReservation);
+  }),
+  http.post(provisioningUrl('reservations/gcp'), () => {
+    return HttpResponse.json(createdGCPReservation);
+  }),
+  http.post(provisioningUrl('reservations/aws'), () => {
+    return HttpResponse.json(createdAWSReservation);
   }),
 ];
