@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import './App.scss';
+// import './App.scss';
 
 const App = () => {
   return <Fragment></Fragment>;

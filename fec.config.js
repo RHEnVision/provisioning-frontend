@@ -11,13 +11,13 @@ module.exports = {
   /**
    * Change to false after your app is registered in configuration files
    */
-  interceptChromeConfig: true,
+  // interceptChromeConfig: true,
   /**
    * Add additional webpack plugins
    */
   plugins: [process.env.ANALYZED && new BundleAnalyzerPlugin()],
-  _unstableHotReload: process.env.HOT === 'true',
-  routesPath: process.env.ROUTES_PATH && resolve(process.env.ROUTES_PATH),
+  // _unstableHotReload: process.env.HOT === 'true',
+  // routesPath: process.env.ROUTES_PATH && resolve(process.env.ROUTES_PATH),
   moduleFederation: {
     exposes: {
       './RootApp': resolve(__dirname, './src/AppEntry'),
